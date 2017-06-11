@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d19e753749bed4d0f83ca29a640a5482
+timeCreated: 1490879328
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - FurnitureFramePrefab: {fileID: 1450129967538076, guid: 4fcf1c1741c294c83adddf0c8d3268be,
+      type: 2}
+  - ActionBoxPrefab: {fileID: 1223456222460630, guid: c8c212c9ccaa0423aa3c0d95377f4ffa,
+      type: 2}
+  - ActionPrefab: {fileID: 1580682117257516, guid: f2a8c47d9e1d64463b54742aa395bdc9,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

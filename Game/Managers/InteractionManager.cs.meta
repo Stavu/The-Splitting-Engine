@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: ed402a29859cd4a95b0b97115e40b2b6
+timeCreated: 1490879360
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - TextBoxPrefab: {fileID: 1411484436228102, guid: 223d04cf1197a4447ad08da76c65c5e5,
+      type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
