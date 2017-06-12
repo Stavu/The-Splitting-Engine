@@ -38,6 +38,9 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 	public void PlaceFurniture(Tile tile, string furnitureName)
 	{		
+
+		Debug.Log ("place furniture");
+
 		if(furnitureName == null)
 		{
 			return;
@@ -186,6 +189,8 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 	public void PlaceFurnitureInTiles(Furniture furn, Room room, Grid grid)
 	{
+		Debug.Log ("PlaceFurnitureInTiles");
+
 		List<Tile> tempTileList = room.GetMyTiles (grid, furn.GetMyCoordsList ());
 		Debug.Log ("tile list count" + tempTileList.Count);
 

@@ -77,7 +77,7 @@ public class DanielScene : Cutscene
 
 		// Declerations
 
-		Character llehctiM = (Character)PI_Handler.instance.name_PI_map ["llehctiM"];
+		//Character llehctiM = (Character)PI_Handler.instance.name_PI_map ["llehctiM"];
 		Player Daniel = PlayerManager.myPlayer;
 
 		// dialogue between daniel and llehctiM

@@ -446,11 +446,13 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 				// Removing from Tiles
 
-				foreach (Tile oldTile in myRoom.myMirrorRoom.shadowGrid.gridArray) 
+				if (myRoom.myMirrorRoom.shadowGrid != null) 
 				{
-					if (oldTile.myFurniture == furn) 
+					foreach (Tile oldTile in myRoom.myMirrorRoom.shadowGrid.gridArray) 
 					{
-						oldTile.myFurniture = null;
+						if (oldTile.myFurniture == furn) {
+							oldTile.myFurniture = null;
+						}
 					}
 				}
 			}

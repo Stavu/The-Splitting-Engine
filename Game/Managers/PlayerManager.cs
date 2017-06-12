@@ -25,7 +25,7 @@ public class PlayerManager : MonoBehaviour {
 
 	public GameObject CharacterPrefab;
 	public static Player myPlayer;
-	PlayerObject playerObject;
+	public PlayerObject playerObject;
 
 	public Dictionary<Player,GameObject> playerGameObjectMap;
 	public static Vector2 entrancePoint = new Vector2(15,6);
@@ -37,8 +37,8 @@ public class PlayerManager : MonoBehaviour {
 
 	public void Initialize () 
 	{		
-		EventsHandler.cb_roomCreated 	+= CreatePlayer;
-		EventsHandler.cb_playerCreated 	+= CreatePlayerObject;
+		//EventsHandler.cb_roomCreated 	+= CreatePlayer;
+		//EventsHandler.cb_playerCreated 	+= CreatePlayerObject;
 		EventsHandler.cb_keyPressed 	+= MovePlayer;
 		EventsHandler.cb_noKeyPressed 	+= StopPlayer;
 		EventsHandler.cb_playerMove		+= SavePlayerPosition;
@@ -49,8 +49,8 @@ public class PlayerManager : MonoBehaviour {
 
 	public void OnDestroy()
 	{	
-		EventsHandler.cb_roomCreated 	-= CreatePlayer;
-		EventsHandler.cb_playerCreated 	-= CreatePlayerObject;
+		//EventsHandler.cb_roomCreated 	-= CreatePlayer;
+		//EventsHandler.cb_playerCreated 	-= CreatePlayerObject;
 		EventsHandler.cb_keyPressed 	-= MovePlayer;
 		EventsHandler.cb_noKeyPressed 	-= StopPlayer;
 		EventsHandler.cb_playerMove 	-= SavePlayerPosition;
@@ -65,7 +65,7 @@ public class PlayerManager : MonoBehaviour {
 		{
 			if (myPlayer.identificationName == "Daniel") 
 			{
-				SwitchPlayer ("llehctiM");
+				SwitchPlayer ("geM");
 			
 			} else {
 				
@@ -115,18 +115,27 @@ public class PlayerManager : MonoBehaviour {
 
 
 			Player player_llehctiM = new Player ("llehctiM", new Vector2 (2, 1));
-			player_llehctiM.startingRoom = "test_mom";
+			player_llehctiM.startingRoom = "test1";
 			player_llehctiM.startingPos = new Vector3 (15f, 6f, 0);
+
+		
+			Player player_geM = new Player ("geM", new Vector2 (2, 1));
+			player_geM.startingRoom = "test_mom";
+			player_geM.startingPos = new Vector3 (10f, 4f, 0);
+
 
 			playerList.Add (player_daniel);
 			playerList.Add (player_llehctiM);
+			playerList.Add (player_geM);
 
-			myPlayer = player_llehctiM;
+			myPlayer = player_geM;
 			myPlayer.isActive = true;
 		}
 	}
 
 
+
+	/*
 
 	// Create Character 
 
@@ -169,7 +178,7 @@ public class PlayerManager : MonoBehaviour {
 		playerGameObjectMap.Add (myPlayer,playerObject.gameObject);
 	}
 
-
+	*/
 
 
 	// -------- MOVE PLAYER --------- // 
@@ -198,7 +207,7 @@ public class PlayerManager : MonoBehaviour {
 
 				newPos = new Vector3 ((myPlayer.myPos.x - playerSpeed), myPlayer.myPos.y, myPlayer.myPos.z);
 				offsetX = -0.5f;
-				playerGameObjectMap [myPlayer].transform.localScale = new Vector3(1,1,1);
+				//playerGameObjectMap [myPlayer].transform.localScale = new Vector3(1,1,1);
 
 				break;
 
@@ -206,7 +215,7 @@ public class PlayerManager : MonoBehaviour {
 
 				newPos = new Vector3 ((myPlayer.myPos.x + playerSpeed), myPlayer.myPos.y, myPlayer.myPos.z);
 				offsetX = 0.5f;
-				playerGameObjectMap [myPlayer].transform.localScale = new Vector3(-1,1,1);
+				//playerGameObjectMap [myPlayer].transform.localScale = new Vector3(-1,1,1);
 
 				break;
 
@@ -451,7 +460,7 @@ public class PlayerManager : MonoBehaviour {
 
 		List<Tile> PlayerTiles = myRoom.GetMyTiles(myRoom.myGrid,player.mySize, player.x, player.y);
 
-		PlayerTiles.ForEach(tile => Debug.Log(tile.x + "," + tile.y));
+		//PlayerTiles.ForEach(tile => Debug.Log(tile.x + "," + tile.y));
 		PlayerTiles.ForEach (tile => tile.PlaceInactivePlayerInTile (player));
 
 		if (myRoom.roomState == RoomState.Mirror) 

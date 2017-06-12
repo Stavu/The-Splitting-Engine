@@ -142,6 +142,25 @@ public class Utilities {
 			obj.transform.GetChild (i).GetComponent<SpriteRenderer> ().sortingOrder = i + (-myPI.y * 10);			
 		}
 
+		/*
+
+		// exceptions
+
+		if (myPI.fileName == "busStop") 
+		{
+			SpriteRenderer sr;
+			sr = obj.transform.Find ("Back").GetComponent<SpriteRenderer> ();
+			sr.sortingOrder = sr.sortingOrder - 65;
+		}
+
+		if (myPI.fileName == "busStop_shadow") 
+		{
+			SpriteRenderer sr;
+			sr = obj.transform.Find ("Back").GetComponent<SpriteRenderer> ();
+			sr.sortingOrder = sr.sortingOrder - 65;
+		}
+		*/
+
 	}
 
 
@@ -149,8 +168,6 @@ public class Utilities {
 
 	public static GameObject CreateCharacterGameObject (Character myCharacter, Transform parent)
 	{
-
-
 		//Debug.Log ("Assign Furniture Image");
 
 		myCharacter.myPos = new Vector3 (myCharacter.x + myCharacter.mySize.x/2, myCharacter.y, 0);
@@ -289,6 +306,8 @@ public class Utilities {
 		{
 			sr.color = Color.white;
 		}
+
+		EventsHandler.Invoke_cb_tileLayoutChanged ();
 	}
 
 

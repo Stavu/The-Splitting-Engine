@@ -86,7 +86,7 @@ public class PI_Handler : MonoBehaviour {
 
 		bool useIdentifiactionName = ((myPhysicalInteractable.identificationName != null) && (myPhysicalInteractable.identificationName != string.Empty));
 		string PI_name = useIdentifiactionName ? myPhysicalInteractable.identificationName : myPhysicalInteractable.fileName;			
-			
+
 		myPhysicalInteractable.myPos = new Vector3 (myPhysicalInteractable.x + myPhysicalInteractable.mySize.x/2, myPhysicalInteractable.y, 0);
 
 		GameObject obj = null;
@@ -97,9 +97,11 @@ public class PI_Handler : MonoBehaviour {
 	
 		if (GameManager.stringPrefabMap.ContainsKey (myPhysicalInteractable.fileName)) {
 
-			//Debug.Log ("found file name " + myPhysicalInteractable.fileName);
+			Debug.Log ("found file name " + myPhysicalInteractable.fileName);
 
 			obj = Instantiate (GameManager.stringPrefabMap [myPhysicalInteractable.fileName]);
+			obj.name = myPhysicalInteractable.identificationName;
+
 			sr = obj.GetComponentInChildren<SpriteRenderer> ();
 			string state = GameManager.userData.GetAnimationState (myPhysicalInteractable.identificationName);
 
@@ -116,6 +118,19 @@ public class PI_Handler : MonoBehaviour {
 			{
 				animationEvent.physicalInteractable = myPhysicalInteractable;
 			}
+
+			if (myPhysicalInteractable is Player) 
+			{	
+				PlayerObject playerObj = obj.AddComponent<PlayerObject> ();
+
+				Player player = (Player)myPhysicalInteractable;
+
+				if (player.isActive == true) 
+				{
+					PlayerManager.instance.playerObject = playerObj;
+				}				
+			}
+
 
 		} else {
 			
