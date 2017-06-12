@@ -19,7 +19,8 @@ public class PlayerObject : MonoBehaviour {
 	{
 		mySpriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer> ();
 		myAnimator = gameObject.GetComponent<Animator> ();
-		StopCharacter (PlayerManager.myPlayer.myDirection);
+
+	//	StopCharacter (PlayerManager.myPlayer.myDirection);
 	}
 
 	
@@ -156,7 +157,6 @@ public class PlayerObject : MonoBehaviour {
 
 		if (ASI.IsName (animationName) == false) 
 		{
-
 			myAnimator.PlayInFixedTime (animationName);
 		}
 			

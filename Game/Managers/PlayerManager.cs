@@ -123,7 +123,6 @@ public class PlayerManager : MonoBehaviour {
 			player_geM.startingRoom = "test_mom";
 			player_geM.startingPos = new Vector3 (10f, 4f, 0);
 
-
 			playerList.Add (player_daniel);
 			playerList.Add (player_llehctiM);
 			playerList.Add (player_geM);
@@ -189,6 +188,13 @@ public class PlayerManager : MonoBehaviour {
 		if (GameManager.instance.inputState != InputState.Character) 
 		{
 			return;			
+		}
+
+		// if player is not in the room, return
+
+		if (myPlayer.currentRoom != RoomManager.instance.myRoom.myName) 
+		{
+			return;
 		}
 
 		// 4 tiles in one second
@@ -328,7 +334,16 @@ public class PlayerManager : MonoBehaviour {
 
 	public void StopPlayer(Direction lastDirection)
 	{		
-		playerObject.StopCharacter (lastDirection);
+		if (playerObject != null) 
+		{	
+			playerObject.StopCharacter (lastDirection);
+
+		} else {
+
+			//Debug.LogError ("player object is null");
+		}
+	
+		
 	}
 
 
@@ -336,7 +351,14 @@ public class PlayerManager : MonoBehaviour {
 
 	public void UpdatePlayerObjectPosition(Player myPlayer, Direction myDirection)
 	{		
-		playerObject.MovePlayerObject (myPlayer, myDirection);
+		if (playerObject != null) 
+		{	
+			playerObject.MovePlayerObject (myPlayer, myDirection);
+
+		} else {
+
+			Debug.LogError ("player object is null");
+		}
 	}
 
 

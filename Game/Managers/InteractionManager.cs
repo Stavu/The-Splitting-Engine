@@ -230,9 +230,6 @@ public class InteractionManager : MonoBehaviour {
 
 
 
-
-
-
 	// move to room
 
 
@@ -260,6 +257,7 @@ public class InteractionManager : MonoBehaviour {
 		}
 
 		PlayerManager.entrancePoint = entrancePoint;
+		PlayerManager.myPlayer.currentRoom = roomName;
 		NavigationManager.instance.NavigateToScene (SceneManager.GetActiveScene ().name, Color.black);
 
 		//SceneManager.LoadScene(SceneManager.GetActiveScene().name);	
