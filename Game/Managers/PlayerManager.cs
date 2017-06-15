@@ -82,102 +82,25 @@ public class PlayerManager : MonoBehaviour {
 		// When first loading the game - create list and assign player
 
 		if (playerList == null) 
-		{			
+		{		
+			Debug.Log ("nullllll");
+			
 			playerList = new List<Player> ();
 
-			Player player_daniel = new Player ("Daniel", new Vector2 (2, 1));
-			player_daniel.startingRoom = "test_mom";
-			player_daniel.startingPos = new Vector3 (15f, 3f, 0);
 
+			System.Object[] myPlayers = Resources.LoadAll ("Jsons/Players");
 
-			// hardcoded stuff
+			foreach (TextAsset txt in myPlayers) 
+			{
+				Player player = JsonUtility.FromJson<Player> (txt.text);
+				playerList.Add (player);
 
-			GraphicState defaultGraphicState = new GraphicState ();
+			}
 
-			defaultGraphicState.graphicStateName = "default";
-
-			defaultGraphicState.frameExtents = new Vector2 (1, 2);
-			defaultGraphicState.frameOffsetX = 0;
-			defaultGraphicState.frameOffsetY = 0;
-
-			defaultGraphicState.coordsList = new List<Coords> ();
-
-			player_daniel.graphicStates.Add (defaultGraphicState);
-
-
-			Interaction interaction = new Interaction ();
-			interaction.myVerb = "Look At";
-			SubInteraction subInt = new SubInteraction ("showMonologue");
-			subInt.rawText = "hi daniel.";
-			subInt.textList = Utilities.SeparateText (subInt.rawText);
-			interaction.SubIntList.Add (subInt);
-			player_daniel.myInteractionList.Add (interaction);
-
-
-			Player player_llehctiM = new Player ("llehctiM", new Vector2 (2, 1));
-			player_llehctiM.startingRoom = "test1";
-			player_llehctiM.startingPos = new Vector3 (15f, 6f, 0);
-
-		
-			Player player_geM = new Player ("geM", new Vector2 (2, 1));
-			player_geM.startingRoom = "test_mom";
-			player_geM.startingPos = new Vector3 (10f, 4f, 0);
-
-			playerList.Add (player_daniel);
-			playerList.Add (player_llehctiM);
-			playerList.Add (player_geM);
-
-			myPlayer = player_geM;
-			myPlayer.isActive = true;
 		}
 	}
 
 
-
-	/*
-
-	// Create Character 
-
-	public void CreatePlayer(Room myRoom)	
-	{		
-		//myPlayer = new Player("Daniel", new Vector2(1,1), new Vector3(entrancePoint.x,entrancePoint.y,0));
-
-		PlayerData playerData = GameManager.userData.GetPlayerDataByPlayerName (myPlayer.identificationName);
-
-		if (playerData.currentPos != Vector3.zero)
-		{
-			myPlayer.myPos = playerData.currentPos;
-
-		} else {
-
-			myPlayer.myPos = myPlayer.startingPos;
-		}
-
-		CreatePlayerObject (myPlayer);
-	}
-
-
-
-
-	// Player object
-
-	public void CreatePlayerObject(Player myPlayer)
-	{
-		//Debug.Log ("created character object");
-
-		playerObject = (Instantiate (Resources.Load<GameObject>("Prefabs/Characters/" + myPlayer.fileName))).AddComponent<PlayerObject>();
-
-		Debug.Log (myPlayer.fileName);
-
-		playerObject.gameObject.name = myPlayer.fileName;
-		playerObject.transform.position = myPlayer.myPos;
-
-		//obj.GetComponent<SpriteRenderer> ().sortingLayerName = Constants.furniture_character_layer;
-	
-		playerGameObjectMap.Add (myPlayer,playerObject.gameObject);
-	}
-
-	*/
 
 
 	// -------- MOVE PLAYER --------- // 
@@ -391,7 +314,7 @@ public class PlayerManager : MonoBehaviour {
 
 		Player player = GetPlayerByName (newPlayer);
 						
-		Debug.Log ("switch player");
+		//Debug.Log ("switch player");
 
 
 		// ---- switcharoo ---- //
@@ -409,15 +332,14 @@ public class PlayerManager : MonoBehaviour {
 		// new player is active
 
 		myPlayer.isActive = true;
+		GameManager.userData.currentActivePlayer = myPlayer.identificationName;
 
-
-		Debug.Log (myPlayer.identificationName);
+		//Debug.Log (myPlayer.identificationName);
 
 		// check if player is already in the room
 
 		if (myPlayer.currentRoom == RoomManager.instance.myRoom.myName) 
-		{
-			
+		{			
 			// remove new player from tiles 
 
 			RemovePlayerFromTiles (myPlayer);
@@ -425,7 +347,7 @@ public class PlayerManager : MonoBehaviour {
 
 			// if new player is in room
 
-			Debug.Log ("player exists in room");
+			//Debug.Log ("player exists in room");
 
 			if (playerGameObjectMap [myPlayer].GetComponent<PlayerObject> () == null) {
 				playerGameObjectMap [myPlayer].AddComponent<PlayerObject> ();
@@ -439,7 +361,7 @@ public class PlayerManager : MonoBehaviour {
 
 		}
 
-		Debug.Log ("after else");
+		//Debug.Log ("after else");
 
 		EventsHandler.Invoke_cb_playerSwitched (player);
 		return;	
@@ -524,6 +446,62 @@ public class PlayerManager : MonoBehaviour {
 
 	}
 
+
+
+
+
+	public void PlayerEntersRoom(string playerName)
+	{
+		Player player = GetPlayerByName (playerName);
+
+		// change current room of player
+
+		player.currentRoom = RoomManager.instance.myRoom.myName;
+		GameManager.userData.GetPlayerDataByPlayerName (playerName).currentRoom = player.currentRoom;
+
+		// create game object 
+
+		EventsHandler.Invoke_cb_playerChanged (player);
+
+
+		// park in tiles
+
+		if (player.isActive == false) 
+		{
+			ParkPlayerInTiles (player, player.myPos);
+		}
+	}
+
+
+
+	public void PlayerExitsRoom(string playerName, string nextRoom)
+	{
+		Player player = GetPlayerByName (playerName);
+
+		// change current room of player
+
+		player.currentRoom = nextRoom;
+		GameManager.userData.GetPlayerDataByPlayerName (playerName).currentRoom = player.currentRoom;
+
+
+		// destroy game object 
+
+		GameObject playerObj = playerGameObjectMap [player];
+
+		Destroy (playerObj);
+
+
+		// remove from maps 
+					
+		playerGameObjectMap.Remove (player);		
+		PI_Handler.instance.name_PI_map.Remove (player.identificationName);
+		PI_Handler.instance.PI_gameObjectMap.Remove (player);
+
+
+		// remove from tiles 
+
+		RemovePlayerFromTiles (player);
+	}
 
 
 }

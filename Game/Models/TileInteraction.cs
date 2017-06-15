@@ -16,34 +16,27 @@ public class TileInteraction : Interactable {
 
 
 	public SubInteraction mySubInt;
-
+	public Vector2 entrancePoint;
 
 	public TileInteraction(int x, int y)
 	{
-
 		this.x = x;
 		this.y = y;
-
 	}
-
-
 
 
 	// Constructor for flipped furniture
 
 	public TileInteraction(Room room, TileInteraction tileInt)
 	{		
-		
 		this.x = room.MyGrid.myWidth - 1 - tileInt.x - ((int)tileInt.mySize.x - 1);
 		this.y = tileInt.y;
 
 		this.mySize = tileInt.mySize;
 		this.walkable = tileInt.walkable;
 
+		this.entrancePoint = tileInt.entrancePoint;
 	}
-
-
-
 
 
 }

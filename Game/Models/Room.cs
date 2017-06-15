@@ -328,7 +328,7 @@ public class Room {
 
 	public List<Tile> GetMyTiles (Grid grid, Vector2 mySize, int x ,int y)
 	{
-		Debug.Log ("GetMyTiles_size");
+		//Debug.Log ("GetMyTiles_size");
 
 		List<Tile> myTilesList = new List<Tile>();
 
@@ -358,7 +358,7 @@ public class Room {
 	public List<Tile> GetMyTiles (Grid grid, List<Coords> coordsList)
 	{
 
-		Debug.Log ("GetMyTiles_coordslist");
+		//Debug.Log ("GetMyTiles_coordslist");
 
 		List<Tile> myTilesList = new List<Tile>();
 

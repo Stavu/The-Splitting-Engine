@@ -43,6 +43,8 @@ public class SubInteraction : IConditionable {
 
 	public string newPlayer;
 
+	public bool isImportant;
+
 	public string rawText;
 	public string RawText 
 	{
@@ -120,7 +122,7 @@ public class SubInteraction : IConditionable {
 
 				//Debug.Log ("SubInteract: Show monologue");
 
-				InteractionManager.instance.DisplayText (Utilities.CreateSentenceList(PlayerManager.myPlayer, textList));
+				InteractionManager.instance.DisplayText (Utilities.CreateSentenceList(PlayerManager.myPlayer, textList), isImportant);
 
 				break;
 
@@ -188,6 +190,7 @@ public class SubInteraction : IConditionable {
 
 			case "moveToRoom":
 
+				Debug.Log ("ep " + entrancePoint);
 				InteractionManager.instance.MoveToRoom (destinationRoomName, entrancePoint);
 
 				break;
@@ -289,8 +292,6 @@ public class SubInteraction : IConditionable {
 
 		this.inventoryItem = null;
 	}
-
-
 }
 
 

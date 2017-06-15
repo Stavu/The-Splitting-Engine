@@ -43,7 +43,7 @@ public class PhysicalInteractable : Interactable {
 
 	public List<Coords> GetMyCoordsList()
 	{	
-		Debug.Log ("GetMyCoordsList");
+		//Debug.Log ("GetMyCoordsList");
 
 		if (currentGraphicState == null) 
 		{			
@@ -53,7 +53,7 @@ public class PhysicalInteractable : Interactable {
 
 		if (CurrentGraphicState ().coordsList.Count > 0) 
 		{			
-			Debug.Log ("getting coords list");
+			//Debug.Log ("getting coords list");
 			return CurrentGraphicState ().coordsList;
 
 		} else {
@@ -107,4 +107,11 @@ public struct Coords {
 		this.x = x;
 		this.y = y;
 	}
+
+	public Coords(float x, float y)
+	{
+		this.x = Mathf.FloorToInt (x);
+		this.y = Mathf.FloorToInt (y);
+	}
+
 }

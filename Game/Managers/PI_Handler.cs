@@ -21,20 +21,19 @@ public class PI_Handler : MonoBehaviour {
 	// Singleton //
 
 
-
 	public Dictionary<PhysicalInteractable,GameObject> PI_gameObjectMap;
 	public Dictionary<string,PhysicalInteractable> name_PI_map;
 
 
-
 	// Use this for initialization
+
 	public void Initialize () 
 	{
 		EventsHandler.cb_newAnimationState += ChangeCurrentGraphicState;
 
 		EventsHandler.cb_furnitureChanged += CreatePIGameObject;
 		EventsHandler.cb_characterChanged += CreatePIGameObject;
-		EventsHandler.cb_inactivePlayerChanged += CreatePIGameObject;
+		EventsHandler.cb_playerChanged += CreatePIGameObject;
 
 		PI_gameObjectMap = new Dictionary<PhysicalInteractable, GameObject> ();
 		name_PI_map = new Dictionary<string, PhysicalInteractable> ();
@@ -47,7 +46,7 @@ public class PI_Handler : MonoBehaviour {
 
 		EventsHandler.cb_furnitureChanged -= CreatePIGameObject;
 		EventsHandler.cb_characterChanged -= CreatePIGameObject;
-		EventsHandler.cb_inactivePlayerChanged -= CreatePIGameObject;
+		EventsHandler.cb_playerChanged -= CreatePIGameObject;
 
 		PI_gameObjectMap.Clear ();
 		name_PI_map.Clear ();
@@ -89,15 +88,34 @@ public class PI_Handler : MonoBehaviour {
 
 		myPhysicalInteractable.myPos = new Vector3 (myPhysicalInteractable.x + myPhysicalInteractable.mySize.x/2, myPhysicalInteractable.y, 0);
 
+
+		/*
+		// active player should get the position according to the entrance pos
+
+		if (myPhysicalInteractable is Player)
+		{
+			Player player = (Player)myPhysicalInteractable;
+
+			if (player.isActive == true) 
+			{
+				if (PlayerManager.entrancePoint != Vector2.zero) 
+				{
+					player.myPos = new Vector3 (PlayerManager.entrancePoint.x, PlayerManager.entrancePoint.y, 0);
+				}
+			}
+		}
+		*/
+
+
 		GameObject obj = null;
 		SpriteRenderer sr = null;
 
 
 		// Animated Object
 	
-		if (GameManager.stringPrefabMap.ContainsKey (myPhysicalInteractable.fileName)) {
-
-			Debug.Log ("found file name " + myPhysicalInteractable.fileName);
+		if (GameManager.stringPrefabMap.ContainsKey (myPhysicalInteractable.fileName)) 
+		{
+			//Debug.Log ("found file name " + myPhysicalInteractable.fileName);
 
 			obj = Instantiate (GameManager.stringPrefabMap [myPhysicalInteractable.fileName]);
 			obj.name = myPhysicalInteractable.identificationName;
@@ -131,7 +149,6 @@ public class PI_Handler : MonoBehaviour {
 				}				
 			}
 
-
 		} else {
 			
 			// if not animated object (furniture)
@@ -144,11 +161,20 @@ public class PI_Handler : MonoBehaviour {
 
 			sr = childObj.AddComponent<SpriteRenderer>();
 			sr.sprite = Resources.Load<Sprite> ("Sprites/Furniture/" + myPhysicalInteractable.fileName); 
-
 		}
 
 		obj.transform.SetParent (this.transform);
-		obj.transform.position = new Vector3 (myPhysicalInteractable.myPos.x + myPhysicalInteractable.offsetX, myPhysicalInteractable.myPos.y + 0.5f + myPhysicalInteractable.offsetY, myPhysicalInteractable.myPos.z);
+
+		if (myPhysicalInteractable is Player) 
+		{
+			obj.transform.position = myPhysicalInteractable.myPos;
+
+		} else {
+			
+			obj.transform.position = new Vector3 (myPhysicalInteractable.myPos.x + myPhysicalInteractable.offsetX, myPhysicalInteractable.myPos.y + 0.5f + myPhysicalInteractable.offsetY, myPhysicalInteractable.myPos.z);
+
+		}
+
 
 		// sorting order 
 
@@ -177,12 +203,10 @@ public class PI_Handler : MonoBehaviour {
 			{
 				RoomManager.instance.myRoom.ChangePIInTiles (physicalInteractable, graphicState);
 				physicalInteractable.currentGraphicState = graphicState;
-				GameManager.userData.AddAnimationState (physicalInteractable.identificationName, state);
-			
+				GameManager.userData.AddAnimationState (physicalInteractable.identificationName, state);			
 			}
 		}
 	}
-
 
 
 	// Setting furniture animation state
@@ -210,13 +234,6 @@ public class PI_Handler : MonoBehaviour {
 			Debug.LogError ("I don't have this title name " + PI_name);
 		}
 	}
-
-
-
-
-
-
-
 
 
 

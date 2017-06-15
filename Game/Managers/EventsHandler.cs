@@ -256,13 +256,13 @@ public static class EventsHandler
 	}
 
 
-	public static Action<Player> cb_inactivePlayerChanged; 
+	public static Action<Player> cb_playerChanged; 
 
-	public static void Invoke_cb_inactivePlayerChanged(Player player)
+	public static void Invoke_cb_playerChanged(Player player)
 	{
-		if(cb_inactivePlayerChanged != null)
+		if(cb_playerChanged != null)
 		{
-			cb_inactivePlayerChanged (player);
+			cb_playerChanged (player);
 		}
 
 		Invoke_cb_tileLayoutChanged ();	

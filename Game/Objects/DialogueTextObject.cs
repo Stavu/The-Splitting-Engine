@@ -10,12 +10,13 @@ public class DialogueTextObject : MonoBehaviour {
 	int currentEntry;
 	Text textComponent;
 
+	public bool isImportant = true;
+
 
 	// Use this for initialization
 
 	public void AddTextList (List<DialogueSentence> list) 
 	{
-
 		textComponent = gameObject.transform.Find ("Image").Find ("Text").GetComponent<Text> ();
 
 		this.sentenceList = list;
@@ -23,16 +24,14 @@ public class DialogueTextObject : MonoBehaviour {
 		PopulateTextBox (sentenceList [0]);
 
 		//currentTextBox.GetComponent<RectTransform> ().anchoredPosition = PositionTextBox (speaker);
-
 	}
-
 
 
 	// Update is called once per frame
 
 	void Update () 
-	{
-		if (Input.GetKeyDown(KeyCode.Space)) 
+	{	
+		if ((Input.GetKeyDown(KeyCode.Space) || ((isImportant == false) && (Input.anyKeyDown)))) 
 		{
 			//Debug.Log ("Update: sentenceList count" + sentenceList.Count);
 
@@ -44,12 +43,10 @@ public class DialogueTextObject : MonoBehaviour {
 				List<SubInteraction> subinteractionsToDo = Utilities.GetPassedSubinteractions (sentenceList [currentEntry].mySubIntList);
 
 				subinteractionsToDo.ForEach (subInt => subInt.SubInteract ());	
-
 			}
 
 			NextEntry ();
-		}	
-
+		}
 	}
 
 

@@ -29,7 +29,6 @@ public class InteractionManager : MonoBehaviour {
 	public GameObject currentTextBox;
 
 
-
 	// Use this for initialization
 
 	public void Initialize () 
@@ -54,7 +53,7 @@ public class InteractionManager : MonoBehaviour {
 	// ------  TEXT ------ //
 
 
-	public void DisplayText(List<DialogueSentence> sentenceList)
+	public void DisplayText(List<DialogueSentence> sentenceList, bool isImportant = true)
 	{
 		if (currentTextBox != null) 		
 		{			
@@ -64,6 +63,7 @@ public class InteractionManager : MonoBehaviour {
 		currentTextBox = Instantiate (TextBoxPrefab);	
 		DialogueTextObject textObject = currentTextBox.AddComponent<DialogueTextObject> ();
 		textObject.AddTextList (sentenceList);
+		textObject.isImportant = isImportant;
 
 		GameManager.textBoxActive = true;
 		EventsHandler.Invoke_cb_inputStateChanged ();
@@ -158,7 +158,6 @@ public class InteractionManager : MonoBehaviour {
 		text.color = new Color (1f, 1f, 1f, a);
 
 		Destroy (text.transform.parent.gameObject);
-
 	}
 
 
@@ -199,14 +198,12 @@ public class InteractionManager : MonoBehaviour {
 			yield return new WaitForFixedUpdate ();
 		}
 
-
 		a = 1f;
 
 		objText.color = Color.white;
 		objImage.color = Color.black;
 
 		yield return new WaitForSeconds (3);
-
 
 		while(a > 0)
 		{
@@ -215,7 +212,6 @@ public class InteractionManager : MonoBehaviour {
 			objImage.color = new Color (0f, 0f, 0f, a);
 
 			yield return new WaitForFixedUpdate ();
-
 		}
 
 		a = 0;
@@ -223,19 +219,13 @@ public class InteractionManager : MonoBehaviour {
 		objImage.color = new Color (0f, 0f, 0f, a);
 
 		Destroy (obj);
-
 	}
-
-
-
 
 
 	// move to room
 
-
 	public void MoveToRoom(string roomName, Vector2 entrancePoint)
 	{
-
 		GameManager.roomToLoad = GameManager.instance.stringRoomMap [roomName];
 
 		Tile tempTile = RoomManager.instance.myRoom.MyGrid.GetTileAt ((int)entrancePoint.x, (int)entrancePoint.y);
@@ -258,11 +248,10 @@ public class InteractionManager : MonoBehaviour {
 
 		PlayerManager.entrancePoint = entrancePoint;
 		PlayerManager.myPlayer.currentRoom = roomName;
+		GameManager.userData.GetPlayerDataByPlayerName (PlayerManager.myPlayer.identificationName).currentRoom = PlayerManager.myPlayer.currentRoom;
+
 		NavigationManager.instance.NavigateToScene (SceneManager.GetActiveScene ().name, Color.black);
-
-		//SceneManager.LoadScene(SceneManager.GetActiveScene().name);	
 	}
-
 
 
 	// Shadows
@@ -313,6 +302,4 @@ public class InteractionManager : MonoBehaviour {
 	{
 		InventoryUI.instance.OpenInventory (InventoryState.Combine);
 	}
-
-
 }

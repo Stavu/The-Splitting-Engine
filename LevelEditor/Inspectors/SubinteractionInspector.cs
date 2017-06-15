@@ -23,6 +23,8 @@ public class SubinteractionInspector : MonoBehaviour {
 	Button cancelButton;
 	Button submitButton;
 
+	Toggle importantToggle;
+
 	ISubinteractable subinteractable;
 	SubInteraction currentSubint;
 	List<string> subIntTypeList;
@@ -67,7 +69,6 @@ public class SubinteractionInspector : MonoBehaviour {
 
 	public void CreateSubinteractionPanel(ISubinteractable iSubinteractable, SubInteraction subInt = null)
 	{
-
 		if (subinteractionPanelObject != null) 
 		{
 			return;
@@ -81,6 +82,7 @@ public class SubinteractionInspector : MonoBehaviour {
 		subIntTypeDropdown = panel.Find ("SubIntTypeDropdown").GetComponent<Dropdown> ();
 		textInputBig = panel.Find ("TextInput").GetComponent<InputField> ();
 		textInputSmall = panel.Find ("TextInputSmall").GetComponent<InputField> ();
+		importantToggle = panel.Find ("ImportantToggle").GetComponent<Toggle> ();
 
 		recieveItem = panel.Find ("RecieveItem");
 		moveToRoom = panel.Find ("MoveToRoom");
@@ -122,11 +124,12 @@ public class SubinteractionInspector : MonoBehaviour {
 			// Fill the active fields
 
 
-			switch (subInt.interactionType) {
-
+			switch (subInt.interactionType) 
+			{
 				case "showMonologue":
 
 					textInputBig.text = subInt.RawText;
+					importantToggle.isOn = subInt.isImportant;
 
 					break;
 
@@ -151,6 +154,7 @@ public class SubinteractionInspector : MonoBehaviour {
 					playSound.Find("NumberOfPlaysInput").GetComponent<InputField>().text = subInt.numberOfPlays.ToString();
 
 					break;
+
 
 				case "StopSound":
 
@@ -418,6 +422,7 @@ public class SubinteractionInspector : MonoBehaviour {
 			case "showMonologue":
 
 				currentSubint.RawText = textInputBig.text;
+				currentSubint.isImportant = importantToggle.isOn;
 
 				break;
 

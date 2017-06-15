@@ -105,32 +105,60 @@ public class CharacterManager : MonoBehaviour {
 
 	public IEnumerator MoveCoroutine(IWalker walker)
 	{
-		
+
+		// the walker's position and the target position
+
 		Vector3 startPos = walker.walkerGameObject.transform.position;
 		Vector3 endPos = Utilities.GetCharacterPosOnTile (walker, walker.walkerTargetPos);
 
 		float distance = Vector3.Distance (startPos, endPos);
-		Debug.Log ("distance " + distance);
+		//Debug.Log ("distance " + distance);
 
 		float tempSpeed = walker.walkerSpeed / distance;
-		Debug.Log ("tempSpeed " + tempSpeed);
+		//Debug.Log ("tempSpeed " + tempSpeed);
 
 		// interpolation
 		float inter = 0;
 
 
-		// Animations
+
+		// -- ANIMATIONS -- //
+
+		// declarations
 
 		Animator myAnimator = walker.walkerGameObject.GetComponent<Animator>();
 		Direction lastDirection = Direction.left;
 
+		// coords - for the animation 
 
-		// ANIMATIONS
+		Coords startCoords = new Coords (walker.speakerPos.x, walker.speakerPos.y);
+		Coords endCoords = new Coords (walker.walkerTargetPos.x, walker.walkerTargetPos.y);
+
+
+
+		// Walk down
+
+		//Debug.Log ("current_y" + startCoords.y + "target_y" + endCoords.y);
+
+		if (startCoords.y > endCoords.y) 			
+		{
+			myAnimator.PlayInFixedTime ("Walk_front");
+			lastDirection = Direction.down;
+		}
+
+
+		// Walk up
+
+		if (startCoords.y < endCoords.y) 			
+		{
+			myAnimator.PlayInFixedTime ("Walk_back");
+			lastDirection = Direction.up;
+		}
 
 
 		// Walk left
 
-		if (walker.speakerPos.x > walker.walkerTargetPos.x) 
+		if (startCoords.x > endCoords.x) 			
 		{
 			myAnimator.PlayInFixedTime ("Walk_left");
 			lastDirection = Direction.left;
@@ -140,31 +168,11 @@ public class CharacterManager : MonoBehaviour {
 
 		// Walk right
 
-		if (walker.speakerPos.x < walker.walkerTargetPos.x) 
+		if (startCoords.x < endCoords.x) 			
 		{
 			myAnimator.PlayInFixedTime ("Walk_right");
 			lastDirection = Direction.right;
 		}
-
-
-		// Walk down
-
-		if (walker.speakerPos.y > walker.walkerTargetPos.y) 
-		{
-			myAnimator.PlayInFixedTime ("Walk_front");
-			lastDirection = Direction.down;
-		}
-
-
-		// Walk up
-
-		if (walker.speakerPos.y < walker.walkerTargetPos.y) 
-		{
-			myAnimator.PlayInFixedTime ("Walk_back");
-			lastDirection = Direction.up;
-		}
-
-
 
 
 		// while loop - updating the character object position
@@ -175,7 +183,7 @@ public class CharacterManager : MonoBehaviour {
 
 			if (inter >= 1) 
 			{				
-				Debug.Log ("I arrived " + walker.speakerName);
+				//Debug.Log ("I arrived " + walker.speakerName);
 
 				walker.walkerGameObject.transform.position = startPos = endPos;
 				break;
@@ -246,6 +254,8 @@ public class CharacterManager : MonoBehaviour {
 
 
 	}
+
+
 
 
 

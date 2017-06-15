@@ -55,6 +55,7 @@ public class CutsceneManager : MonoBehaviour {
 
 	public void PlayCutscene(string cutsceneName)
 	{
+		Debug.Log ("play cutscene");
 
 		if (stringCutsceneMap.ContainsKey (cutsceneName) == false) 
 		{

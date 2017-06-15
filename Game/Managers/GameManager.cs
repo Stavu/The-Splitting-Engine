@@ -175,6 +175,7 @@ public class GameManager : MonoBehaviour
 			if (currentPlayer != null) 
 			{				
 				PlayerManager.myPlayer = currentPlayer;
+				PlayerManager.myPlayer.isActive = true;
 			}
 
 			// Player data 
@@ -182,7 +183,12 @@ public class GameManager : MonoBehaviour
 			foreach (PlayerData playerData in userData.playerDataList) 
 			{
 				// set current room of the player according to current room from data
-				PlayerManager.instance.GetPlayerByName (playerData.playerName).currentRoom = playerData.currentRoom;
+
+				Player player = PlayerManager.instance.GetPlayerByName (playerData.playerName);
+				player.currentRoom = playerData.currentRoom;
+				player.myPos = playerData.currentPos;
+
+				Debug.Log("name: " + player.identificationName + " pos: " + player.myPos);
 
 				foreach (InventoryItem item in playerData.inventory.items) 
 				{
@@ -206,16 +212,15 @@ public class GameManager : MonoBehaviour
 		PlayerManager.instance.CreatePlayers ();
 
 		userData = new UserData ();
+		userData.currentActivePlayer = "geM";
+
+		PlayerManager.myPlayer = PlayerManager.instance.GetPlayerByName ("geM");
+		PlayerManager.myPlayer.isActive = true;
 
 		foreach (Player player in PlayerManager.playerList) 
 		{	
 			PlayerData data = new PlayerData(player.identificationName);
 			userData.playerDataList.Add (data);
-
-			if (player.isActive == true) 
-			{
-				userData.currentActivePlayer = player.identificationName;
-			}
 
 			data.currentRoom = player.startingRoom;
 			player.currentRoom = player.startingRoom;
@@ -234,7 +239,7 @@ public class GameManager : MonoBehaviour
 			string data = JsonUtility.ToJson (userData);
 			PlayerPrefs.SetString ("PlayerData", data);
 
-			//Debug.Log ("data " + data);
+			//Debug.Log (data);
 		}
 	}
 

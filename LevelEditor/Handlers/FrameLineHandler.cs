@@ -55,7 +55,7 @@ public class FrameLineHandler : MonoBehaviour {
 
 
 		List<Vector3> positionList = Utilities.EditorGetPhysicalInteractableFrameBounds (physicalInteractable);
-		Debug.Log ("center" + positionList [0]);
+		//Debug.Log ("center" + positionList [0]);
 
 
 		Vector3[] posArray = new Vector3[4];

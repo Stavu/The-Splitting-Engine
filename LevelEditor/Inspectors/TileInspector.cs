@@ -16,11 +16,18 @@ public class TileInspector : MonoBehaviour {
 	InputField sizeYInput;
 	InputField posXInput;
 	InputField posYInput;
+	InputField entrancePointXInput;
+	InputField entrancePointYInput;
+
 
 	Text sizeXPlaceholder;
 	Text sizeYPlaceholder;
 	Text posXPlaceholder;
 	Text posYPlaceholder;
+	Text entrancePointXPlaceholder;
+	Text entrancePointYPlaceholder;
+
+
 
 	InputField interactionTextInput;
 	Toggle textInputCheckBox;
@@ -72,11 +79,15 @@ public class TileInspector : MonoBehaviour {
 		sizeYInput = panel.Find ("SizeY").GetComponent<InputField> ();
 		posXInput = panel.Find ("PosX").GetComponent<InputField> ();
 		posYInput = panel.Find ("PosY").GetComponent<InputField> ();
+		entrancePointXInput = panel.Find ("EntrancePointX").GetComponent<InputField> ();
+		entrancePointYInput = panel.Find ("EntrancePointY").GetComponent<InputField> ();
 
 		sizeXPlaceholder = panel.Find ("SizeX").Find ("Placeholder").GetComponent<Text> ();
 		sizeYPlaceholder = panel.Find ("SizeY").Find ("Placeholder").GetComponent<Text> ();
 		posXPlaceholder = panel.Find ("PosX").Find ("Placeholder").GetComponent<Text> ();
 		posYPlaceholder = panel.Find ("PosY").Find ("Placeholder").GetComponent<Text> ();
+		entrancePointXPlaceholder = panel.Find ("EntrancePointX").Find ("Placeholder").GetComponent<Text> ();
+		entrancePointYPlaceholder = panel.Find ("EntrancePointY").Find ("Placeholder").GetComponent<Text> ();
 
 		// Dialogue
 
@@ -108,6 +119,9 @@ public class TileInspector : MonoBehaviour {
 
 		posXPlaceholder.text = currentTileInteraction.x.ToString();
 		posYPlaceholder.text = currentTileInteraction.y.ToString();
+
+		entrancePointXPlaceholder.text = currentTileInteraction.entrancePoint.x.ToString();
+		entrancePointYPlaceholder.text = currentTileInteraction.entrancePoint.y.ToString();
 
 
 		// Listeners
@@ -276,6 +290,9 @@ public class TileInspector : MonoBehaviour {
 		{
 			SubInteraction subInteraction = new SubInteraction ("moveToRoom");
 			subInteraction.destinationRoomName = destinationRoomInput.text;
+
+			Vector2 entrancePoint = new Vector2 (int.Parse (entrancePointXInput.text), int.Parse (entrancePointYInput.text));
+			subInteraction.entrancePoint = entrancePoint;
 
 			InspectorManager.instance.chosenTileInteraction.mySubInt = subInteraction;
 		}

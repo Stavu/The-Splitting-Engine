@@ -119,7 +119,6 @@ public class Player : PhysicalInteractable, ISpeaker, IWalker {
 		this.fileName = myName;
 
 		this.mySize = mySize;	
-		//this.myPos = myPos;	
 
 		/*
 		if (myName == "Daniel") 

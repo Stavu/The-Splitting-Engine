@@ -33,15 +33,50 @@ public class ChangePlayerScene : Cutscene
 	{
 
 		Debug.Log ("switch cutscene");
+		Debug.Log (GameManager.instance.inputState);
 
 		// move to room
 
-		PlayerManager.instance.SwitchPlayer ("Daniel");
+		//InteractionManager.instance.MoveToRoom ("test1", new Vector2 (4, 7));
+		PlayerManager.instance.PlayerEntersRoom ("geM");
+
+
+		///////////
+		yield return new WaitForSeconds (1);
+		///////////
+
+		List<Vector2> geMMPosList = new List<Vector2> 
+		{
+			new Vector2 (24, 9),
+			new Vector2 (1, 9),
+			new Vector2 (24, 9),
+			new Vector2 (1, 9),
+			//new Vector2 (5, 10)
+		};
+
+		CharacterManager.instance.MoveByPath (PlayerManager.instance.GetPlayerByName("llehctiM"), geMMPosList);
+
+
+		isClearToContinue = false;
+
+		while (isClearToContinue == false) 
+		{
+			yield return new WaitForFixedUpdate ();
+		}
+
+		//PlayerManager.instance.SwitchPlayer ("Daniel");
 		//InteractionManager.instance.MoveToRoom ("test_mom", new Vector2 (15, 15));
 	
 		///////////
-		yield return new WaitForSeconds (2);
+		yield return new WaitForSeconds (1);
 		///////////
+
+		PlayerManager.instance.PlayerExitsRoom ("llehctiM",string.Empty);
+
+		///////////
+		yield return new WaitForSeconds (1);
+		///////////
+
 
 		// End of Cutscne
 

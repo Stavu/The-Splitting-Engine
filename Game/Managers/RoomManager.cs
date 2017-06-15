@@ -104,12 +104,10 @@ public class RoomManager : MonoBehaviour {
 			{
 				//Debug.Log ("Player in room " + player.identificationName);
 
-				// active player should get the position according to the entrance pos
-
 				Vector3 playerCurrentPos = GameManager.userData.GetPlayerDataByPlayerName (player.identificationName).currentPos;
 
 				if (playerCurrentPos == Vector3.zero) 
-				{
+				{					
 					playerCurrentPos = player.startingPos;
 				}
 
@@ -118,7 +116,7 @@ public class RoomManager : MonoBehaviour {
 					PlayerManager.instance.ParkPlayerInTiles (player, playerCurrentPos);
 				}
 
-				EventsHandler.Invoke_cb_inactivePlayerChanged (player);
+				EventsHandler.Invoke_cb_playerChanged (player);
 				nameSpeakerMap.Add (player.identificationName, player);
 			}
 		}
@@ -132,7 +130,7 @@ public class RoomManager : MonoBehaviour {
 		// sorting order by tags. Any object tagged with "in_the_back" will get -65 sorting order
 
 		GameObject[] backObjects = GameObject.FindGameObjectsWithTag ("in_the_back");
-		Debug.Log (backObjects.Length);
+		//Debug.Log (backObjects.Length);
 
 
 		foreach (GameObject anotherObj in backObjects) 
@@ -156,50 +154,7 @@ public class RoomManager : MonoBehaviour {
 	}
 
 
-	// -- Player -- // 
 
-	/*
-	// Create Character 
-
-	public void CreatePlayer(Room myRoom)	
-	{		
-
-		PlayerData playerData = GameManager.userData.GetPlayerDataByPlayerName (myPlayer.identificationName);
-
-		if (playerData.currentPos != Vector3.zero)
-		{
-			myPlayer.myPos = playerData.currentPos;
-
-		} else {
-
-			myPlayer.myPos = myPlayer.startingPos;
-		}
-
-		CreatePlayerObject (myPlayer);
-	}
-
-
-
-
-	// Player object
-
-	public void CreatePlayerObject(Player myPlayer)
-	{
-		//Debug.Log ("created character object");
-
-		playerObject = (Instantiate (Resources.Load<GameObject>("Prefabs/Characters/" + myPlayer.fileName))).AddComponent<PlayerObject>();
-
-		Debug.Log (myPlayer.fileName);
-
-		playerObject.gameObject.name = myPlayer.fileName;
-		playerObject.transform.position = myPlayer.myPos;
-
-		//obj.GetComponent<SpriteRenderer> ().sortingLayerName = Constants.furniture_character_layer;
-
-		playerGameObjectMap.Add (myPlayer,playerObject.gameObject);
-	}
-
-	*/
 
 	// --- ROOM OBJECT --- //
 

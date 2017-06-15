@@ -58,8 +58,7 @@ public class Conversation {
 
 [Serializable]
 public class DialogueOption: IConditionable {
-
-
+	
 	public string myTitle;
 
 	public List<DialogueSentence> sentenceList;
@@ -78,17 +77,14 @@ public class DialogueOption: IConditionable {
 		}
 	}
 
-
 	public void RemoveConditionFromList(Condition condition)
 	{
-
 		if (condition == null) 
 		{
 
 			Debug.LogError ("condition is null");
 			return;
 		}
-
 
 		if (conditionList.Contains (condition) == false) 
 		{
@@ -97,9 +93,7 @@ public class DialogueOption: IConditionable {
 		}
 
 		conditionList.Remove (condition);
-
 	}
-
 }
 
 
@@ -110,8 +104,7 @@ public class DialogueOption: IConditionable {
 
 [Serializable]
 public class DialogueSentence : ISubinteractable {
-
-
+	
 	public string speakerName;
 	public string myText;
 	public bool subinteractImmediately = false;

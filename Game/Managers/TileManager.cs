@@ -162,9 +162,7 @@ public class TileManager : MonoBehaviour {
 
 		foreach (Tile tile in RoomManager.instance.myRoom.MyGrid.gridArray) 
 		{
-
 			Tile mapTile = RoomManager.instance.myRoom.myGrid.GetTileAt (tile.x, tile.y);
-
 		
 			if (tile.myTileInteraction != null) 
 			{
