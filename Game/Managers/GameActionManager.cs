@@ -65,10 +65,6 @@ public class GameActionManager : MonoBehaviour {
 
 	public void OnSpacebarPressed ()
 	{
-
-		//Debug.Log ("input state " + GameManager.instance.inputState);
-
-
 		switch (GameManager.instance.inputState) 
 		{
 
@@ -173,26 +169,13 @@ public class GameActionManager : MonoBehaviour {
 		}
 
 		ActionBoxManager.instance.CloseActionBox ();
-
-		/*
-		if (GameManager.instance.inputState == InputState.DialogueBox) 
-		{
-
-		}
-		*/
-
 	}
-
-
 
 
 	// manage input stat
 
-
 	public void ManageInputState()
 	{
-
-
 		if (NavigationManager.navigationInProcess == true) 
 		{
 			GameManager.instance.inputState = InputState.NoInput;
@@ -261,12 +244,8 @@ public class GameActionManager : MonoBehaviour {
 
 	// Tile Interaction //
 
-
 	public void OnHitTileInteraction(Tile tile)
 	{		
-
-		//Debug.Log ("OnHitTileInteraction");
-		
 		TileInteraction tileInt = tile.myTileInteraction;
 
 		if (currentTileInteraction != tileInt) 
@@ -289,10 +268,7 @@ public class GameActionManager : MonoBehaviour {
 
 	public void OnLeaveTileInteraction ()
 	{
-		//Debug.Log ("OnLeaveTileInteraction");
 		currentTileInteraction = null;
-
 	}
-
 
 }

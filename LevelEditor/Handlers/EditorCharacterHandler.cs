@@ -85,28 +85,18 @@ public class EditorCharacterHandler : MonoBehaviour {
 
 	public void CharacterFactory(Room room)
 	{
-
-		//Debug.Log ("FurnitureFactory");
-
 		foreach (Character character in room.myCharacterList) 
 		{	
 			EventsHandler.Invoke_cb_editorCharacterModelChanged (character);
 			PlaceCharacterInTiles (character, room, room.MyGrid);	
 		}
-
 	}
 
 
 
 	public void CreateCharacterObject(Character myCharacter)
 	{	
-
 		GameObject obj = Utilities.CreateCharacterGameObject (myCharacter, this.transform);
-
-		if (myCharacter == null) 
-		{
-			Debug.Log ("character = null");
-		}
 
 		if (EditorRoomManager.instance.characterGameObjectMap == null) 
 		{
@@ -114,7 +104,6 @@ public class EditorCharacterHandler : MonoBehaviour {
 		}
 
 		EditorRoomManager.instance.characterGameObjectMap.Add (myCharacter, obj);	
-
 
 		// populate list of graphic states
 
@@ -133,11 +122,9 @@ public class EditorCharacterHandler : MonoBehaviour {
 	public void PlaceCharacterInTiles(Character character, Room room, Grid grid)
 	{
 		List<Tile> tempTileList = room.GetMyTiles (grid, character.GetMyCoordsList ());
-		Debug.Log ("tile list count" + tempTileList.Count);
 
 		foreach (Tile myTile in tempTileList) 
 		{			
-			Debug.Log ("tile x " + myTile.x + "y " + myTile.y);
 			myTile.myCharacter = character;
 		}
 

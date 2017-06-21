@@ -8,8 +8,8 @@ using System;
 
 
 
-public class EditorUI : MonoBehaviour {
-
+public class EditorUI : MonoBehaviour 
+{
 
 	// Singleton //
 
@@ -24,7 +24,6 @@ public class EditorUI : MonoBehaviour {
 	}
 
 	// Singleton //
-
 
 
 	Dropdown backgroundDropdown;
@@ -49,9 +48,11 @@ public class EditorUI : MonoBehaviour {
 	Dropdown roomStateDropdown;
 
 	Toggle shadowToggle;
+	Toggle flippedToggle;
+
+	Slider zoomSlider;
 
 	List<string> mapAreaList;
-
 
 
 	// Use this for initialization
@@ -70,12 +71,6 @@ public class EditorUI : MonoBehaviour {
 		};
 
 		CreateBgSelect ();
-	}
-
-	// Update is called once per frame
-	void Update () 
-	{
-
 	}
 
 
@@ -109,7 +104,7 @@ public class EditorUI : MonoBehaviour {
 		toGameButton = transform.Find ("ToGameButton").GetComponent<Button> ();
 
 		roomNameInput = transform.Find ("RoomNameInput").GetComponent<InputField> ();
-		backgroundDropdown = transform.Find ("Dropdown").GetComponent<Dropdown> ();
+		backgroundDropdown = transform.Find ("BackgroundDropdown").GetComponent<Dropdown> ();
 		musicDropdown = transform.Find ("MusicDropdown").GetComponent<Dropdown> ();
 		mapAreaDropdown = transform.Find ("MapAreaDropdown").GetComponent<Dropdown> ();
 		furnButton = transform.Find ("FurnitureButton").GetComponent<Button>();
@@ -119,18 +114,21 @@ public class EditorUI : MonoBehaviour {
 		flipRoomButton = transform.Find ("FlipRoomButton").GetComponent<Button>();
 		roomStateDropdown = transform.Find ("RoomStateDropdown").GetComponent<Dropdown>();
 		shadowToggle = transform.Find ("ShadowToggle").GetComponent<Toggle>();
+		flippedToggle = transform.Find ("FlippedToggle").GetComponent<Toggle>();
 
+		zoomSlider = transform.Find ("ZoomSlider").GetComponent<Slider>();
 
 		// Listeners
 
 		toGameButton.onClick.AddListener(() => SceneManager.LoadScene("Main"));
-
 
 		// BACKGROUND DROPDOWN
 
 		backgroundDropdown.AddOptions (bgNameList);
 		backgroundDropdown.onValueChanged.AddListener (NewBackgroundSelected);
 
+		// Zoom Slider
+		zoomSlider.onValueChanged.AddListener ( i => Camera.main.orthographicSize = i );
 
 		// set bg dropdown value 
 
@@ -153,7 +151,6 @@ public class EditorUI : MonoBehaviour {
 			Debug.LogError ("can't find bg name in list");
 		}
 			
-
 		// MUSIC DROPDOWN
 
 		musicDropdown.AddOptions (clipNameList);
@@ -175,11 +172,10 @@ public class EditorUI : MonoBehaviour {
 		{
 			musicDropdown.value = clipNameList.IndexOf (roomMusicName);
 
-		} else {
-
+		} else if (roomMusicName != string.Empty) 
+		{
 			Debug.LogError ("can't find clip name in list");
 		}
-
 
 		// MAP AREA DROPDOWN
 
@@ -194,8 +190,8 @@ public class EditorUI : MonoBehaviour {
 		{
 			mapAreaDropdown.value = mapAreaList.IndexOf (roomMapArea);
 
-		} else {
-
+		} else if (roomMapArea != string.Empty) 
+		{
 			Debug.LogError ("can't find map area in list");
 		}
 
@@ -211,14 +207,12 @@ public class EditorUI : MonoBehaviour {
 
 		roomNameInput.onEndEdit.AddListener (RoomNameChanged);
 
-
 		// Room name 
 
 		if (myRoom.myName != null) 
 		{
 			roomNameInput.text = myRoom.myName;
 		}
-
 
 		// Shadow state 
 
@@ -234,6 +228,10 @@ public class EditorUI : MonoBehaviour {
 		}
 
 		shadowToggle.onValueChanged.AddListener (SetShadowState);
+
+		// flipped background
+		flippedToggle.isOn = myRoom.bgFlipped;
+		flippedToggle.interactable = false; // FIXME: if you want to make it interactable, add a function which will change it and reload the background
 	}
 
 
@@ -263,6 +261,7 @@ public class EditorUI : MonoBehaviour {
 
 	public void CreateBackgroundSelect()
 	{
+		Destroy (interactableSelect);
 		interactableSelect = Instantiate (interactableSelectPrefab);
 
 		GameObject content = interactableSelect.GetComponentInChildren<GridLayoutGroup> ().gameObject;				
@@ -278,6 +277,9 @@ public class EditorUI : MonoBehaviour {
 
 			button.GetComponent<Button> ().onClick.AddListener (() => EditorRoomManager.instance.CreateNewRoomFromSprite(sprite.name));
 		}
+
+		// Assigning the close button
+		GameObject.Find("CloseButton").GetComponentInChildren<Button>().onClick.AddListener ( () => Destroy (interactableSelect) );
 	}
 
 
@@ -285,6 +287,7 @@ public class EditorUI : MonoBehaviour {
 
 	public void CreateFurnitureSelect()
 	{
+		Destroy (interactableSelect);
 		interactableSelect = Instantiate (interactableSelectPrefab);
 
 		GameObject content = interactableSelect.GetComponentInChildren<GridLayoutGroup> ().gameObject;				
@@ -300,14 +303,17 @@ public class EditorUI : MonoBehaviour {
 
 			button.GetComponent<Button> ().onClick.AddListener (() => SetFurnitureBuildMode(sprite.name));
 		}
+
+		// Assigning the close button
+		GameObject.Find("CloseButton").GetComponentInChildren<Button>().onClick.AddListener ( () => Destroy (interactableSelect) );
 	}
 
 
 	// CREATING CHARACTER //
 
-
 	public void CreateCharacterSelect()
 	{
+		Destroy (interactableSelect);
 		interactableSelect = Instantiate (interactableSelectPrefab);
 
 		GameObject content = interactableSelect.GetComponentInChildren<GridLayoutGroup> ().gameObject;
@@ -323,6 +329,9 @@ public class EditorUI : MonoBehaviour {
 
 			button.GetComponent<Button> ().onClick.AddListener (() => SetCharacterBuildMode(gameObject.name));
 		}
+
+		// Assigning the close button
+		GameObject.Find("CloseButton").GetComponentInChildren<Button>().onClick.AddListener ( () => Destroy (interactableSelect) );
 	}
 
 
@@ -331,7 +340,6 @@ public class EditorUI : MonoBehaviour {
 		BuildController.instance.furnitureName = furnitureName;
 
 		Destroy (interactableSelect);
-
 
 		// set to build Furniture mode
 
@@ -344,7 +352,6 @@ public class EditorUI : MonoBehaviour {
 		BuildController.instance.characterName = characterName;
 
 		Destroy (interactableSelect);
-
 
 		// set to build Furniture mode
 
@@ -407,8 +414,6 @@ public class EditorUI : MonoBehaviour {
 		EditorRoomManager.instance.room.myMirrorRoom.inTheShadow = inShadow;
 		EditorRoomManager.roomToLoad = JsonUtility.ToJson (EditorRoomManager.instance.room);
 
-		//Debug.Log (EditorRoomManager.roomToLoad);
-
 		EditorRoomManager.loadRoomFromMemory = true;
 
 		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -444,6 +449,5 @@ public class EditorUI : MonoBehaviour {
 
 		okButton.onClick.AddListener (() => Destroy(alertObject));
 	}
-
 
 }

@@ -71,8 +71,6 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 	public void CreateInspector(PhysicalInteractable currentPhysicalInteractable)
 	{
-		Debug.Log ("createInspector");
-
 		DestroyInspector ();
 		inspectorObject = Instantiate (inspectorObjectPrefab);
 
@@ -299,31 +297,42 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 	public void changeWidth(string x)
 	{
-		int newX = int.Parse (x);
+		int newX;
+		bool validFormat = int.TryParse (x, out newX);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableWidth (newX, InspectorManager.instance.chosenFurniture);
+		if (validFormat)
+		{
+			if (InspectorManager.instance.chosenFurniture != null) 
+			{			
+				EditorRoomManager.instance.ChangeInteractableWidth (newX, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableWidth (newX, InspectorManager.instance.chosenCharacter);
+			} else if (InspectorManager.instance.chosenCharacter != null) 
+			{			
+				EditorRoomManager.instance.ChangeInteractableWidth (newX, InspectorManager.instance.chosenCharacter);
+			}
 		}
+
+
 	}
 
 
 
 	public void changeHeight(string y)
 	{
-		int newY = int.Parse (y);
+		int newY;
+		bool validFormat = int.TryParse (y, out newY);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableHeight (newY, InspectorManager.instance.chosenFurniture);
+		if (validFormat)
+		{
+			if (InspectorManager.instance.chosenFurniture != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableHeight (newY, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableHeight (newY, InspectorManager.instance.chosenCharacter);
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableHeight (newY, InspectorManager.instance.chosenCharacter);
+			}
 		}
 	}
 
@@ -333,30 +342,40 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 	public void changeX(string x)
 	{
-		int newX = int.Parse (x);
+		int newX;
+		bool validFormat = int.TryParse (x, out newX);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableTileX (newX, InspectorManager.instance.chosenFurniture);
+		if (validFormat)
+		{
+			if (InspectorManager.instance.chosenFurniture != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableTileX (newX, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableTileX (newX, InspectorManager.instance.chosenCharacter);
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableTileX (newX, InspectorManager.instance.chosenCharacter);
+			}
 		}
 	}
 
 
 	public void changeY(string y)
 	{
-		int newY = int.Parse (y);
+		int newY;
+		bool validFormat = int.TryParse (y, out newY);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableTileY (newY, InspectorManager.instance.chosenFurniture);
+		if (validFormat)
+		{
+			if (InspectorManager.instance.chosenFurniture != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableTileY (newY, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableTileY (newY, InspectorManager.instance.chosenCharacter);
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableTileY (newY, InspectorManager.instance.chosenCharacter);
+			}
 		}
 	}
 
@@ -366,35 +385,45 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 	public void changeOffsetX(string x)
 	{
-		float newX = float.Parse (x);
+		float newX;
+		bool validFormat = float.TryParse (x, out newX);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
+		if (validFormat)
 		{
-			EditorRoomManager.instance.ChangeInteractableOffsetX (newX, InspectorManager.instance.chosenFurniture);
+			if (InspectorManager.instance.chosenFurniture != null)
+			{
+				EditorRoomManager.instance.ChangeInteractableOffsetX (newX, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableOffsetX (newX, InspectorManager.instance.chosenCharacter);
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableOffsetX (newX, InspectorManager.instance.chosenCharacter);
+			}
+
+			offsetXInput.text = x;
 		}
-
-		offsetXInput.text = x;
 	}
 
 
 	public void changeOffsetY(string y)
 	{
-		float newY = float.Parse (y);
+		float newY;
+		bool validFormat = float.TryParse (y, out newY);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
+		if (validFormat)
 		{
-			EditorRoomManager.instance.ChangeInteractableOffsetY (newY, InspectorManager.instance.chosenFurniture);
+			if (InspectorManager.instance.chosenFurniture != null)
+			{
+				EditorRoomManager.instance.ChangeInteractableOffsetY (newY, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableOffsetY (newY, InspectorManager.instance.chosenCharacter);
-		}	
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableOffsetY (newY, InspectorManager.instance.chosenCharacter);
+			}	
 
-		offsetYInput.text = y;
+			offsetYInput.text = y;
+		}
 	}
 
 

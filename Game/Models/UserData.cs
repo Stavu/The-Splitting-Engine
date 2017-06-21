@@ -107,9 +107,8 @@ public class UserData {
 			roomsVisitedList.Add (roomName);
 			GameManager.instance.SaveData ();
 			return true;
-		}	
+		}
 
-		//Debug.Log ("already existed");
 		return false;
 	}
 
@@ -142,8 +141,6 @@ public class UserData {
 
 	public void AddAnimationState(string physicalInateractable,string animationState)
 	{		
-		//Debug.Log ("add animation state");
-
 		foreach (PI_AnimationState state in animationStateList) 
 		{
 			if (physicalInateractable == state.myName) 
@@ -166,8 +163,6 @@ public class UserData {
 
 	public string GetAnimationState(string physicalInateractable)
 	{
-		//Debug.Log ("get animation state");
-
 		string animationState;
 
 		foreach (PI_AnimationState state in animationStateList) 
@@ -175,7 +170,7 @@ public class UserData {
 			if (physicalInateractable == state.myName) 
 			{
 				animationState = state.animationState;
-				//Debug.Log ("return animation state " + animationState);
+
 				return animationState;
 			}
 		}

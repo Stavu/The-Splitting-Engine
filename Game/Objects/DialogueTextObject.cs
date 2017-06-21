@@ -33,8 +33,6 @@ public class DialogueTextObject : MonoBehaviour {
 	{	
 		if ((Input.GetKeyDown(KeyCode.Space) || ((isImportant == false) && (Input.anyKeyDown)))) 
 		{
-			//Debug.Log ("Update: sentenceList count" + sentenceList.Count);
-
 			if ((sentenceList [currentEntry].mySubIntList != null) && (sentenceList[currentEntry].subinteractImmediately == false))
 			{
 
@@ -106,12 +104,6 @@ public class DialogueTextObject : MonoBehaviour {
 
 	public Vector3 PositionTextBox(ISpeaker speaker)
 	{
-		if (speaker == null) 
-		{
-			Debug.Log("speaker is null");
-
-		}
-
 		int offsetX = 0;
 		int offsetY = 5;
 

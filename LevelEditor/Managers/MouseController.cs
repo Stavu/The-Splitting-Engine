@@ -64,11 +64,7 @@ public class MouseController : MonoBehaviour {
 
 
 	Vector3 GetCurrentMousePosition()
-	{
-
-		//Debug.Log ("GetCurrentMousePosition");
-
-
+	{		
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 		Debug.DrawRay(ray.origin, ray.direction * -Camera.main.transform.position.z, Color.yellow);
 
@@ -78,25 +74,19 @@ public class MouseController : MonoBehaviour {
 		Vector3 pos = ray.GetPoint (rayDistance);
 
 		return pos;
-
 	}
 
 
 	void DestroyMarkers()
 	{
-
 		while (tileMarkerGameObjects.Count > 0) 
 		{
-
 			GameObject go = tileMarkerGameObjects[0];
 
 			tileMarkerGameObjects.RemoveAt(0);
 
 			SimplePool.Despawn (go);
-
-
 		}
-
 	}
 
 
@@ -105,24 +95,19 @@ public class MouseController : MonoBehaviour {
 
 	void CheckClickOnTile()
 	{
-
 		if ((EventSystem.current.IsPointerOverGameObject()) && (isDragging == false))
 		{
 			return;
 		}
 
-
 		if (Input.GetMouseButtonDown (0)) 
-		{			
-
+		{
 			int posX = Mathf.FloorToInt (currentFramePosition.x);
 			int posY = Mathf.FloorToInt (currentFramePosition.y);
-
 
 			// Destroying old markers
 
 			DestroyMarkers ();
-
 
 			// Creation of the marker
 
@@ -149,19 +134,15 @@ public class MouseController : MonoBehaviour {
 
 	void UpdateDragging()
 	{
-
 		if ((EventSystem.current.IsPointerOverGameObject()) && (isDragging == false))
 		{
 			return;
 		}
 
-
 		if (Input.GetMouseButtonDown (0)) 
 		{
-
 			dragStartPosition = currentFramePosition;
 			isDragging = true;
-
 		}
 
 		// The tile we started at
@@ -174,13 +155,7 @@ public class MouseController : MonoBehaviour {
 		int endX = Mathf.FloorToInt(currentFramePosition.x);
 		int endY = Mathf.FloorToInt(currentFramePosition.y);
 
-		//Debug.Log (currentFramePosition);
-
-		//Debug.Log (endX.ToString () + "," + endY.ToString ());
-
-
 		// Making it friendly :)
-
 
 		if (endX < startX) 
 		{
@@ -196,53 +171,37 @@ public class MouseController : MonoBehaviour {
 			int temp = startY;
 			startY = endY;
 			endY = temp;
-
-
 		}
-
 
 		// Destroying old markers
 
 		DestroyMarkers ();
 
-
-
 		// Creation of the markers
 
 		if ((Input.GetMouseButton (0)) && (isDragging)) 
 		{
-
 			for (int x = startX; x <= endX; x++) 
 			{
 				for (int y = startY; y <= endY; y++) 
 				{
-
 					Tile tile = EditorRoomManager.instance.room.MyGrid.GetTileAt (x, y);
 
 					if (tile != null) 
 					{
-
 						GameObject obj = SimplePool.Spawn (tileMarker, new Vector3 (x, y, -1), Quaternion.identity);
 						obj.transform.SetParent (this.transform, true);
 
 						tileMarkerGameObjects.Add (obj);
-
 					}
-
 				}
-
 			}
-
 		}
-
-
 
 		// Creating objects
 
-
 		if ((Input.GetMouseButtonUp (0)) && (isDragging)) 
 		{
-
 			isDragging = false;
 
 			List<Tile> tileList = new List<Tile> ();
@@ -251,26 +210,15 @@ public class MouseController : MonoBehaviour {
 			{
 				for (int y = startY; y <= endY; y++) 
 				{
-
 					Tile tile = EditorRoomManager.instance.room.MyGrid.GetTileAt (x, y);
 
 					if (tile != null) 
-					{
-					
-						tileList.Add (tile);
-					
+					{					
+						tileList.Add (tile);					
 					}
 				}
 			}
-
-
-			//EventsHandler.Invoke_cb_editorTilesSelected (tileList);
-
 		}
 	}
-
-
-
-
 
 }

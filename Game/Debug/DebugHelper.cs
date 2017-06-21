@@ -72,8 +72,6 @@ public class DebugHelper : MonoBehaviour {
 		{
 
 			roomNameList.Add (roomString);
-			//Debug.Log (roomString);
-			
 		}
 
 		dropDownMenu.AddOptions (roomNameList);

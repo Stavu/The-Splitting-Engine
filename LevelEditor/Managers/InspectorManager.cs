@@ -7,10 +7,9 @@ using System;
 
 
 
-public class InspectorManager : MonoBehaviour {
-
-
-
+public class InspectorManager : MonoBehaviour 
+{
+	
 	// Singleton //
 
 	public static InspectorManager instance { get; protected set;}
@@ -26,14 +25,8 @@ public class InspectorManager : MonoBehaviour {
 	// Singleton //
 
 
-
 	public GameObject interactionPanelObjectPrefab;
 	public GameObject tileInspectorObjectPrefab;
-
-
-	//GameObject interactionPanelObject;
-	//GameObject tileInspectorObject;
-
 
 	public static InteractionInspector interactionInspector;
 	public static PhysicalInteractableInspector physicalInteractableInspector;
@@ -43,7 +36,6 @@ public class InspectorManager : MonoBehaviour {
 	public static GraphicStateInspector graphicStateInspector;
 
 	// public Interaction loadedInteraction;
-
 
 
 	// Chosen furniture
@@ -73,7 +65,6 @@ public class InspectorManager : MonoBehaviour {
 	}
 
 
-
 	// Chosen character
 
 	Character _chosenCharacter;
@@ -101,9 +92,6 @@ public class InspectorManager : MonoBehaviour {
 	}
 
 
-
-
-
 	// chosen tile interaction property
 
 	TileInteraction _chosenTileInteraction;
@@ -120,18 +108,14 @@ public class InspectorManager : MonoBehaviour {
 
 			if (_chosenTileInteraction == null)  
 			{
-				//Debug.Log ("destroy tile inspector");
 				tileInspector.DestroyTileInspector ();
 
 			} else {
 
-				//Debug.Log ("create tile inspector");
 				tileInspector.CreateTileInspector (_chosenTileInteraction);
 			}
 		}
 	}
-
-
 
 
 	// Use this for initialization
@@ -172,19 +156,6 @@ public class InspectorManager : MonoBehaviour {
 	}
 
 
-	// Update is called once per frame
-
-	void Update () 
-	{
-		
-	}
-
-
-
-
-
-
-
 	public PhysicalInteractable GetChosenPI()
 	{
 		
@@ -200,8 +171,5 @@ public class InspectorManager : MonoBehaviour {
 		return null;
 
 	}
-
-
-
 
 }

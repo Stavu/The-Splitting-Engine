@@ -156,7 +156,6 @@ public class GameManager : MonoBehaviour
 	{
 		if (userData != null) 
 		{
-			//Debug.Log ("playerData is not null");
 			return;
 		}
 
@@ -188,8 +187,6 @@ public class GameManager : MonoBehaviour
 				player.currentRoom = playerData.currentRoom;
 				player.myPos = playerData.currentPos;
 
-				Debug.Log("name: " + player.identificationName + " pos: " + player.myPos);
-
 				foreach (InventoryItem item in playerData.inventory.items) 
 				{
 					item.Initialize ();
@@ -212,9 +209,9 @@ public class GameManager : MonoBehaviour
 		PlayerManager.instance.CreatePlayers ();
 
 		userData = new UserData ();
-		userData.currentActivePlayer = "geM";
+		userData.currentActivePlayer = "Daniel";
 
-		PlayerManager.myPlayer = PlayerManager.instance.GetPlayerByName ("geM");
+		PlayerManager.myPlayer = PlayerManager.instance.GetPlayerByName ("Daniel");
 		PlayerManager.myPlayer.isActive = true;
 
 		foreach (Player player in PlayerManager.playerList) 
@@ -224,6 +221,7 @@ public class GameManager : MonoBehaviour
 
 			data.currentRoom = player.startingRoom;
 			player.currentRoom = player.startingRoom;
+			player.myPos = player.startingPos;
 		}
 
 		SaveData ();
@@ -232,16 +230,11 @@ public class GameManager : MonoBehaviour
 
 	public void SaveData ()
 	{		
-		//Debug.Log ("Saving data");
-
 		if (userData != null) 
 		{
 			string data = JsonUtility.ToJson (userData);
 			PlayerPrefs.SetString ("PlayerData", data);
-
-			//Debug.Log (data);
 		}
 	}
-
 
 }

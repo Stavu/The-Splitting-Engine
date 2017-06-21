@@ -108,7 +108,6 @@ public class BuildController : MonoBehaviour {
 			
 			case Mode.changeCoords:
 
-				Debug.Log ("change coords");
 				EditorRoomManager.instance.SetPICoords (tile);
 
 				return;		

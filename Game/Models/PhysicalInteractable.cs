@@ -43,17 +43,13 @@ public class PhysicalInteractable : Interactable {
 
 	public List<Coords> GetMyCoordsList()
 	{	
-		//Debug.Log ("GetMyCoordsList");
-
 		if (currentGraphicState == null) 
 		{			
 			Debug.LogError ("graphic state is null");
 		} 
 
-
 		if (CurrentGraphicState ().coordsList.Count > 0) 
 		{			
-			//Debug.Log ("getting coords list");
 			return CurrentGraphicState ().coordsList;
 
 		} else {

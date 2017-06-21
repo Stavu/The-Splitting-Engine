@@ -90,19 +90,6 @@ public class Room {
 	public RoomMirror myMirrorRoom;
 
 
-
-	// empty constructor
-
-	/*
-	public Room()
-	{
-
-		Debug.Log ("empty room" + myName);
-
-	}
-	*/
-
-
 	// Shallow Room - for editor
 
 	public Room(int myWidth, int myHeight)
@@ -124,13 +111,10 @@ public class Room {
 	}
 
 
-
 	// Real Room - for game 
 
 	public Room(Room clone)
 	{
-		//Debug.Log ("room clone");
-
 		this.myName = clone.myName;
 		this.myMusic = clone.myMusic;
 
@@ -163,9 +147,6 @@ public class Room {
 
 	public void CreateRoomInteractables()
 	{
-
-		//Debug.Log ("CreateRoomInteractables");
-
 		// Furniture
 
 		foreach (Furniture furn in myFurnitureList) 
@@ -328,8 +309,6 @@ public class Room {
 
 	public List<Tile> GetMyTiles (Grid grid, Vector2 mySize, int x ,int y)
 	{
-		//Debug.Log ("GetMyTiles_size");
-
 		List<Tile> myTilesList = new List<Tile>();
 
 		for (int i = 0; i < mySize.x; i++) {
@@ -357,9 +336,6 @@ public class Room {
 
 	public List<Tile> GetMyTiles (Grid grid, List<Coords> coordsList)
 	{
-
-		//Debug.Log ("GetMyTiles_coordslist");
-
 		List<Tile> myTilesList = new List<Tile>();
 
 		foreach (Coords coords in coordsList) 
@@ -376,18 +352,14 @@ public class Room {
 
 	public void ChangePIInTiles(PhysicalInteractable physicalInteractable, GraphicState newState)
 	{
-
-		Debug.Log ("ChangePIInTiles");
-
 		List<Tile> oldTiles;
 
-		if (physicalInteractable.CurrentGraphicState ().coordsList.Count > 0) {
-			//Debug.Log ("get list from coords");
+		if (physicalInteractable.CurrentGraphicState ().coordsList.Count > 0) 
+		{
 			oldTiles = GetMyTiles (MyGrid, physicalInteractable.CurrentGraphicState ().coordsList);	
 
 		} else {
 
-			//Debug.Log ("get list from size");
 			oldTiles = GetMyTiles (MyGrid, physicalInteractable.mySize, physicalInteractable.x, physicalInteractable.y);
 		}
 

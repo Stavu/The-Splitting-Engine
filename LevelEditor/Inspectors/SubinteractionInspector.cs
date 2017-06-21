@@ -104,7 +104,6 @@ public class SubinteractionInspector : MonoBehaviour {
 
 	public void OpenSubinteractionPanel(SubInteraction subInt)
 	{
-		Debug.Log ("open sub interaction panel");
 		// SubInteraction type dropdown
 
 		subIntTypeDropdown.AddOptions (subIntTypeList);
@@ -120,9 +119,7 @@ public class SubinteractionInspector : MonoBehaviour {
 
 			SetSubinteractionType (i);
 
-
 			// Fill the active fields
-
 
 			switch (subInt.interactionType) 
 			{
@@ -165,37 +162,14 @@ public class SubinteractionInspector : MonoBehaviour {
 				
 				case "PlayAnimation":
 
-					Debug.Log ("play animation");
 					// populating the animation dropdown according to the object's animations 
 
 					List<string> animationList = new List<string> ();
 					Furniture furn = InspectorManager.instance.chosenFurniture;
 
 					GameObject prefab = Resources.Load<GameObject> ("Prefabs/Furniture/" + furn.fileName);
-					Debug.Log ("create prefab");
 
 					animationList = Utilities.GetAnimationClipNames (prefab);
-
-
-					/*
-					if (prefab != null) 
-					{		
-						Debug.Log ("prefab isn't null");
-						Animator animator = prefab.GetComponent<Animator> ();
-
-						if (animator != null) 
-						{	
-							Debug.Log ("animator isn't null");
-							foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) 
-							{
-								animationList.Add (clip.name);
-								Debug.Log ("animation list " + animationList.Count);
-							}
-						}
-					}	
-
-					*/
-
 
 					playAnimation.Find ("AnimationDropdown").GetComponent<Dropdown> ().AddOptions (animationList);
 
@@ -326,14 +300,12 @@ public class SubinteractionInspector : MonoBehaviour {
 
 				playAnimation.gameObject.SetActive (true);
 
-				Debug.Log("play animation");
 				// populating the animation dropdown according to the object's animations 
 
 				List<string> animationList = new List<string> ();
 				Furniture furn = InspectorManager.instance.chosenFurniture;
 
 				GameObject prefab = Resources.Load<GameObject> ("Prefabs/Furniture/" + furn.fileName);
-				Debug.Log ("create prefab");
 			
 				animationList = Utilities.GetAnimationClipNames (prefab);							
 
@@ -401,8 +373,6 @@ public class SubinteractionInspector : MonoBehaviour {
 	{
 		if (currentSubint == null) 
 		{
-			Debug.Log ("SubmitSubinteraction: currentSubInt is null");
-
 			int i = subIntTypeDropdown.value;
 			string subIntType = subIntTypeList [i];
 
@@ -453,7 +423,7 @@ public class SubinteractionInspector : MonoBehaviour {
 					break;
 				}
 
-				currentSubint.numberOfPlays = int.Parse(numberOfPlaysString);
+				int.TryParse(numberOfPlaysString, out currentSubint.numberOfPlays); // FIXME: what happens if it is a vlid format? will it change anything?
 
 				break;
 
@@ -479,10 +449,15 @@ public class SubinteractionInspector : MonoBehaviour {
 
 				currentSubint.destinationRoomName = moveToRoom.Find ("TextInputSmall1").GetComponent<InputField> ().text;
 
-				Vector2 entrancePoint = new Vector2 (int.Parse (moveToRoom.Find ("InputX").GetComponent<InputField> ().text),
-					                      			 int.Parse (moveToRoom.Find ("InputY").GetComponent<InputField> ().text));
+				// currently if the format is invalid, it will give it a default value of 0
 
-				currentSubint.entrancePoint = entrancePoint;
+				int x = 0;
+				int y = 0;
+
+				int.TryParse (moveToRoom.Find ("InputX").GetComponent<InputField> ().text, out x);
+				int.TryParse (moveToRoom.Find ("InputY").GetComponent<InputField> ().text, out y);
+
+				currentSubint.entrancePoint = new Vector2 (x, y);
 
 				break;
 

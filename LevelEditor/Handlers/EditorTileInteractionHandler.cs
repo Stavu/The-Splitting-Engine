@@ -112,11 +112,9 @@ public class EditorTileInteractionHandler : MonoBehaviour {
 	public void PlaceTileIntInTiles(TileInteraction tileInt, Room room, Grid grid)
 	{
 		List<Tile> tempTileList = room.GetMyTiles (grid, tileInt.mySize, tileInt.x, tileInt.y);
-		Debug.Log ("tile list count" + tempTileList.Count);
 
 		foreach (Tile myTile in tempTileList) 
 		{			
-			Debug.Log ("tile x " + myTile.x + "y " + myTile.y);
 			myTile.myTileInteraction = tileInt;
 		}
 

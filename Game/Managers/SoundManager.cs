@@ -139,8 +139,6 @@ public class SoundManager : MonoBehaviour {
 
 	public void SetMusic(bool musicOff)
 	{
-		Debug.Log ("SetMusic");
-
 		foreach (AudioSource audioSource in audioSources_music) 
 		{
 			audioSource.mute = musicOff;
@@ -154,8 +152,6 @@ public class SoundManager : MonoBehaviour {
 
 	public void SetSound(bool soundOff)
 	{
-		Debug.Log ("SetSound");
-
 		foreach (AudioSource audioSource in audioSources) 
 		{
 			audioSource.mute = soundOff;
@@ -197,7 +193,6 @@ public class SoundManager : MonoBehaviour {
 
 				if (audioSources_music [currentMusicChannel].clip.name == nextRoom.myMirrorRoom.myShadowMusic) 
 				{
-					Debug.Log ("same music");
 					return;
 				}
 
@@ -207,7 +202,6 @@ public class SoundManager : MonoBehaviour {
 
 				if (audioSources_music [currentMusicChannel].clip.name == nextRoom.myMusic) 
 				{
-					Debug.Log ("same music");
 					return;
 				}
 			}
@@ -218,7 +212,6 @@ public class SoundManager : MonoBehaviour {
 
 			if (audioSources_music [currentMusicChannel].clip.name == nextRoom.myMusic) 
 			{
-				Debug.Log ("same music");
 				return;
 			}
 		}
@@ -258,19 +251,16 @@ public class SoundManager : MonoBehaviour {
 
 		if (myRoom.roomState == RoomState.Real) 
 		{
-			Debug.Log ("the room is real.");
 			return;
 		}
 
 		if (myRoom.myMirrorRoom == null) 
 		{
-			Debug.Log ("mirror room is null.");
 			return;
 		}
 
 		if (myRoom.myMusic == myRoom.myMirrorRoom.myShadowMusic) 
 		{
-			Debug.Log ("same music");
 			return;
 		}
 
@@ -328,8 +318,6 @@ public class SoundManager : MonoBehaviour {
 
 	public void PlaySound(string soundName, int numberOfPlays)
 	{
-		Debug.Log ("play sound " + soundName);
-
 		if (numberOfPlays == 0) 
 		{
 			audioSources_loop[nextAudioSource_loop].clip = stringAudioClipMap [soundName];
@@ -349,8 +337,6 @@ public class SoundManager : MonoBehaviour {
 
 	public void StopSound(string soundName)
 	{
-		Debug.Log ("stop sound " + soundName);
-
 		if (stringAudioSourceLoopMap.ContainsKey (soundName)) 
 		{
 			stringAudioSourceLoopMap [soundName].Stop ();
@@ -367,8 +353,6 @@ public class SoundManager : MonoBehaviour {
 		{		
 			// PLAY IN LOOP
 
-			Debug.Log ("n = 0");
-
 			audioSource.loop = true;
 			audioSource.Play ();
 
@@ -377,8 +361,6 @@ public class SoundManager : MonoBehaviour {
 			yield return null;
 		
 		} else {
-
-			Debug.Log ("n != 0");
 
 			int i = 0;
 

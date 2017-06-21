@@ -105,22 +105,17 @@ public class CharacterManager : MonoBehaviour {
 
 	public IEnumerator MoveCoroutine(IWalker walker)
 	{
-
 		// the walker's position and the target position
 
 		Vector3 startPos = walker.walkerGameObject.transform.position;
 		Vector3 endPos = Utilities.GetCharacterPosOnTile (walker, walker.walkerTargetPos);
 
 		float distance = Vector3.Distance (startPos, endPos);
-		//Debug.Log ("distance " + distance);
 
 		float tempSpeed = walker.walkerSpeed / distance;
-		//Debug.Log ("tempSpeed " + tempSpeed);
 
 		// interpolation
 		float inter = 0;
-
-
 
 		// -- ANIMATIONS -- //
 
@@ -134,18 +129,13 @@ public class CharacterManager : MonoBehaviour {
 		Coords startCoords = new Coords (walker.speakerPos.x, walker.speakerPos.y);
 		Coords endCoords = new Coords (walker.walkerTargetPos.x, walker.walkerTargetPos.y);
 
-
-
 		// Walk down
-
-		//Debug.Log ("current_y" + startCoords.y + "target_y" + endCoords.y);
 
 		if (startCoords.y > endCoords.y) 			
 		{
 			myAnimator.PlayInFixedTime ("Walk_front");
 			lastDirection = Direction.down;
 		}
-
 
 		// Walk up
 
@@ -154,7 +144,6 @@ public class CharacterManager : MonoBehaviour {
 			myAnimator.PlayInFixedTime ("Walk_back");
 			lastDirection = Direction.up;
 		}
-
 
 		// Walk left
 
@@ -165,7 +154,6 @@ public class CharacterManager : MonoBehaviour {
 
 		}
 
-
 		// Walk right
 
 		if (startCoords.x < endCoords.x) 			
@@ -173,7 +161,6 @@ public class CharacterManager : MonoBehaviour {
 			myAnimator.PlayInFixedTime ("Walk_right");
 			lastDirection = Direction.right;
 		}
-
 
 		// while loop - updating the character object position
 
@@ -183,26 +170,20 @@ public class CharacterManager : MonoBehaviour {
 
 			if (inter >= 1) 
 			{				
-				//Debug.Log ("I arrived " + walker.speakerName);
-
 				walker.walkerGameObject.transform.position = startPos = endPos;
 				break;
 
 			} else {
 
 				walker.walkerGameObject.transform.position = Vector3.Lerp (startPos, endPos, inter);
-
 			}
 
 			yield return new WaitForFixedUpdate ();
-
 		}
-
 
 		// After while loop is done, change the character tile
 
 		walker.ChangePos (walker.walkerTargetPos);
-
 
 		switch (lastDirection) 
 		{
@@ -212,13 +193,11 @@ public class CharacterManager : MonoBehaviour {
 
 				break;
 
-
 			case Direction.right:
 
 				myAnimator.PlayInFixedTime ("Idle_right");
 
 				break;
-
 
 			case Direction.down:
 
@@ -226,16 +205,12 @@ public class CharacterManager : MonoBehaviour {
 
 				break;
 
-
 			case Direction.up:
 
 				myAnimator.PlayInFixedTime ("Idle_back");
 
 				break;
-
 		}
-
-
 
 		// Check if I need to continue walking 
 
@@ -251,13 +226,6 @@ public class CharacterManager : MonoBehaviour {
 				EventsHandler.Invoke_cb_characterFinishedPath ();
 			}
 		}
-
-
 	}
-
-
-
-
-
 
 }

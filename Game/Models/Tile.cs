@@ -25,8 +25,6 @@ public class Tile {
 	{
 		this.x = x;
 		this.y = y;
-
-		//Debug.Log ("Created new tile at" + this.x + this.y); 
 	}
 
 
@@ -84,9 +82,6 @@ public class Tile {
 
 	public void PlaceInactivePlayerInTile(Player player)
 	{
-
-		//Debug.Log ("place ip in tile");
-
 		if (player == null) 
 		{
 			Debug.LogError("Tile: PlaceRoomObject myObject is null");
@@ -112,15 +107,12 @@ public class Tile {
 
 	public void PlaceTileInteraction(TileInteraction tileInteraction)
 	{
-
-
 		if (tileInteraction == null) 
 		{
 			Debug.LogError("Tile: PlaceRoomObject tileInteraction is null");
 
 			return;
 		}
-
 
 		if(myTileInteraction != null)
 		{
@@ -130,17 +122,12 @@ public class Tile {
 
 				return;
 			}
-
 		}
-
 
 		// if everything's okay, set myFurniture
 
 		myTileInteraction = tileInteraction;
-
-
 	}
-
 
 
 	public bool IsWalkable()
@@ -168,9 +155,6 @@ public class Tile {
 		}
 
 		return true;
-
 	}
-
-
 
 }

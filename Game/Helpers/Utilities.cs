@@ -11,13 +11,18 @@ public class Utilities {
 	int myVar3; 
 
 
-
-
 	public static void AdjustOrthographicCamera(Room room)
 	{
 		Camera.main.orthographicSize = 12; 
 
 		Camera.main.transform.position = new Vector3 ((room.myWidth / 2), (room.myHeight / 2), -10);
+	}
+
+	public static void AdjustOrthographicCamera_Editor(Room room)
+	{
+		Camera.main.orthographicSize = 14; 
+
+		Camera.main.transform.position = new Vector3 ((room.myWidth / 2), (room.myHeight / 2) - 1, -10);
 	}
 
 
@@ -54,13 +59,7 @@ public class Utilities {
 			textList.Add (str);
 		}
 
-		//Debug.Log (textList);
-
-
 		return textList;
-
-
-
 	}
 
 
@@ -96,17 +95,7 @@ public class Utilities {
 			sr.flipX = myFurniture.imageFlipped;
 		}
 
-		/*
-		if (myFurniture.currentGraphicState.frameExtents == Vector2.zero) 
-		{
-			Debug.Log ("frameExtents " + myFurniture.currentGraphicState.frameExtents);
-			myFurniture.currentGraphicState.frameExtents = sr.sprite.bounds.extents;
-		}
-		*/	
-
 		obj.transform.position = new Vector3 (myFurniture.myPos.x + myFurniture.offsetX, myFurniture.myPos.y + 0.5f + myFurniture.offsetY, myFurniture.myPos.z);
-		Debug.Log (obj.transform.position);
-
 
 		// sorting order 
 
@@ -121,65 +110,31 @@ public class Utilities {
 		sr.sortingLayerName = Constants.furniture_character_layer;
 
 		return obj;
-
 	}
-
-
-
 
 
 	public static void SetPISortingOrder(PhysicalInteractable myPI, GameObject obj)
 	{
-
 		// sorting order 
 
 		SpriteRenderer[] sr_list = obj.GetComponentsInChildren<SpriteRenderer> ();
-		//Debug.Log ("length" + obj.transform.childCount);
-
 
 		for (int i = 0; i < obj.transform.childCount; i++)
 		{
 			obj.transform.GetChild (i).GetComponent<SpriteRenderer> ().sortingOrder = i + (-myPI.y * 10);			
 		}
 
-		/*
-
-		// exceptions
-
-		if (myPI.fileName == "busStop") 
-		{
-			SpriteRenderer sr;
-			sr = obj.transform.Find ("Back").GetComponent<SpriteRenderer> ();
-			sr.sortingOrder = sr.sortingOrder - 65;
-		}
-
-		if (myPI.fileName == "busStop_shadow") 
-		{
-			SpriteRenderer sr;
-			sr = obj.transform.Find ("Back").GetComponent<SpriteRenderer> ();
-			sr.sortingOrder = sr.sortingOrder - 65;
-		}
-		*/
-
 	}
-
-
 
 
 	public static GameObject CreateCharacterGameObject (Character myCharacter, Transform parent)
 	{
-		//Debug.Log ("Assign Furniture Image");
-
 		myCharacter.myPos = new Vector3 (myCharacter.x + myCharacter.mySize.x/2, myCharacter.y, 0);
 
 		GameObject obj = GameObject.Instantiate(Resources.Load<GameObject> ("Prefabs/Characters/" + myCharacter.fileName)); 			
 		obj.transform.SetParent (parent);
 
-
 		obj.transform.position = new Vector3 (myCharacter.myPos.x + myCharacter.offsetX, myCharacter.myPos.y + 0.5f + myCharacter.offsetY, myCharacter.myPos.z);
-
-		//Debug.Log ("object position" + myFurniture.myName + obj.transform.position + sr.sprite.bounds);
-
 
 		// sorting order 
 
@@ -187,32 +142,22 @@ public class Utilities {
 		obj.GetComponentInChildren<SpriteRenderer>().sortingLayerName = Constants.furniture_character_layer;
 
 		return obj;
-
-
 	}
-
 
 
 	public static Vector2 GetCharacterPosOnTile(IWalker character, Vector2 myPos)
-	{	
-		
+	{			
 		Vector2 pos = new Vector2 (myPos.x + character.speakerSize.x / 2 + character.walkerOffsetX, myPos.y + character.walkerOffsetY + 0.5f);
 
 		return pos;
-
 	}
-
-
 
 
 	// When it's the player	
 
-
 	public static List<DialogueSentence> CreateSentenceList (ISpeaker speaker, List<string> textlist)
 	{
-
 		List<DialogueSentence> sentenceList = new List<DialogueSentence> ();
-
 
 		foreach (string str in textlist) 
 		{
@@ -221,50 +166,39 @@ public class Utilities {
 		}
 
 		return sentenceList;
-
 	}
-
 
 
 	public static List<DialogueSentence> CreateSentenceList (ISpeaker speaker, string text)
 	{
-
 		List<DialogueSentence> sentenceList = new List<DialogueSentence> ();
 
 		DialogueSentence tempSentence = new DialogueSentence (speaker.speakerName, text, false);
 		sentenceList.Add (tempSentence);
 
 		return sentenceList;
-
 	}
 
 
 	public static bool EvaluateConditions(List<Condition> conditionList)
 	{
-
 		if (conditionList.Count == 0) 
 		{
 			return true;
 		}
 
-
 		bool evaluation = true;
 
 		foreach (Condition cond in conditionList) 
-		{
-			
+		{			
 			evaluation = cond.EvaluateCondition ();
-
 		}
 
 		return evaluation;
-
-
 	}
 
 
 	// FADE IN AND OUT - from shadow to mirror and vice versa //
-
 
 	public static IEnumerator FadeBetweenSprites(List<SpriteRenderer> fadeOutSprites, List<SpriteRenderer> fadeInSprites)
 	{		
@@ -292,7 +226,6 @@ public class Utilities {
 
 		SwitchBetweenSprites (fadeOutSprites, fadeInSprites);
 	}
-
 
 
 	public static void SwitchBetweenSprites(List<SpriteRenderer> outSprites, List<SpriteRenderer> inSprites)
@@ -338,8 +271,6 @@ public class Utilities {
 	}
 
 
-
-
 	public static List<Vector3> GetPhysicalInteractableFrameBounds(PhysicalInteractable myPhysicalInt)
 	{
 		
@@ -382,9 +313,6 @@ public class Utilities {
 	}
 
 
-
-
-
 	public static List<Vector3> EditorGetPhysicalInteractableFrameBounds(PhysicalInteractable myPhysicalInt)
 	{
 		// declerations 
@@ -395,18 +323,9 @@ public class Utilities {
 
 		if (myPhysicalInt is Furniture) 		
 		{
-
 			Furniture myFurniture = (Furniture)myPhysicalInt;
 
-
 			SpriteRenderer sr = EditorRoomManager.instance.furnitureGameObjectMap[myFurniture].GetComponentInChildren<SpriteRenderer>();
-
-			if (sr == null) 
-			{
-				Debug.Log ("sr is null");
-			}
-
-
 
 			Vector3 center = sr.bounds.center;
 
@@ -419,8 +338,7 @@ public class Utilities {
 			if (frameBounds == Vector2.zero) 
 			{
 				frameBounds = sr.bounds.extents;
-			}			
-
+			}
 		}
 
 
@@ -442,7 +360,6 @@ public class Utilities {
 			}
 		}
 
-
 		//down left
 		positions.Add(new Vector3 (-frameBounds.x, -frameBounds.y,0));
 
@@ -459,14 +376,10 @@ public class Utilities {
 	}
 
 
-
-
 	public static List<GraphicState> GetGraphicStateList (PhysicalInteractable physicalInteractable)
 	{
-
 		GameObject obj = null;
 		List<GraphicState> graphicStateList = new List<GraphicState> ();
-
 
 		if (physicalInteractable is Furniture) 
 		{
@@ -505,8 +418,6 @@ public class Utilities {
 				graphicState.coordsList = new List<Coords> ();
 
 				graphicStateList.Add (graphicState);
-
-				Debug.Log ("animation list " + graphicStateList.Count);
 			}
 
 		} else {
@@ -524,21 +435,14 @@ public class Utilities {
 			defaultGraphicState.coordsList = new List<Coords> ();
 
 			graphicStateList.Add (defaultGraphicState);
-
 		}
 
 		return graphicStateList;
-
-
 	}
 
 
-
-
-
 	public static List<string> GetAnimationClipNames(GameObject obj)
-	{
-		
+	{		
 		List<string> animationList = new List<string> ();
 
 		if (obj != null) 
@@ -554,16 +458,11 @@ public class Utilities {
 			foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips) 
 			{
 				animationList.Add (clip.name);
-				//Debug.Log ("animation list " + animationList.Count);
 			}
-
 		}
 
 		return animationList;
 	}
-
-
-
 
 }
 

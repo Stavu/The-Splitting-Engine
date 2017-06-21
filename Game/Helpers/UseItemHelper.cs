@@ -8,17 +8,10 @@ public class UseItemHelper {
 
 	public static void UseItemOnPhysicalInteractable (InventoryItem item, PhysicalInteractable physicalInt)
 	{
-
-		//Debug.Log ("Use item Helper " + item.fileName + " " + furniture.myName);
-
-
 		switch (item.fileName) 
 		{
-
-
+			
 			/* -------- COMPASS -------- */
-
-
 
 			case "compass":
 
@@ -45,7 +38,6 @@ public class UseItemHelper {
 				}
 
 			break;
-
 
 
 				/* -------- MISSING PICTURE -------- */

@@ -120,21 +120,11 @@ public class Player : PhysicalInteractable, ISpeaker, IWalker {
 
 		this.mySize = mySize;	
 
-		/*
-		if (myName == "Daniel") 
-		{
-			//Debug.Log ("color");
-			myTextColor = GameManager.instance.danielColor;
-		}
-		*/
-
 		myTextColor = Color.white;
 
 		myInteractionList = new List<Interaction> ();
 		graphicStates = new List<GraphicState> ();
-
 	}
-
 
 
 	// When user is moving the player

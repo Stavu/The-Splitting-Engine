@@ -120,16 +120,12 @@ public class SubInteraction : IConditionable {
 			
 			case "showMonologue":
 
-				//Debug.Log ("SubInteract: Show monologue");
-
 				InteractionManager.instance.DisplayText (Utilities.CreateSentenceList(PlayerManager.myPlayer, textList), isImportant);
 
 				break;
 
 
 			case "showDialogue":
-
-				//Debug.Log ("SubInteract: Show dialogue");
 
 				InteractionManager.instance.DisplayDialogueOption (this.dialogueOptionTitle);
 
@@ -159,7 +155,6 @@ public class SubInteraction : IConditionable {
 
 				PI_Handler.instance.SetPIAnimationState (targetFurniture, animationToPlay);
 				EventsHandler.Invoke_cb_inputStateChanged ();
-				//GameManager.instance.inputState = InputState.Character;
 
 				break;
 
@@ -168,7 +163,6 @@ public class SubInteraction : IConditionable {
 
 				SoundManager.Invoke_cb_playSound (soundToPlay, numberOfPlays);
 				EventsHandler.Invoke_cb_inputStateChanged ();
-				//GameManager.instance.inputState = InputState.Character;
 
 				break;
 
@@ -190,7 +184,6 @@ public class SubInteraction : IConditionable {
 
 			case "moveToRoom":
 
-				Debug.Log ("ep " + entrancePoint);
 				InteractionManager.instance.MoveToRoom (destinationRoomName, entrancePoint);
 
 				break;

@@ -27,9 +27,6 @@ public class GraphicStateInspector : MonoBehaviour {
 	Toggle changeCoordsToggle;
 	Button closeButton;
 
-
-
-
 	// Use this for initialization
 	void Start () 
 	{
@@ -42,15 +39,10 @@ public class GraphicStateInspector : MonoBehaviour {
 		
 	}
 
-
-
-
 	public void CreateGraphicStatePanel(PhysicalInteractable physicalInteractable, int i = 0)
-	{
-		
+	{		
 		if (graphicStateInspectorObject != null) 
 		{
-			Debug.Log ("it's not null");
 			return;
 		}
 
@@ -73,8 +65,6 @@ public class GraphicStateInspector : MonoBehaviour {
 		changeCoordsToggle = panel.Find ("ChangeCoordsToggle").GetComponent<Toggle> ();
 		closeButton = panel.Find ("CloseButton").GetComponent<Button> ();
 	
-
-
 		// OPENING //
 
 		GameObject obj = EditorRoomManager.instance.GetPhysicalInteractableGameObject (physicalInteractable);
@@ -110,24 +100,18 @@ public class GraphicStateInspector : MonoBehaviour {
 		closeButton.onClick.AddListener (DestroyGraphicStatePanel);
 	}
 
-
-
-
 	public void ChangeCurrentGraphicState(int i)
-	{
-		
+	{		
 		string stateName = graphicStateDropdown.options [i].text;
 
 		if (InspectorManager.instance.chosenFurniture != null) 
 		{
-			Debug.Log ("furniture is not null");
 			EditorRoomManager.instance.ChangeInteractableCurrentGraphicState (stateName, InspectorManager.instance.chosenFurniture);
 			DestroyGraphicStatePanel ();
 			CreateGraphicStatePanel (InspectorManager.instance.chosenFurniture , i);
 
 		} else if (InspectorManager.instance.chosenCharacter != null) 
 		{	
-			Debug.Log ("character is not null");
 			EditorRoomManager.instance.ChangeInteractableCurrentGraphicState (stateName, InspectorManager.instance.chosenCharacter);
 			DestroyGraphicStatePanel ();
 			CreateGraphicStatePanel (InspectorManager.instance.chosenCharacter , i);
@@ -135,9 +119,7 @@ public class GraphicStateInspector : MonoBehaviour {
 		}
 	}
 
-
 	// chane coords 
-
 
 	public void SetChangeCoordsMode(bool isInCoordsMode)
 	{
@@ -153,54 +135,51 @@ public class GraphicStateInspector : MonoBehaviour {
 
 	}
 
-
-
-
-
-
 	// frame size
 
 	public void ChangeFrameWidth(string width)
 	{
+		float newWidth;
 
-		float newWidth = float.Parse (width);
+		bool validFormat = float.TryParse (width, out newWidth);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
+		if (validFormat == true)
 		{
-			EditorRoomManager.instance.ChangeInteractableFrameWidth (newWidth, InspectorManager.instance.chosenFurniture);
+			if (InspectorManager.instance.chosenFurniture != null)
+			{
+				EditorRoomManager.instance.ChangeInteractableFrameWidth (newWidth, InspectorManager.instance.chosenFurniture);
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableFrameWidth (newWidth, InspectorManager.instance.chosenCharacter);
+			}	
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableFrameWidth (newWidth, InspectorManager.instance.chosenCharacter);
-		}	
-
-		frameExtentsXInput.text = width;
-
+			frameExtentsXInput.text = width;
+		}
 	}
-
-
-
 
 	public void ChangeFrameHeight(string height)
 	{
 
-		float newHeight = float.Parse (height);
+		float newHeight;
+		bool validFormat = float.TryParse (height, out newHeight);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
+		if (validFormat == true)
 		{
-			EditorRoomManager.instance.ChangeInteractableFrameHeight (newHeight, InspectorManager.instance.chosenFurniture);
+			if (InspectorManager.instance.chosenFurniture != null)
+			{
+				EditorRoomManager.instance.ChangeInteractableFrameHeight (newHeight, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableFrameHeight (newHeight, InspectorManager.instance.chosenCharacter);
-		}	
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableFrameHeight (newHeight, InspectorManager.instance.chosenCharacter);
+			}	
 
-		frameExtentsYInput.text = height;
-
+			frameExtentsYInput.text = height;
+		}
 
 	}
-
-
 
 	// change offset
 
@@ -208,48 +187,46 @@ public class GraphicStateInspector : MonoBehaviour {
 	public void ChangeFrameOffsetX(string x)
 	{
 
-		float newX = float.Parse (x);
+		float newX;
 
-		if (InspectorManager.instance.chosenFurniture != null) 
+		bool validFormat = float.TryParse (x, out newX);
+
+		if (validFormat)
 		{
-			EditorRoomManager.instance.ChangeInteractableFrameOffsetX (newX, InspectorManager.instance.chosenFurniture);
+			if (InspectorManager.instance.chosenFurniture != null)
+			{
+				EditorRoomManager.instance.ChangeInteractableFrameOffsetX (newX, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableFrameOffsetX (newX, InspectorManager.instance.chosenCharacter);
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableFrameOffsetX (newX, InspectorManager.instance.chosenCharacter);
+			}
+
+			frameOffsetXInput.text = x;
 		}
-
-		frameOffsetXInput.text = x;
 	}
-
-
-
-
 
 	public void ChangeFrameOffsetY(string y)
 	{
-		float newY = float.Parse (y);
+		float newY;
+		bool validFormat = float.TryParse (y, out newY);
 
-		if (InspectorManager.instance.chosenFurniture != null) 
+		if (validFormat)
 		{
-			EditorRoomManager.instance.ChangeInteractableFrameOffsetY (newY, InspectorManager.instance.chosenFurniture);
+			if (InspectorManager.instance.chosenFurniture != null)
+			{
+				EditorRoomManager.instance.ChangeInteractableFrameOffsetY (newY, InspectorManager.instance.chosenFurniture);
 
-		} else if (InspectorManager.instance.chosenCharacter != null) 
-		{			
-			EditorRoomManager.instance.ChangeInteractableFrameOffsetY (newY, InspectorManager.instance.chosenCharacter);
-		}	
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableFrameOffsetY (newY, InspectorManager.instance.chosenCharacter);
+			}	
 
-		frameOffsetYInput.text = y;
+			frameOffsetYInput.text = y;
+		}
 	}
-
-
-
-
-
-
-
-
-
 
 	// Close //
 
@@ -263,18 +240,6 @@ public class GraphicStateInspector : MonoBehaviour {
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
+

@@ -62,9 +62,6 @@ public class TileInspector : MonoBehaviour {
 
 	public void CreateTileInspector(TileInteraction currentTileInteraction)
 	{
-
-		Debug.Log("CreateTileInspector");
-
 		InspectorManager.physicalInteractableInspector.DestroyInspector ();
 		DestroyTileInspector ();
 
@@ -139,31 +136,23 @@ public class TileInspector : MonoBehaviour {
 		// INTERACTIONS //
 
 
-		// dialogue
+
 
 		if (currentTileInteraction.mySubInt != null) 
 		{			
-			if (currentTileInteraction.mySubInt.RawText != string.Empty) 
+			// dialogue
+			if (currentTileInteraction.mySubInt.interactionType == "showMonologue") 
 			{
-				//Debug.Log ("CreateTileInspector: insert raw text" + currentTileInteraction.mySubInt.RawText);
-
 				textInputCheckBox.isOn = true;
 				interactionTextInput.interactable = true;
 
 				interactionTextInput.text = currentTileInteraction.mySubInt.RawText;
 
-			} else {
+			} 
 
-				Debug.Log ("RawText = null");
-			}
-		}
+			// move to room
 
-
-		// move to room
-
-		if (currentTileInteraction.mySubInt != null) 
-		{			
-			if (currentTileInteraction.mySubInt.destinationRoomName != string.Empty) 
+			if (currentTileInteraction.mySubInt.interactionType == "moveToRoom") 
 			{
 				enterRoomCheckBox.isOn = true;
 				destinationRoomInput.interactable = true;
@@ -273,25 +262,27 @@ public class TileInspector : MonoBehaviour {
 
 		// create show dialogue
 
-		if (interactionTextInput.interactable == true) 		
+		if (interactionTextInput.interactable == true && interactionTextInput.text != string.Empty) 		
 		{
 			SubInteraction subInteraction = new SubInteraction ("showMonologue");
 			subInteraction.RawText = interactionTextInput.text;
-			Debug.Log ("raw " + subInteraction.RawText);
 
 			InspectorManager.instance.chosenTileInteraction.mySubInt = subInteraction;
 		}
-
-
-		// create enter room
-
-
-		if (destinationRoomInput.interactable == true)		
+		else if (destinationRoomInput.interactable == true && destinationRoomInput.text != string.Empty)		
 		{
+			// create enter room
+			// default is 0
+			int x = 0;
+			int y = 0;
+
+			int.TryParse (entrancePointXInput.text, out x);
+			int.TryParse (entrancePointYInput.text, out y);
+
 			SubInteraction subInteraction = new SubInteraction ("moveToRoom");
 			subInteraction.destinationRoomName = destinationRoomInput.text;
 
-			Vector2 entrancePoint = new Vector2 (int.Parse (entrancePointXInput.text), int.Parse (entrancePointYInput.text));
+			Vector2 entrancePoint = new Vector2 (x, y);
 			subInteraction.entrancePoint = entrancePoint;
 
 			InspectorManager.instance.chosenTileInteraction.mySubInt = subInteraction;
@@ -319,15 +310,25 @@ public class TileInspector : MonoBehaviour {
 
 	public void ChangeTileInteractionWidth(string x)
 	{
-		int newX = int.Parse (x);
-		EditorRoomManager.instance.ChangeInteractableWidth (newX, InspectorManager.instance.chosenTileInteraction);
+		int newX;
+		bool validFormat = int.TryParse (x, out newX);
+
+		if (validFormat)
+		{
+			EditorRoomManager.instance.ChangeInteractableWidth (newX, InspectorManager.instance.chosenTileInteraction);
+		}
 	}
 
 
 	public void ChangeTileInteractionHeight(string y)
 	{
-		int newY = int.Parse (y);
-		EditorRoomManager.instance.ChangeInteractableHeight (newY, InspectorManager.instance.chosenTileInteraction);
+		int newY;
+		bool validFormat = int.TryParse (y, out newY);
+
+		if (validFormat)
+		{
+			EditorRoomManager.instance.ChangeInteractableHeight (newY, InspectorManager.instance.chosenTileInteraction);
+		}
 	}
 
 
@@ -335,33 +336,47 @@ public class TileInspector : MonoBehaviour {
 
 	public void ChangeTileInteractionX(string x)
 	{
-		int newX = int.Parse (x);
-		EditorRoomManager.instance.ChangeInteractableTileX (newX, InspectorManager.instance.chosenTileInteraction);
+		int newX;
+		bool validFormat = int.TryParse (x, out newX);
+
+		if (validFormat)
+		{
+			EditorRoomManager.instance.ChangeInteractableTileX (newX, InspectorManager.instance.chosenTileInteraction);
+		}
 	}
 
 
 	public void ChangeTileInteractionY(string y)
 	{
-		int newY = int.Parse (y);
-		EditorRoomManager.instance.ChangeInteractableTileY (newY, InspectorManager.instance.chosenTileInteraction);
+		int newY;
+		bool validFormat = int.TryParse (y, out newY);
+
+		if (validFormat)
+		{
+			EditorRoomManager.instance.ChangeInteractableTileY (newY, InspectorManager.instance.chosenTileInteraction);
+		}
 	}
 
 
 	public void DeleteTileInteraction()
 	{
-		Debug.Log ("delete tile interaction");
-
+		Room room = EditorRoomManager.instance.room;
 		TileInteraction tileInt = InspectorManager.instance.chosenTileInteraction;
 
-		Tile tile = EditorRoomManager.instance.room.MyGrid.GetTileAt (tileInt.x, tileInt.y);
+		// remove from all lists
+		room.myTileInteractionList.Remove (tileInt);
+		if (room.myMirrorRoom != null)
+		{
+			room.myMirrorRoom.myTileInteractionList_Persistant.Remove (tileInt);
+			room.myMirrorRoom.myTileInteractionList_Shadow.Remove (tileInt);
+		}
 
-		EditorRoomManager.instance.room.myTileInteractionList.Remove (tileInt);
+		Tile tile = EditorRoomManager.instance.room.MyGrid.GetTileAt (tileInt.x, tileInt.y);
 		tile.myTileInteraction = null;
 
 		InspectorManager.instance.chosenTileInteraction = null;
 
 		EventsHandler.Invoke_cb_tileLayoutChanged ();
-		//DestroyTileInspector ();
 	}
 
 

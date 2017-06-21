@@ -102,8 +102,6 @@ public class RoomManager : MonoBehaviour {
 		{
 			if (player.currentRoom == myRoom.myName)
 			{
-				//Debug.Log ("Player in room " + player.identificationName);
-
 				Vector3 playerCurrentPos = GameManager.userData.GetPlayerDataByPlayerName (player.identificationName).currentPos;
 
 				if (playerCurrentPos == Vector3.zero) 
@@ -111,9 +109,12 @@ public class RoomManager : MonoBehaviour {
 					playerCurrentPos = player.startingPos;
 				}
 
-				if (player.isActive == false) 
-				{
+				if (player.isActive == false) {
 					PlayerManager.instance.ParkPlayerInTiles (player, playerCurrentPos);
+				} else 
+				{
+					//player.x = Mathf.FloorToInt(playerCurrentPos.x);
+					//player.y = Mathf.FloorToInt(playerCurrentPos.y);
 				}
 
 				EventsHandler.Invoke_cb_playerChanged (player);
@@ -130,8 +131,6 @@ public class RoomManager : MonoBehaviour {
 		// sorting order by tags. Any object tagged with "in_the_back" will get -65 sorting order
 
 		GameObject[] backObjects = GameObject.FindGameObjectsWithTag ("in_the_back");
-		//Debug.Log (backObjects.Length);
-
 
 		foreach (GameObject anotherObj in backObjects) 
 		{

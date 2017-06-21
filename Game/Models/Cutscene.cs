@@ -31,10 +31,6 @@ public class ChangePlayerScene : Cutscene
 
 	public override IEnumerator MyCutscene()
 	{
-
-		Debug.Log ("switch cutscene");
-		Debug.Log (GameManager.instance.inputState);
-
 		// move to room
 
 		//InteractionManager.instance.MoveToRoom ("test1", new Vector2 (4, 7));
@@ -80,8 +76,6 @@ public class ChangePlayerScene : Cutscene
 
 		// End of Cutscne
 
-		Debug.Log ("end of cutscene");
-
 		CutsceneManager.inCutscene = false;
 		EventsHandler.Invoke_cb_inputStateChanged ();
 
@@ -107,9 +101,6 @@ public class DanielScene : Cutscene
 
 	public override IEnumerator MyCutscene()
 	{
-
-		Debug.Log ("my cutscene");
-
 		// Declerations
 
 		//Character llehctiM = (Character)PI_Handler.instance.name_PI_map ["llehctiM"];
@@ -177,8 +168,6 @@ public class DanielScene : Cutscene
 		///////////
 
 		// End of Cutscne
-
-		Debug.Log ("end of cutscene");
 
 		CutsceneManager.inCutscene = false;
 		EventsHandler.Invoke_cb_inputStateChanged ();

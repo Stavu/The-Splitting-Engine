@@ -38,9 +38,6 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 	public void PlaceFurniture(Tile tile, string furnitureName)
 	{		
-
-		Debug.Log ("place furniture");
-
 		if(furnitureName == null)
 		{
 			return;
@@ -89,15 +86,12 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 		Furniture furn = new Furniture (furnitureName, tile.x, tile.y);
 
-
 		// set default size
 
 		Sprite furnitureSprite = Resources.Load <Sprite> ("Sprites/Furniture/" + furnitureName);
 		furn.mySize = new Vector2 (Mathf.Ceil(furnitureSprite.bounds.size.x), 1f);
 
-
 		// According to room state, add to list
-
 
 		if (myRoom.RoomState == RoomState.Real) 
 		{			
@@ -136,8 +130,6 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 	public void FurnitureFactory(Room room)
 	{
-		//Debug.Log ("FurnitureFactory");
-
 		if (room.RoomState == RoomState.Real) 
 		{			
 			// -- REAL ROOM -- //
@@ -189,19 +181,14 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 	public void PlaceFurnitureInTiles(Furniture furn, Room room, Grid grid)
 	{
-		Debug.Log ("PlaceFurnitureInTiles");
-
 		List<Tile> tempTileList = room.GetMyTiles (grid, furn.GetMyCoordsList ());
-		Debug.Log ("tile list count" + tempTileList.Count);
 
 		foreach (Tile myTile in tempTileList) 
 		{			
-			Debug.Log ("tile x " + myTile.x + "y " + myTile.y);
 			myTile.myFurniture = furn;
 		}
 
 		EventsHandler.Invoke_cb_tileLayoutChanged ();
-
 	}
 
 
@@ -209,16 +196,7 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 	public void CreateFurnitureObject(Furniture furn)
 	{
-
-		//Debug.Log ("CreateFurnitureObject");
-
 		GameObject obj = Utilities.CreateEditorFurnitureGameObject (furn, this.transform);
-
-
-		if (furn == null) 
-		{
-			Debug.Log ("furn = null");
-		}
 
 		if (EditorRoomManager.instance.furnitureGameObjectMap == null) 
 		{
@@ -226,7 +204,6 @@ public class EditorFurnitureHandler : MonoBehaviour
 		}
 
 		EditorRoomManager.instance.furnitureGameObjectMap.Add (furn, obj);	
-
 
 		// populate list of graphic states
 
@@ -236,8 +213,6 @@ public class EditorFurnitureHandler : MonoBehaviour
 		}
 
 		furn.currentGraphicState = furn.graphicStates [0];
-
-
 	}
 
 }

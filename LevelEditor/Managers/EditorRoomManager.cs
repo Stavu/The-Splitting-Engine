@@ -112,20 +112,11 @@ public class EditorRoomManager : MonoBehaviour {
 		return tempRoom;
 	}
 
-	public void Update()
-	{
-		if(Input.GetKeyDown(KeyCode.H))
-		{
-			Debug.Log ("room name " + room.myName);
-		}
-	}
 
 	// adding background image 
 
 	public void InitializeRoom(string name = "abandoned_lobby_bg")
 	{
-		//Debug.Log ("SetRoomBackground");
-
 		if (roomToLoad == null) 
 		{
 			CreateNewRoomFromSprite (name);
@@ -139,7 +130,7 @@ public class EditorRoomManager : MonoBehaviour {
 
 		SetBackgroundObject (room);
 
-		Utilities.AdjustOrthographicCamera (room);
+		Utilities.AdjustOrthographicCamera_Editor (room);
 	}
 
 
@@ -316,12 +307,9 @@ public class EditorRoomManager : MonoBehaviour {
 		sr.sortingLayerName = Constants.room_layer;
 		roomBackground.transform.SetParent (this.transform);
 
-		Utilities.AdjustOrthographicCamera (room);
+		Utilities.AdjustOrthographicCamera_Editor (room);
 
 	}
-
-
-
 
 
 	// Checking if tiles are clean
@@ -616,11 +604,6 @@ public class EditorRoomManager : MonoBehaviour {
 
 	public void ChangeInteractableTileX(int x, Interactable interactable)
 	{
-		if (interactable == null) 
-		{
-			Debug.Log ("interactable is null");
-		}	
-
 		if (interactable is Furniture) 
 		{			
 			Furniture furn = (Furniture)interactable;
@@ -919,11 +902,8 @@ public class EditorRoomManager : MonoBehaviour {
 	{
 		foreach (GraphicState graphicState in interactable.graphicStates) 
 		{
-			Debug.Log (graphicState.graphicStateName + "=>" + state);
 			if (graphicState.graphicStateName == state) 
 			{
-				Debug.Log ("found state");
-
 				// clean previous graphic state
 
 				EditorRoomManager.instance.room.ChangePIInTiles (interactable, graphicState);
@@ -989,8 +969,6 @@ public class EditorRoomManager : MonoBehaviour {
 
 	public Room LoadRoom(string roomString)
 	{
-		Debug.Log ("LoadRoom");
-
 		Room tempRoom = JsonUtility.FromJson<Room> (roomString);
 		tempRoom.myGrid = new Grid (tempRoom.myWidth, tempRoom.myHeight);
 
@@ -1167,8 +1145,6 @@ public class EditorRoomManager : MonoBehaviour {
 	public string SerializeRoom ()
 	{
 		string roomString = JsonUtility.ToJson (room);
-		//Debug.Log ("roomString" + roomString);
-		//Debug.Log(Application.persistentDataPath); 
 
 		string path = ("Assets/Resources/Jsons/Rooms/" + room.myName + ".json");
 
@@ -1184,8 +1160,5 @@ public class EditorRoomManager : MonoBehaviour {
 
 		return roomString;
 	}
-
-
-
 
 }

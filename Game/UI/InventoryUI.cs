@@ -172,26 +172,6 @@ public class InventoryUI : MonoBehaviour {
 		EventsHandler.cb_playerSwitched -= SwitchPlayerInventory;
 	}
 
-
-
-	
-	// Update is called once per frame
-
-
-	void Update () 
-	{
-		/*
-		if(Input.GetKeyDown(KeyCode.A))
-		{
-			Debug.Log ("currentInteraction " + currentInteraction.myVerb);
-			Debug.Log ("chosenItem " + chosenItem.fileName);
-			Debug.Log ("interactionList" + chosenItem.inventoryItemInteractionList.Count);
-			Debug.Log ("interactionObjectMap " + myInteractionObjectMap.Count);
-		}
-		*/
-	}
-
-
 	public void CreateInventory()
 	{
 
@@ -345,14 +325,10 @@ public class InventoryUI : MonoBehaviour {
 
 	public void OpenInventory(InventoryState state)
 	{
-		Debug.Log ("OpenInventory");
-
 		// If there are no items in the inventory, display text message, then return
 
 		if(GameManager.userData.GetCurrentPlayerData().inventory.items.Count == 0)
 		{
-			Debug.Log ("count 0");
-
 			switch (state) 
 			{
 				
@@ -590,19 +566,10 @@ public class InventoryUI : MonoBehaviour {
 
 	public void UpdateZoomInWindow()
 	{
-		
-		if (itemBigICon == null) 
-		{ 
-			//Debug.Log ("item big icon = null");
-		}
-
 		itemBigICon.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/Inventory/Big_items/" + chosenItem.fileName + "_big");			
 		itemTitle.GetComponent<Text>().text = chosenItem.titleName;
 
-
-		//Debug.Log ("count " + chosenItem.inventoryItemInteractionList.Count);
 		SetInteractions ();
-
 	}
 
 
@@ -617,8 +584,6 @@ public class InventoryUI : MonoBehaviour {
 
 		if (myInteractionObjectMap != null) 
 		{		
-			//Debug.LogError ("destroy past objects");
-
 			foreach (GameObject obj in myInteractionObjectMap.Values) 
 			{
 				Destroy (obj);	
@@ -644,7 +609,6 @@ public class InventoryUI : MonoBehaviour {
 
 		GameObject itemInteractionPrefab = (Resources.Load<GameObject>("Prefabs/ItemInteraction"));
 
-
 		// Create new interaction objects, and put them in the temp dictionary
 
 		for (int i = 0; i < chosenItem.inventoryItemInteractionList.Count; i++) 
@@ -659,11 +623,9 @@ public class InventoryUI : MonoBehaviour {
 
 		}
 	
-
 		// Set the first interaction as the current interaction
 
 		currentInteraction = chosenItem.inventoryItemInteractionList[0];
-
 	}
 
 
@@ -677,25 +639,21 @@ public class InventoryUI : MonoBehaviour {
 
 		if((myDirection == Direction.left) || (myDirection == Direction.right))
 		{
-			//Debug.LogError ("BrowseInteractions: the direction is left or right.");
 			return;
 		}
 
 		if (GameManager.instance.inputState != InputState.Inventory) 
 		{
-			//Debug.LogError ("BrowseInteractions: input state is not inventory.");
 			return;
 		}
 
 		if (zoomInWindow == null) 		
 		{	
-			//Debug.LogError ("BrowseInteractions: zoom in window is null.");
 			return;
 		}
 
 		if (currentInteraction == null) 
 		{
-			//Debug.LogError ("BrowseInteractions: current interaction is null.");
 			return;
 		}
 
@@ -742,15 +700,13 @@ public class InventoryUI : MonoBehaviour {
 
 	// Activate Interaction
 
-
 	public void ActivateInteraction()
 	{
 
 		if (currentInteraction == null) 
 		{
 			return;
-		}
-			
+		}			
 
 		// check if subinteractions passed the conditions
 
@@ -767,8 +723,6 @@ public class InventoryUI : MonoBehaviour {
 
 	public void CombineItems()
 	{
-		
-
 		// If there's no chosen item or chosen combine item, we're in big trouble
 
 		if ((chosenItem == null) || (chosenCombineItem == null))
@@ -785,7 +739,6 @@ public class InventoryUI : MonoBehaviour {
 
 		List<ItemData_CombineInteractions> itemsToCombineList;
 		List<SubInteraction> subInteractionList = null;
-
 
 		// Check the first item for combining information
 
@@ -822,12 +775,10 @@ public class InventoryUI : MonoBehaviour {
 			}	
 		}
 
-
 		// Activating the subinteractions
 
 		if (subInteractionList != null) 
 		{
-
 			// check if subinteractions passed the conditions
 
 			List<SubInteraction> subinteractionsToDo = Utilities.GetPassedSubinteractions (subInteractionList);
@@ -840,9 +791,7 @@ public class InventoryUI : MonoBehaviour {
 			defaultCombineTextList.Add ("It won't work.");		
 				
 			InteractionManager.instance.DisplayInventoryText (defaultCombineTextList);
-
 		}
-
 
 		// Setting the state back to browse
 
@@ -853,16 +802,10 @@ public class InventoryUI : MonoBehaviour {
 
 	}
 
-
-
-
-
 	// ----- CLOSE INVENTORY ----- //
-
 
 	public void CloseInventory()
 	{
-
 		chosenItem = null;
 		chosenCombineItem = null;
 
@@ -876,22 +819,14 @@ public class InventoryUI : MonoBehaviour {
 			zoomInWindow.SetActive (false);
 		}
 
-
 		GameManager.inventoryOpen = false;
 		EventsHandler.Invoke_cb_inputStateChanged ();
-
-
 	}
-
-
 
 	// Select item to use - activates when pressing spacebar, and selects the item we are on 
 
-
 	public void SelectItemToUse()
 	{
-
-
 		if (GameManager.instance.inputState != InputState.Inventory) 
 		{
 			return;
@@ -907,15 +842,9 @@ public class InventoryUI : MonoBehaviour {
 			return;
 		}
 
-
 		UseItemHelper.UseItemOnPhysicalInteractable (chosenItem, ActionBoxManager.instance.currentPhysicalInteractable);
 
-		CloseInventory ();
-
-	
+		CloseInventory ();	
 	}
-
-
-
 
 }

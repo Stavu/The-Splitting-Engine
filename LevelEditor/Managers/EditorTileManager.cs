@@ -33,13 +33,10 @@ public class EditorTileManager : MonoBehaviour {
 	// Use this for initialization
 	public void Initialize () {
 
-		//Debug.Log ("EditorTileManager");
-
 		EventsHandler.cb_editorNewRoomCreated += CreateTileObject;
 		EventsHandler.cb_tileLayoutChanged += ColorTiles;
 
 		tileGameObjectMap = new Dictionary<Tile, GameObject>();
-
 	}
 
 
@@ -82,8 +79,6 @@ public class EditorTileManager : MonoBehaviour {
 
 		tilesParent = new GameObject ("Tiles");
 
-		//Debug.Log ("tiles");
-
 		foreach (Tile tile in myRoom.MyGrid.gridArray) 
 		{
 			GameObject obj = Instantiate (TilePrefab, tilesParent.transform);
@@ -104,9 +99,6 @@ public class EditorTileManager : MonoBehaviour {
 
 	public void ColorTiles()
 	{
-
-		//Debug.Log ("ColorTiles");
-
 		// First - Clean tile layout
 
 		foreach (GameObject obj in tileGameObjectMap.Values) 

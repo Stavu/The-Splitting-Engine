@@ -50,8 +50,6 @@ public class NavigationManager : MonoBehaviour {
 
 	void Start () 
 	{	
-		//Debug.Log ("navigation start");
-
 		fadeCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/FadeCanvas"));
 		fadeImage = fadeCanvas.transform.Find ("Image").GetComponent<Image> ();
 
@@ -67,15 +65,6 @@ public class NavigationManager : MonoBehaviour {
 	}
 
 
-	// Update is called once per frame
-
-	void Update () 
-	{
-		
-	}
-
-
-
 	public void NavigateToScene(string scene, Color color)
 	{
 		navigationInProcess = true;
@@ -84,8 +73,6 @@ public class NavigationManager : MonoBehaviour {
 		lastColor = color;
 		StartCoroutine(FadeOut (scene, color));	
 	}
-
-
 
 
 	// Fading from scene to black / white screen
@@ -142,7 +129,6 @@ public class NavigationManager : MonoBehaviour {
 	}
 
 
-
 	public void StartFadeIn(Scene scene, LoadSceneMode mode)
 	{
 		fadeCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/FadeCanvas"));
@@ -150,19 +136,5 @@ public class NavigationManager : MonoBehaviour {
 		StartCoroutine(FadeIn());	
 	}
 
-
-
-
-	/*
-
-	public void DebugMashu(Scene scene, LoadSceneMode mode)
-	{
-
-		Debug.Log ("debug mashu");
-
-	}
-
-	*/
-
-
 }
+

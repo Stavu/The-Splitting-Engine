@@ -4,37 +4,12 @@ using UnityEngine;
 
 
 
-public class SaveHandler : MonoBehaviour {
-
-
-
-
-
-	// Use this for initialization
-	void Start () 
-	{
-		
-	}
-
-
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
-
+public class SaveHandler : MonoBehaviour 
+{
 
 	public void SaveToFile()
 	{
-
-		//Debug.Log (EditorRoomManager.instance.room.bgName);
-
-		EditorRoomManager.instance.SerializeRoom ();
-	
+		EditorRoomManager.instance.SerializeRoom ();	
 	}
-
-
-
-
 
 }

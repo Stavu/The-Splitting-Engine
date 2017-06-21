@@ -86,8 +86,22 @@ public class PI_Handler : MonoBehaviour {
 		bool useIdentifiactionName = ((myPhysicalInteractable.identificationName != null) && (myPhysicalInteractable.identificationName != string.Empty));
 		string PI_name = useIdentifiactionName ? myPhysicalInteractable.identificationName : myPhysicalInteractable.fileName;			
 
-		myPhysicalInteractable.myPos = new Vector3 (myPhysicalInteractable.x + myPhysicalInteractable.mySize.x/2, myPhysicalInteractable.y, 0);
+		// for an active player, we do not calculate a position
+		// it is done by the MoveToRoom function
+		// for inactive players and other PIs we do
+		if ((myPhysicalInteractable is Player) == false)
+		{
+			myPhysicalInteractable.myPos = new Vector3 (myPhysicalInteractable.x + myPhysicalInteractable.mySize.x / 2, myPhysicalInteractable.y, 0);
+		}
+		if (myPhysicalInteractable is Player) 
+		{	
+			Player player = (Player)myPhysicalInteractable;
 
+			if (player.isActive == false) 
+			{
+				myPhysicalInteractable.myPos = new Vector3 (myPhysicalInteractable.x + myPhysicalInteractable.mySize.x / 2, myPhysicalInteractable.y, 0);
+			}				
+		}
 
 		/*
 		// active player should get the position according to the entrance pos
@@ -115,8 +129,6 @@ public class PI_Handler : MonoBehaviour {
 	
 		if (GameManager.stringPrefabMap.ContainsKey (myPhysicalInteractable.fileName)) 
 		{
-			//Debug.Log ("found file name " + myPhysicalInteractable.fileName);
-
 			obj = Instantiate (GameManager.stringPrefabMap [myPhysicalInteractable.fileName]);
 			obj.name = myPhysicalInteractable.identificationName;
 
@@ -197,8 +209,6 @@ public class PI_Handler : MonoBehaviour {
 
 		foreach (GraphicState graphicState in physicalInteractable.graphicStates) 
 		{
-			//Debug.Log ("state " + state + " name " + graphicState.graphicStateName);
-
 			if (graphicState.graphicStateName == state) 
 			{
 				RoomManager.instance.myRoom.ChangePIInTiles (physicalInteractable, graphicState);

@@ -67,8 +67,11 @@ public class PlayerManager : MonoBehaviour {
 			{
 				SwitchPlayer ("geM");
 			
-			} else {
+			} else if (myPlayer.identificationName == "geM") {
 				
+				SwitchPlayer ("llehctiM");
+			}
+			else {
 				SwitchPlayer ("Daniel");
 			}
 		}
@@ -82,11 +85,9 @@ public class PlayerManager : MonoBehaviour {
 		// When first loading the game - create list and assign player
 
 		if (playerList == null) 
-		{		
-			Debug.Log ("nullllll");
-			
-			playerList = new List<Player> ();
+		{	
 
+			playerList = new List<Player> ();
 
 			System.Object[] myPlayers = Resources.LoadAll ("Jsons/Players");
 
@@ -261,12 +262,7 @@ public class PlayerManager : MonoBehaviour {
 		{	
 			playerObject.StopCharacter (lastDirection);
 
-		} else {
-
-			//Debug.LogError ("player object is null");
-		}
-	
-		
+		} 		
 	}
 
 
@@ -313,9 +309,6 @@ public class PlayerManager : MonoBehaviour {
 		}
 
 		Player player = GetPlayerByName (newPlayer);
-						
-		//Debug.Log ("switch player");
-
 
 		// ---- switcharoo ---- //
 
@@ -334,8 +327,6 @@ public class PlayerManager : MonoBehaviour {
 		myPlayer.isActive = true;
 		GameManager.userData.currentActivePlayer = myPlayer.identificationName;
 
-		//Debug.Log (myPlayer.identificationName);
-
 		// check if player is already in the room
 
 		if (myPlayer.currentRoom == RoomManager.instance.myRoom.myName) 
@@ -346,8 +337,6 @@ public class PlayerManager : MonoBehaviour {
 
 
 			// if new player is in room
-
-			//Debug.Log ("player exists in room");
 
 			if (playerGameObjectMap [myPlayer].GetComponent<PlayerObject> () == null) {
 				playerGameObjectMap [myPlayer].AddComponent<PlayerObject> ();
@@ -360,8 +349,6 @@ public class PlayerManager : MonoBehaviour {
 			InteractionManager.instance.MoveToRoom (myPlayer.currentRoom, new Vector2 (myPlayer.myPos.x, myPlayer.myPos.y));
 
 		}
-
-		//Debug.Log ("after else");
 
 		EventsHandler.Invoke_cb_playerSwitched (player);
 		return;	
@@ -404,7 +391,6 @@ public class PlayerManager : MonoBehaviour {
 
 		List<Tile> PlayerTiles = myRoom.GetMyTiles(myRoom.myGrid,player.mySize, player.x, player.y);
 
-		//PlayerTiles.ForEach(tile => Debug.Log(tile.x + "," + tile.y));
 		PlayerTiles.ForEach (tile => tile.PlaceInactivePlayerInTile (player));
 
 		if (myRoom.roomState == RoomState.Mirror) 

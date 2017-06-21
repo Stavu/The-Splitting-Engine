@@ -76,12 +76,8 @@ public class InteractionInspector : MonoBehaviour {
 
 	public void CreateInteractionPanel()
 	{
-
-		Debug.Log ("CreateInteractionPanel");
-
 		if (interactionPanelObject != null) 
 		{
-			Debug.Log ("destroy interactionpanel");
 			DestroyInteractionPanel ();
 		}
 
@@ -120,48 +116,32 @@ public class InteractionInspector : MonoBehaviour {
 	
 		if (loadedInteraction != null) 
 		{
-
-
-		//	Debug.Log ("list count" + loadedInteraction.subInteractionList.Count);
-
-
 			// interaction title input field
 
 			interactionTitleInput.text = loadedInteraction.myVerb;
-
 
 			// insert interaction conditions 
 
 			PopulateConditionContainer (loadedInteraction,conditionContainer);
 
-
 			// Set title row height
-
 
 			if (loadedInteraction.conditionList.Count >= 2) 
 			{
-				Debug.Log ("OpenInteractionPanel: set title row height");
-
 				Rect tempRect = titleRow.GetComponent<RectTransform> ().rect;
 				titleRow.GetComponent<RectTransform> ().sizeDelta = new Vector2 (tempRect.width, loadedInteraction.conditionList.Count * 30);
 			}
 
-
 			// Create row for each subinteraction in the interaction's subinterction list
-
-
 
 			if (loadedInteraction.subInteractionList.Count > 0) 
 			{
-
 				for (int i = 0; i < loadedInteraction.subInteractionList.Count; i++) 
 				{
-
 					SubInteraction subInt = loadedInteraction.subInteractionList [i];
 
 					GameObject row = Instantiate (rowObjectPrefab, panel);
 					row.name = ("Row_" + i); 
-
 
 					// Declerations
 
@@ -171,60 +151,42 @@ public class InteractionInspector : MonoBehaviour {
 
 					Transform subIntConditionContainer = row.transform.Find("Conditions");
 
-
 					// Populate condition container (with condition)
 
 					PopulateConditionContainer (subInt, subIntConditionContainer);
-
 
 					// Set row height
 
 					if (subInt.conditionList.Count >= 2) 
 					{
-
 						Rect tempRect = row.GetComponent<RectTransform> ().rect;
 						row.GetComponent<RectTransform> ().sizeDelta = new Vector2 (tempRect.width, subInt.conditionList.Count * 30);
-
-
 					}
-
 
 					// Remove subinteraction button
 
 					removeSubIntButton.onClick.AddListener (() => RemoveSubinteraction(subInt));
 
-
 					// Add Condition button
 
 					addSubIntConditionButton.onClick.AddListener(() => InspectorManager.conditionInspector.CreateConditionPanel(subInt));
 
-
 					// Edit subinteraction button
 
 					editSubIntButton.transform.Find ("Text").GetComponent<Text> ().text = subInt.interactionType;
-					editSubIntButton.onClick.AddListener (() => InspectorManager.subinteractionInspector.CreateSubinteractionPanel (loadedInteraction,subInt));
-
-											
+					editSubIntButton.onClick.AddListener (() => InspectorManager.subinteractionInspector.CreateSubinteractionPanel (loadedInteraction,subInt));											
 				}
 			}
-
 
 			// Take 2 last rows to bottom
 
 			addSubIntPanel.transform.SetAsLastSibling();
 			intButtonsPanel.transform.SetAsLastSibling ();
 
-
 		} else {
-
-						
+			
 			loadedInteraction = new Interaction ();
-			Debug.Log ("list count" + loadedInteraction.subInteractionList.Count);
-
-
 		}
-
-
 
 		// If it's relevant both to null / not null interaction
 
@@ -232,22 +194,17 @@ public class InteractionInspector : MonoBehaviour {
 
 		interactionTitleInput.onValueChanged.AddListener (ChangeTitleText);
 
-
-
 		// New Condition Button 
 
 		interactionConditionButton.onClick.AddListener (() => InspectorManager.conditionInspector.CreateConditionPanel(loadedInteraction));
 
-
 		// New subinteraction button
 
 		newSubIntButton.onClick.AddListener (() => InspectorManager.subinteractionInspector.CreateSubinteractionPanel (loadedInteraction));
-			
 
 		// Cancel button
 
 		cancelButton.onClick.AddListener (DestroyInteractionPanel);
-
 
 		// Submit button
 

@@ -44,8 +44,6 @@ public class EditorLoadRoom : MonoBehaviour {
 
 		for (int i = 0; i < contentObject.transform.childCount; i++) 
 		{
-			//Debug.Log ("CreateButtons: Destory old buttons.");
-
 			Destroy (contentObject.transform.GetChild(i).gameObject);
 		}
 

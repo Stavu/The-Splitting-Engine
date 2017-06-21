@@ -35,10 +35,6 @@ public static class EditorRoomHelper {
 
 		}
 
-		newRoom.myFurnitureList.ForEach (furn => Debug.Log (furn.identificationName));
-
-
-
 		foreach (TileInteraction tileInt in room.myTileInteractionList) 
 		{		
 			TileInteraction flippedTileInteraction = new TileInteraction (room, tileInt);
@@ -54,9 +50,8 @@ public static class EditorRoomHelper {
 
 		if (room.RoomState == RoomState.Mirror) 
 		{
-
 			newRoom.myMirrorRoom = new RoomMirror ();
-
+			newRoom.myMirrorRoom.shadowGrid = new Grid (newRoom.myWidth, newRoom.myHeight);
 
 			// Persistant Lists
 
@@ -86,10 +81,7 @@ public static class EditorRoomHelper {
 				shadowTile.myTileInteraction = flippedTileInteraction;
 			}
 
-
-
 			// Shadow Lists
-
 
 			foreach (Furniture furn in room.myMirrorRoom.myFurnitureList_Shadow) 
 			{			
@@ -101,7 +93,6 @@ public static class EditorRoomHelper {
 				shadowTile.myFurniture = flippedFurn;
 			}
 
-
 			foreach (TileInteraction tileInt in room.myMirrorRoom.myTileInteractionList_Shadow) 
 			{			
 				TileInteraction flippedTileInteraction = new TileInteraction (room, tileInt);
@@ -111,15 +102,9 @@ public static class EditorRoomHelper {
 				Tile shadowTile = newRoom.myMirrorRoom.shadowGrid.GetTileAt (flippedTileInteraction.x, flippedTileInteraction.y);
 				shadowTile.myTileInteraction = flippedTileInteraction;
 			}
-
-
 		}
 
-
-
 		return newRoom;
-
-
 	}
 
 

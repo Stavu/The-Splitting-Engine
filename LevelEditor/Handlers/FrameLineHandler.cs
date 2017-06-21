@@ -53,10 +53,7 @@ public class FrameLineHandler : MonoBehaviour {
 		lr.positionCount = 4;
 		lr.widthMultiplier = 0.1f;
 
-
 		List<Vector3> positionList = Utilities.EditorGetPhysicalInteractableFrameBounds (physicalInteractable);
-		//Debug.Log ("center" + positionList [0]);
-
 
 		Vector3[] posArray = new Vector3[4];
 
@@ -66,11 +63,9 @@ public class FrameLineHandler : MonoBehaviour {
 			posArray [i - 1] = positionList [i] + positionList [0] + new Vector3 (physicalInteractable.currentGraphicState.frameOffsetX, physicalInteractable.currentGraphicState.frameOffsetY,-5);
 		}
 
-
 		lr.SetPositions (posArray);
 
 		lineContainer.Add (lineObj);
-
 	}
 
 
@@ -98,11 +93,6 @@ public class FrameLineHandler : MonoBehaviour {
 				CreateLine (character);
 			}
 		}
-
-
 	}
-
-
-
 
 }

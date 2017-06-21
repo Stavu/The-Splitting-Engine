@@ -101,16 +101,10 @@ public class PlayerObject : MonoBehaviour {
 
 	public void StopCharacter(Direction lastDirection)
 	{
-
-		//Debug.Log ("StopCharacter");
-
-
 		if (GameManager.instance.inputState != InputState.Character)
 		{
 			return;
 		}
-					
-
 
 		switch (lastDirection) 
 		{

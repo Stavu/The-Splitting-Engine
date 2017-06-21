@@ -230,8 +230,6 @@ public class InteractionManager : MonoBehaviour {
 
 		Tile tempTile = RoomManager.instance.myRoom.MyGrid.GetTileAt ((int)entrancePoint.x, (int)entrancePoint.y);
 
-		//Debug.Log (entrancePoint);
-
 		// Errors with destination tile
 
 		if (tempTile != null) 
@@ -246,8 +244,10 @@ public class InteractionManager : MonoBehaviour {
 			Debug.LogError ("destination tile is null");
 		}
 
-		PlayerManager.entrancePoint = entrancePoint;
+		//PlayerManager.entrancePoint = entrancePoint;
 		PlayerManager.myPlayer.currentRoom = roomName;
+		PlayerManager.myPlayer.myPos = entrancePoint;
+
 		GameManager.userData.GetPlayerDataByPlayerName (PlayerManager.myPlayer.identificationName).currentRoom = PlayerManager.myPlayer.currentRoom;
 
 		NavigationManager.instance.NavigateToScene (SceneManager.GetActiveScene ().name, Color.black);
@@ -259,7 +259,6 @@ public class InteractionManager : MonoBehaviour {
 	public void ChangeShadowState(bool inTheShadow)
 	{		
 		EventsHandler.Invoke_cb_inputStateChanged ();
-		//GameManager.instance.inputState = InputState.Character;
 
 		if (RoomManager.instance.myRoom.myMirrorRoom == null) 
 		{

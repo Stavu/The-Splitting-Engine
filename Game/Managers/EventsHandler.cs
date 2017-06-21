@@ -269,8 +269,6 @@ public static class EventsHandler
 	}
 
 
-
-
 	public static Action<TileInteraction> cb_tileInteractionChanged; 
 
 	public static void Invoke_cb_tileInteractionChanged(TileInteraction tileInt)
@@ -285,9 +283,7 @@ public static class EventsHandler
 	}
 
 
-
 	// Cutscene events
-
 
 	public static Action cb_dialogueEnded; 
 
@@ -298,7 +294,6 @@ public static class EventsHandler
 			cb_dialogueEnded ();
 		}
 	}
-
 
 
 	public static Action cb_characterFinishedPath; 
@@ -312,7 +307,6 @@ public static class EventsHandler
 	}
 
 
-
 	// Animation Events
 
 
@@ -320,8 +314,6 @@ public static class EventsHandler
 
 	public static void Invoke_cb_newAnimationState(PhysicalInteractable physicalInteractable, string state)
 	{
-		Debug.Log ("Invoke_cb_newAnimationState");
-
 		if(cb_newAnimationState != null)
 		{
 			cb_newAnimationState (physicalInteractable, state);
@@ -329,11 +321,7 @@ public static class EventsHandler
 	}
 
 
-
 	// Player 
-
-
-
 
 	public static Action<Player> cb_playerSwitched;
 
@@ -553,12 +541,8 @@ public static class EventsHandler
 	{
 		if(cb_subinteractionChanged != null)
 		{
-			Delegate[] delegateList = cb_subinteractionChanged.GetInvocationList();
-			//Debug.Log (delegateList.Length);
-
 			cb_subinteractionChanged ();
 		}
-
 	}
 
 
