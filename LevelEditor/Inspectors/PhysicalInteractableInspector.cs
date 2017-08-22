@@ -16,6 +16,8 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 	Toggle imageFlippedToggle;
 	Toggle persistentToggle;
+	Toggle hiddenToggle;
+	Toggle aboveFrameToggle;
 
 	// inputs
 
@@ -28,6 +30,8 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 	InputField offsetXInput;
 	InputField offsetYInput;
 
+	InputField offsetLayerInput;
+
 
 	// placeholders
 
@@ -39,6 +43,8 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 	Text offsetXPlaceholder;
 	Text offsetYPlaceholder;
+
+	Text offsetLayerPlaceHolder;
 
 
 	// grpahic state panel button
@@ -84,6 +90,8 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 		imageFlippedToggle = panel.Find ("ImageFlippedToggle").GetComponent<Toggle> ();
 		persistentToggle = panel.Find ("PersistentToggle").GetComponent<Toggle> ();
+		hiddenToggle = panel.Find ("HiddenToggle").GetComponent<Toggle> ();
+		aboveFrameToggle = panel.Find ("AboveFrameToggle").GetComponent<Toggle> ();
 
 		graphicStatePanelButton = panel.Find ("OpenGraphicStatePanelButton").GetComponent<Button> ();
 		deleteButton = panel.Find ("DeleteButton").GetComponent<Button> ();
@@ -97,6 +105,8 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 		offsetXInput = panel.Find ("OffsetX").GetComponent<InputField> ();
 		offsetYInput = panel.Find ("OffsetY").GetComponent<InputField> ();
 
+		offsetLayerInput = panel.Find ("LayerOffset").GetComponent<InputField> ();
+
 
 		// placeholders 
 
@@ -108,6 +118,9 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 		offsetXPlaceholder = panel.Find ("OffsetX").Find ("Placeholder").GetComponent<Text> ();
 		offsetYPlaceholder = panel.Find ("OffsetY").Find ("Placeholder").GetComponent<Text> ();
+
+		offsetLayerPlaceHolder = panel.Find ("LayerOffset").Find ("Placeholder").GetComponent<Text> ();
+
 
 
 		// Text
@@ -124,6 +137,8 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 		offsetXPlaceholder.text = currentPhysicalInteractable.offsetX.ToString();
 		offsetYPlaceholder.text = currentPhysicalInteractable.offsetY.ToString();
 
+		offsetLayerPlaceHolder.text = currentPhysicalInteractable.layerOffset.ToString();
+
 
 		// Listeners
 
@@ -138,11 +153,23 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 		offsetXInput.onEndEdit.AddListener (changeOffsetX);
 		offsetYInput.onEndEdit.AddListener (changeOffsetY);
 
+		offsetLayerInput.onEndEdit.AddListener (changeLayerOffset);
+
+
 		//int graphicState_i = currentPhysicalInteractable.graphicStates.IndexOf (currentPhysicalInteractable.currentGraphicState);
 
 		graphicStatePanelButton.onClick.AddListener (() => InspectorManager.graphicStateInspector.CreateGraphicStatePanel (currentPhysicalInteractable, currentPhysicalInteractable.graphicStates.IndexOf (currentPhysicalInteractable.currentGraphicState)));
 		deleteButton.onClick.AddListener (() => EditorUI.DisplayAlert("Are you sure?", DeletePhysicalInteractable));
 
+		// hidden toggle
+
+		hiddenToggle.isOn = currentPhysicalInteractable.hidden;
+		hiddenToggle.onValueChanged.AddListener (isHidden => SetHidden (currentPhysicalInteractable, isHidden));
+
+		// aboveFrame toggle
+
+		aboveFrameToggle.isOn = currentPhysicalInteractable.aboveFrame;
+		aboveFrameToggle.onValueChanged.AddListener (isAboveFrame => SetAboveFrame (currentPhysicalInteractable, isAboveFrame));
 
 		// Toggle 
 
@@ -155,10 +182,20 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 			imageFlippedToggle.onValueChanged.AddListener (SetImageFlipped);
 						
-		} else {
+		} 
 
-			imageFlippedToggle.interactable = false;
-		}
+
+		if (currentPhysicalInteractable is Character) 
+		{
+			Character character = (Character)currentPhysicalInteractable;
+
+			imageFlippedToggle.interactable = true;
+			imageFlippedToggle.isOn = character.imageFlipped;
+
+			imageFlippedToggle.onValueChanged.AddListener (SetImageFlipped);
+
+		} 
+
 
 
 		// Persistent - only if furniture
@@ -273,12 +310,42 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 	public void SetImageFlipped(bool isFlipped)
 	{
-		Furniture furn = InspectorManager.instance.chosenFurniture;
+		if (InspectorManager.instance.chosenFurniture != null) {
+			Furniture furn = InspectorManager.instance.chosenFurniture;
+			GameObject obj = EditorRoomManager.instance.furnitureGameObjectMap [furn];
+			furn.imageFlipped = isFlipped;
+			float x = isFlipped ? -1f : 1f;
+			obj.transform.localScale = new Vector3(x, obj.transform.localScale.y, obj.transform.localScale.z);
 
-		furn.imageFlipped = isFlipped;
-		EditorRoomManager.instance.furnitureGameObjectMap [furn].GetComponent<SpriteRenderer> ().flipX = isFlipped;
+			changeOffsetX ((-furn.offsetX).ToString ());
 
-		changeOffsetX ((-furn.offsetX).ToString ());
+		} 
+
+
+		if (InspectorManager.instance.chosenCharacter != null) 
+		{
+			Character character = InspectorManager.instance.chosenCharacter;
+			GameObject obj = EditorRoomManager.instance.characterGameObjectMap [character];
+			character.imageFlipped = isFlipped;
+			float x = isFlipped ? -1f : 1f;
+			obj.transform.localScale = new Vector3(x, obj.transform.localScale.y, obj.transform.localScale.z);
+
+			changeOffsetX ((-character.offsetX).ToString ());
+		}
+			
+	
+	}
+
+	// hidden 
+
+	public void SetHidden(PhysicalInteractable physicalInteractable, bool isHidden)
+	{
+		physicalInteractable.hidden = isHidden;
+	}
+
+	public void SetAboveFrame(PhysicalInteractable physicalInteractable, bool isAboveFrame)
+	{
+		physicalInteractable.aboveFrame = isAboveFrame;
 	}
 
 
@@ -426,6 +493,35 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 		}
 	}
 
+
+
+	public void changeLayerOffset(string offset)
+	{
+
+		int newLayerOffset;
+
+		bool validFormat = int.TryParse (offset, out newLayerOffset);
+
+		if (validFormat)
+		{
+			if (InspectorManager.instance.chosenFurniture != null)
+			{
+				EditorRoomManager.instance.ChangeInteractableLayerOffset (newLayerOffset, InspectorManager.instance.chosenFurniture);
+
+			}
+			else if (InspectorManager.instance.chosenCharacter != null)
+			{			
+				EditorRoomManager.instance.ChangeInteractableLayerOffset (newLayerOffset, InspectorManager.instance.chosenCharacter);
+			}	
+
+			offsetYInput.text = offset;
+		}
+
+
+
+
+
+	}
 
 
 

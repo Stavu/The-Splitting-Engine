@@ -27,17 +27,6 @@ public class GraphicStateInspector : MonoBehaviour {
 	Toggle changeCoordsToggle;
 	Button closeButton;
 
-	// Use this for initialization
-	void Start () 
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
 
 	public void CreateGraphicStatePanel(PhysicalInteractable physicalInteractable, int i = 0)
 	{		

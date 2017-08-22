@@ -12,7 +12,9 @@ public class RoomMirror {
 
 	// declerations 
 
+
 	public bool inTheShadow;
+	public bool inTheShadow_initial;
 
 	public string bgName_Shadow;
 	public bool bgFlipped_Shadow = false;
@@ -37,7 +39,6 @@ public class RoomMirror {
 
 		this.myFurnitureList_Shadow = new List<Furniture> ();
 		this.myTileInteractionList_Shadow = new List<TileInteraction> ();
-
 
 	}
 

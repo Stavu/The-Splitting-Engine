@@ -5,18 +5,10 @@ using System;
 
 
 [Serializable]
-public class TileInteraction : Interactable {
-
-
-	//public Vector2 mySize;
-	//public int x;
-	//public int y;
-
-	//public bool walkable = false;
-
+public class TileInteraction : Interactable 
+{
 
 	public SubInteraction mySubInt;
-	public Vector2 entrancePoint;
 
 	public TileInteraction(int x, int y)
 	{
@@ -35,7 +27,7 @@ public class TileInteraction : Interactable {
 		this.mySize = tileInt.mySize;
 		this.walkable = tileInt.walkable;
 
-		this.entrancePoint = tileInt.entrancePoint;
+		this.mySubInt = tileInt.mySubInt;
 	}
 
 

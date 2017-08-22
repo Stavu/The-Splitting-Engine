@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterManager : MonoBehaviour {
-
-
+public class Character_Handler : MonoBehaviour {
 
 	// Singleton //
 
-	public static CharacterManager instance { get; protected set;}
+	public static Character_Handler instance { get; protected set;}
 
 	void Awake () {		
 		if (instance == null) {
@@ -19,52 +17,6 @@ public class CharacterManager : MonoBehaviour {
 	}
 
 	// Singleton //
-
-
-
-	//public Dictionary<Character,GameObject> characterGameObjectMap;
-
-
-
-
-
-	// Use this for initialization
-
-	public void Initialize () 
-	{		
-		//characterGameObjectMap = new Dictionary<Character, GameObject> ();
-	}
-
-
-
-	public void OnDestroy()
-	{	
-
-	}
-
-
-	// Update is called once per frame
-
-	void Update () 
-	{
-
-
-	}
-
-	/*
-
-	public void CreateCharacterGameObject (Character myCharacter)
-	{
-
-		GameObject obj = Utilities.CreateCharacterGameObject (myCharacter, this.transform);
-
-		PI_Handler.instance.AddPIToMap (myCharacter, obj, myCharacter.identificationName);
-
-
-	}
-
-	*/
-
 
 
 	// ---- MOVE CHARACTER ---- //
@@ -178,6 +130,9 @@ public class CharacterManager : MonoBehaviour {
 				walker.walkerGameObject.transform.position = Vector3.Lerp (startPos, endPos, inter);
 			}
 
+			// changing the sorting layer
+			walker.walkerGameObject.GetComponentInChildren<SpriteRenderer>().sortingOrder = Mathf.FloorToInt( -(walker.walkerGameObject.transform.position.y * 10) + 6f);
+
 			yield return new WaitForFixedUpdate ();
 		}
 
@@ -223,7 +178,7 @@ public class CharacterManager : MonoBehaviour {
 			
 			} else {
 
-				EventsHandler.Invoke_cb_characterFinishedPath ();
+				EventsHandler.Invoke_Callback (EventsHandler.cb_characterFinishedPath);
 			}
 		}
 	}

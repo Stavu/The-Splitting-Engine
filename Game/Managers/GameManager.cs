@@ -69,7 +69,14 @@ public class GameManager : MonoBehaviour
 
 		if (roomToLoad == null) 
 		{
-			roomToLoad = stringRoomMap [PlayerManager.myPlayer.currentRoom];
+			if (PlayerManager.myPlayer.currentRoom == "None")
+			{
+				roomToLoad = stringRoomMap ["bus_stop_mirror"];
+			}
+			else
+			{
+				roomToLoad = stringRoomMap [PlayerManager.myPlayer.currentRoom];
+			}
 		}
 
 		speakerColorMap = new Dictionary<string, Color> ();
@@ -78,6 +85,14 @@ public class GameManager : MonoBehaviour
 		speakerColorMap.Add("geM", Color.magenta);
 		speakerColorMap.Add("llehctiM", Color.cyan);
 		speakerColorMap.Add("Stella", Color.red);
+
+		speakerColorMap.Add("technician", new Color(254f,253f,158f));
+		speakerColorMap.Add("technician_reflection", new Color(254f,253f,158f));
+		speakerColorMap.Add("bartender_reflection", Color.blue);
+		speakerColorMap.Add("man_water_reflection", Color.cyan);
+		speakerColorMap.Add("cop_reflection", new Color (253,205,169));
+		speakerColorMap.Add("cop", new Color (253,205,169));
+
 
 		if (stringPrefabMap == null) 
 		{
@@ -95,11 +110,13 @@ public class GameManager : MonoBehaviour
 			CreateNewData ();
 		}
 
+		/*
 		if (Input.GetKeyDown (KeyCode.B)) 
 		{
 			RoomManager.instance.myRoom.myMirrorRoom.inTheShadow = !RoomManager.instance.myRoom.myMirrorRoom.inTheShadow;
 			RoomManager.instance.SwitchObjectByShadowState(false);
 		}
+		*/
 	}
 
 	public void CreateRooms ()
@@ -108,8 +125,9 @@ public class GameManager : MonoBehaviour
 
 		foreach (TextAsset txt in myTextAssets) 
 		{
-			Room myRoom;
-			myRoom = JsonUtility.FromJson<Room> (txt.text);
+			Room myRoom = JsonUtility.FromJson<Room> (txt.text);
+
+			//Debug.Log (myRoom.myName + " - " + myRoom.bgFlipped);
 
 			// Adding room to dictionary
 
@@ -234,6 +252,8 @@ public class GameManager : MonoBehaviour
 		{
 			string data = JsonUtility.ToJson (userData);
 			PlayerPrefs.SetString ("PlayerData", data);
+
+			//Debug.Log ("data: " + data);
 		}
 	}
 

@@ -29,29 +29,7 @@ public class InteractionManager : MonoBehaviour {
 	public GameObject currentTextBox;
 
 
-	// Use this for initialization
-
-	public void Initialize () 
-	{
-				
-	}
-
-	public void OnDestroy()
-	{	
-
-	}
-
-
-	// Update is called once per frame
-
-	void Update () 
-	{
-				
-	}
-
-
 	// ------  TEXT ------ //
-
 
 	public void DisplayText(List<DialogueSentence> sentenceList, bool isImportant = true)
 	{
@@ -77,24 +55,10 @@ public class InteractionManager : MonoBehaviour {
 	}
 
 
-
-	/*
-	// Change conversation
-
-
-	public void ChangeConversation(string conversationName)
-	{
-		
-	
-	}
-	*/
-
 	// inventory text
 
-
 	public void DisplayInventoryText(List<string> stringList)
-	{
-		
+	{		
 		// checking if one already exists
 
 		InventoryTextObject tempObj = GameObject.FindObjectOfType<InventoryTextObject> ();
@@ -109,7 +73,6 @@ public class InteractionManager : MonoBehaviour {
 		GameObject obj = Instantiate (Resources.Load<GameObject>("Prefabs/InventoryTextBox"));
 
 		obj.GetComponent<InventoryTextObject> ().AddTextList (stringList);
-
 	}
 
 
@@ -243,10 +206,30 @@ public class InteractionManager : MonoBehaviour {
 
 			Debug.LogError ("destination tile is null");
 		}
-
-		//PlayerManager.entrancePoint = entrancePoint;
+			
 		PlayerManager.myPlayer.currentRoom = roomName;
-		PlayerManager.myPlayer.myPos = entrancePoint;
+
+		// checking if should be placed in the same position as the player was before
+		Vector2 newPos;
+		if (entrancePoint.x == -1)
+		{
+			newPos.x = PlayerManager.myPlayer.myPos.x;
+		}
+		else
+		{
+			newPos.x = entrancePoint.x;
+		}
+
+		if (entrancePoint.y == -1)
+		{
+			newPos.y = PlayerManager.myPlayer.myPos.y;
+		}
+		else
+		{
+			newPos.y = entrancePoint.y;
+		}
+
+		PlayerManager.myPlayer.myPos = newPos;
 
 		GameManager.userData.GetPlayerDataByPlayerName (PlayerManager.myPlayer.identificationName).currentRoom = PlayerManager.myPlayer.currentRoom;
 
@@ -258,6 +241,8 @@ public class InteractionManager : MonoBehaviour {
 
 	public void ChangeShadowState(bool inTheShadow)
 	{		
+		Debug.Log ("interactionmanager:ChangeShadowState");
+
 		EventsHandler.Invoke_cb_inputStateChanged ();
 
 		if (RoomManager.instance.myRoom.myMirrorRoom == null) 
@@ -268,10 +253,22 @@ public class InteractionManager : MonoBehaviour {
 
 		if (RoomManager.instance.myRoom.myMirrorRoom.inTheShadow == inTheShadow) 
 		{
+			Debug.Log ("the same");
+
 			return;
 		}
 
 		RoomManager.instance.myRoom.myMirrorRoom.inTheShadow = inTheShadow;
+
+		if (inTheShadow == true) 
+		{			
+			GameManager.userData.AddToRoomsInShadow (RoomManager.instance.myRoom.myName);
+
+		} else {
+
+			GameManager.userData.RemoveFromRoomsInShadow (RoomManager.instance.myRoom.myName);
+		}
+
 		RoomManager.instance.SwitchObjectByShadowState (false);
 
 		EventsHandler.Invoke_cb_shadowStateChanged (inTheShadow);
@@ -284,6 +281,14 @@ public class InteractionManager : MonoBehaviour {
 	public void PickUpItem (InventoryItem inventoryItem)
 	{		
 		GameManager.userData.GetCurrentPlayerData().inventory.AddItem (inventoryItem);
+	}
+
+
+	// Remove item
+
+	public void RemoveItem (string itemToRemove)
+	{		
+		GameManager.userData.GetCurrentPlayerData().inventory.RemoveItem (itemToRemove);
 	}
 
 
@@ -300,5 +305,342 @@ public class InteractionManager : MonoBehaviour {
 	public void OpenInventory_CombineItem ()
 	{
 		InventoryUI.instance.OpenInventory (InventoryState.Combine);
+	}
+
+
+
+
+
+	// Pick up item
+
+	public void ResetRoom (string roomToReset)
+	{	
+
+		switch (roomToReset) 
+		{
+			case "maze_room_6_mirror":
+
+
+				// -- GREEN DOOR -- //
+
+				PhysicalInteractable door_abandoned_6_green_mirror = RoomManager.instance.getFurnitureByName ("door_abandoned_6_green_mirror");
+
+				if (GameManager.userData.CheckIfEventExists ("green_door_opened") == true) 
+				{
+					GameManager.userData.AddEventToList("green_door_mirror_opened");
+
+					PI_Handler.instance.SetPIAnimationState (door_abandoned_6_green_mirror.identificationName, "Open");
+					EventsHandler.Invoke_cb_inputStateChanged ();
+
+				} else {
+
+					GameManager.userData.RemoveEventFromList("green_door_mirror_opened");
+
+					PI_Handler.instance.SetPIAnimationState (door_abandoned_6_green_mirror.identificationName, "Closed");
+					EventsHandler.Invoke_cb_inputStateChanged ();
+				}
+					
+
+				// -- BENCH -- //
+
+				PhysicalInteractable bench_abandoned_6_mirror_books = RoomManager.instance.getFurnitureByName ("bench_abandoned_6_mirror");
+
+				// remove all events
+
+				GameManager.userData.RemoveEventFromList ("bench_abandoned_6_mirror_0_books");
+				GameManager.userData.RemoveEventFromList ("bench_abandoned_6_mirror_1_book");
+				GameManager.userData.RemoveEventFromList ("bench_abandoned_6_mirror_2_books");
+				GameManager.userData.RemoveEventFromList ("bench_abandoned_6_mirror_3_books");
+
+				if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_3_books") == true) {
+
+					// add event
+
+					GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_3_books");
+					ResetBenchAbandoned6MirrorBookList ();
+
+					// change animation state
+
+					PI_Handler.instance.SetPIAnimationState (bench_abandoned_6_mirror_books.identificationName, "3_books");
+					EventsHandler.Invoke_cb_inputStateChanged ();
+
+				} else {
+
+					if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_2_books") == true) {
+
+						// add event
+
+						GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_2_books");
+						ResetBenchAbandoned6MirrorBookList ();
+
+						// change animation state
+
+						PI_Handler.instance.SetPIAnimationState (bench_abandoned_6_mirror_books.identificationName, "2_books");
+						EventsHandler.Invoke_cb_inputStateChanged ();
+
+					} else {
+
+						if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_1_book") == true) {							
+
+							// add event
+
+							GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_1_book");
+							ResetBenchAbandoned6MirrorBookList ();
+
+							// change animation state
+
+							PI_Handler.instance.SetPIAnimationState (bench_abandoned_6_mirror_books.identificationName, "1_book");
+							EventsHandler.Invoke_cb_inputStateChanged ();
+
+						} else {
+
+							if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_0_books") == true) 
+							{										
+								// add event
+
+								GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_0_books");
+								ResetBenchAbandoned6MirrorBookList ();
+
+								// change animation state
+
+								PI_Handler.instance.SetPIAnimationState (bench_abandoned_6_mirror_books.identificationName, "Idle");
+								EventsHandler.Invoke_cb_inputStateChanged ();
+							
+							} else {
+
+								Debug.LogError ("how many books?");
+							}
+						}
+					}
+				}
+
+				break;
+
+
+			default:
+
+				Debug.Log ("resetRoom");
+
+				break;
+		}
+	}
+
+
+
+	// Reset book list
+
+	void ResetBenchAbandoned6MirrorBookList ()
+	{
+		GameManager.userData.benchAbandoned6MirrorBookList.Clear ();
+
+		if (GameManager.userData.benchAbandoned6BookList.Count > 0) 
+		{
+			foreach (string bookName in GameManager.userData.benchAbandoned6BookList) 
+			{
+				if (bookName == "book_real") 
+				{
+					GameManager.userData.benchAbandoned6MirrorBookList.Add ("book_mirror");
+				} 
+
+				if(bookName == "book_mirror")
+				{
+					GameManager.userData.benchAbandoned6MirrorBookList.Add ("book_real");
+				}
+			}
+		}
+	}
+
+
+	// Special
+
+	public void SpecialInteraction (string specialInteraction)
+	{		
+		switch(specialInteraction)
+		{
+			case "bench_abandoned_6_pick_up_book":
+
+				PhysicalInteractable bench_abandoned_6 = RoomManager.instance.getFurnitureByName ("bench_abandoned_6");
+
+				if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_3_books") == true) 
+				{
+					Debug.LogError ("not supposed to happen");
+
+				} else {
+
+					if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_2_books") == true) 
+					{
+						// had 2 books, now has 1 book
+
+						// remove event
+						GameManager.userData.RemoveEventFromList ("bench_abandoned_6_2_books");
+
+						// add event
+						GameManager.userData.AddEventToList ("bench_abandoned_6_1_book");
+
+						// change animation state
+
+						PI_Handler.instance.SetPIAnimationState (bench_abandoned_6.identificationName, "1_book");
+						EventsHandler.Invoke_cb_inputStateChanged ();
+
+					} else {
+
+						if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_1_book") == true) 
+						{
+							// had 1 book, now has no books
+
+							// remove event
+							GameManager.userData.RemoveEventFromList ("bench_abandoned_6_1_book");
+
+							// add event
+							GameManager.userData.AddEventToList ("bench_abandoned_6_0_books");
+
+							// change animation state
+
+							PI_Handler.instance.SetPIAnimationState (bench_abandoned_6.identificationName, "Idle");
+							EventsHandler.Invoke_cb_inputStateChanged ();
+						} 
+					}
+
+
+					// add item
+
+					if (GameManager.userData.benchAbandoned6BookList [GameManager.userData.benchAbandoned6BookList.Count - 1] == "book_real") 
+					{
+						// if top book is real 
+
+						GameManager.userData.RemoveBookFromBench ("book_real");
+
+						InventoryItem book = new InventoryItem ("book", "Old Book"); 
+						GameManager.userData.GetCurrentPlayerData ().inventory.AddItem (book);
+
+					} else {							
+
+						// if top book is mirror 
+
+						if (GameManager.userData.benchAbandoned6BookList [GameManager.userData.benchAbandoned6BookList.Count - 1] == "book_mirror") 
+						{
+							GameManager.userData.RemoveBookFromBench ("book_mirror");
+
+							InventoryItem book_mirror = new InventoryItem ("book_mirror", "Old Book"); 
+							GameManager.userData.GetCurrentPlayerData ().inventory.AddItem (book_mirror);
+						}
+					}
+
+					// add event
+
+					GameManager.userData.AddEventToList ("book_taken");		
+				}
+
+				break;
+
+
+			case "bench_abandoned_6_mirror_pick_up_book":
+
+				PhysicalInteractable bench_abandoned_6_mirror = RoomManager.instance.getFurnitureByName ("bench_abandoned_6_mirror");
+
+				if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_3_books") == true) 
+				{
+					DialogueSentence sentence = new DialogueSentence (PlayerManager.myPlayer.identificationName, "I think I'm done moving books around.", false);
+					List<DialogueSentence> list = new List<DialogueSentence> ();
+					list.Add (sentence);
+
+					DisplayText (list);
+
+					return;
+				}
+
+
+				if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_mirror_3_books") == true) 
+				{							
+					// had 3 books, now has 2 books
+
+					// remove event
+					GameManager.userData.RemoveEventFromList ("bench_abandoned_6_mirror_3_books");
+
+					// add event
+					GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_2_books");
+
+					// change animation state
+					PI_Handler.instance.SetPIAnimationState (bench_abandoned_6_mirror.identificationName, "2_books");
+					EventsHandler.Invoke_cb_inputStateChanged ();
+
+				} else {
+
+					if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_mirror_2_books") == true) 
+					{
+						// had 2 books, now has 1 book
+
+						// remove event
+						GameManager.userData.RemoveEventFromList ("bench_abandoned_6_mirror_2_books");
+
+						// add event
+						GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_1_book");
+
+						// change animation state
+
+						PI_Handler.instance.SetPIAnimationState (bench_abandoned_6_mirror.identificationName, "1_book");
+						EventsHandler.Invoke_cb_inputStateChanged ();
+
+					} else {
+
+						if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_mirror_1_book") == true) 
+						{
+							// had 1 book, now has no books
+
+							// remove event
+							GameManager.userData.RemoveEventFromList ("bench_abandoned_6_mirror_1_book");
+
+							// add event
+							GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_0_books");
+
+
+							// change animation state
+
+							PI_Handler.instance.SetPIAnimationState (bench_abandoned_6_mirror.identificationName, "Idle");
+							EventsHandler.Invoke_cb_inputStateChanged ();
+						} 
+					}						
+				}
+
+				// add item
+
+				if (GameManager.userData.benchAbandoned6MirrorBookList.Count > 0)
+				{
+					if (GameManager.userData.benchAbandoned6MirrorBookList [GameManager.userData.benchAbandoned6MirrorBookList.Count - 1] == "book_real") 
+					{
+						// if top book is real 
+
+						GameManager.userData.RemoveBookFromBenchMirror ("book_real");
+
+						InventoryItem book = new InventoryItem ("book", "Old Book"); 
+						GameManager.userData.GetCurrentPlayerData ().inventory.AddItem (book);
+
+					} else {							
+
+						// if top book is mirror 
+
+						if (GameManager.userData.benchAbandoned6MirrorBookList [GameManager.userData.benchAbandoned6MirrorBookList.Count - 1] == "book_mirror") 
+						{
+							GameManager.userData.RemoveBookFromBenchMirror ("book_mirror");
+
+							InventoryItem book_mirror = new InventoryItem ("book_mirror", "Old Book"); 
+							GameManager.userData.GetCurrentPlayerData ().inventory.AddItem (book_mirror);
+						}
+					}
+				}
+
+				// add event
+
+				GameManager.userData.AddEventToList ("book_taken");	
+
+				break;
+
+
+			default:
+
+				Debug.Log("no special interaction");
+
+				break;
+			}
 	}
 }

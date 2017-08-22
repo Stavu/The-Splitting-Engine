@@ -117,10 +117,6 @@ public class TileInspector : MonoBehaviour {
 		posXPlaceholder.text = currentTileInteraction.x.ToString();
 		posYPlaceholder.text = currentTileInteraction.y.ToString();
 
-		entrancePointXPlaceholder.text = currentTileInteraction.entrancePoint.x.ToString();
-		entrancePointYPlaceholder.text = currentTileInteraction.entrancePoint.y.ToString();
-
-
 		// Listeners
 
 		sizeXInput.onEndEdit.AddListener (ChangeTileInteractionWidth);
@@ -158,6 +154,9 @@ public class TileInspector : MonoBehaviour {
 				destinationRoomInput.interactable = true;
 
 				destinationRoomInput.text = currentTileInteraction.mySubInt.destinationRoomName;
+
+				entrancePointXInput.text = currentTileInteraction.mySubInt.entrancePoint.x.ToString();
+				entrancePointYInput.text = currentTileInteraction.mySubInt.entrancePoint.y.ToString();
 			}
 		}
 
@@ -262,19 +261,19 @@ public class TileInspector : MonoBehaviour {
 
 		// create show dialogue
 
-		if (interactionTextInput.interactable == true && interactionTextInput.text != string.Empty) 		
+		if (textInputCheckBox.isOn == true && interactionTextInput.text != string.Empty) 		
 		{
 			SubInteraction subInteraction = new SubInteraction ("showMonologue");
 			subInteraction.RawText = interactionTextInput.text;
 
 			InspectorManager.instance.chosenTileInteraction.mySubInt = subInteraction;
 		}
-		else if (destinationRoomInput.interactable == true && destinationRoomInput.text != string.Empty)		
+		else if (enterRoomCheckBox.isOn == true && destinationRoomInput.text != string.Empty)		
 		{
 			// create enter room
 			// default is 0
-			int x = 0;
-			int y = 0;
+			int x;
+			int y;
 
 			int.TryParse (entrancePointXInput.text, out x);
 			int.TryParse (entrancePointYInput.text, out y);
@@ -284,6 +283,7 @@ public class TileInspector : MonoBehaviour {
 
 			Vector2 entrancePoint = new Vector2 (x, y);
 			subInteraction.entrancePoint = entrancePoint;
+			Debug.Log (entrancePoint.x + entrancePoint.y);
 
 			InspectorManager.instance.chosenTileInteraction.mySubInt = subInteraction;
 		}

@@ -24,7 +24,6 @@ public class InteractionInspector : MonoBehaviour {
 
 	Button interactionConditionButton;
 
-	GameObject addSubIntPanel;
 	GameObject intButtonsPanel;
 
 	Button newSubIntButton;
@@ -91,10 +90,9 @@ public class InteractionInspector : MonoBehaviour {
 
 		interactionConditionButton = titleRow.Find("AddConditionButton").GetComponent<Button> ();
 
-		addSubIntPanel = panel.Find ("AddSubIntPanel").gameObject;
 		intButtonsPanel = panel.Find ("InteractionButtonsPanel").gameObject;
 
-		newSubIntButton = panel.Find("AddSubIntPanel").Find("AddButton").GetComponent<Button> ();
+		newSubIntButton = panel.Find("InteractionButtonsPanel").Find("AddButton").GetComponent<Button> ();
 		cancelButton = panel.Find("InteractionButtonsPanel").Find("CancelButton").GetComponent<Button> ();
 		submitButton = panel.Find("InteractionButtonsPanel").Find("SubmitButton").GetComponent<Button> ();
 
@@ -129,7 +127,7 @@ public class InteractionInspector : MonoBehaviour {
 			if (loadedInteraction.conditionList.Count >= 2) 
 			{
 				Rect tempRect = titleRow.GetComponent<RectTransform> ().rect;
-				titleRow.GetComponent<RectTransform> ().sizeDelta = new Vector2 (tempRect.width, loadedInteraction.conditionList.Count * 30);
+				titleRow.GetComponent<RectTransform> ().sizeDelta = new Vector2 (tempRect.width, loadedInteraction.conditionList.Count * 25 + 10);
 			}
 
 			// Create row for each subinteraction in the interaction's subinterction list
@@ -160,7 +158,7 @@ public class InteractionInspector : MonoBehaviour {
 					if (subInt.conditionList.Count >= 2) 
 					{
 						Rect tempRect = row.GetComponent<RectTransform> ().rect;
-						row.GetComponent<RectTransform> ().sizeDelta = new Vector2 (tempRect.width, subInt.conditionList.Count * 30);
+						row.GetComponent<RectTransform> ().sizeDelta = new Vector2 (tempRect.width, subInt.conditionList.Count * 25 + 10);
 					}
 
 					// Remove subinteraction button
@@ -180,7 +178,6 @@ public class InteractionInspector : MonoBehaviour {
 
 			// Take 2 last rows to bottom
 
-			addSubIntPanel.transform.SetAsLastSibling();
 			intButtonsPanel.transform.SetAsLastSibling ();
 
 		} else {

@@ -41,7 +41,7 @@ public class Tile {
 		{
 			if (myFurniture != furniture) 
 			{
-				Debug.LogError("Tile: PlaceRoomObject myRoomObject exists");
+				Debug.LogError("Tile: PlaceRoomObject myRoomObject exists" + myFurniture.identificationName + " " + furniture.identificationName);
 
 				return;
 			}

@@ -139,13 +139,13 @@ public static class EventsHandler
 
 
 
-	public static Action<PhysicalInteractable,Tile> cb_playerHitPhysicalInteractable; 
+	public static Action<PhysicalInteractable> cb_playerHitPhysicalInteractable; 
 
-	public static void Invoke_cb_playerHitPhysicalInteractable(PhysicalInteractable physicalInt, Tile tile)
+	public static void Invoke_cb_playerHitPhysicalInteractable(PhysicalInteractable physicalInt)
 	{
 		if(cb_playerHitPhysicalInteractable != null)
 		{
-			cb_playerHitPhysicalInteractable (physicalInt, tile);
+			cb_playerHitPhysicalInteractable (physicalInt);
 		}
 
 	}
@@ -285,24 +285,15 @@ public static class EventsHandler
 
 	// Cutscene events
 
-	public static Action cb_dialogueEnded; 
+	public static Action cb_dialogueEnded;
+	public static Action cb_characterFinishedPath;
+	public static Action cb_isClearToContinue;
 
-	public static void Invoke_cb_dialogueEnded()
+	public static void Invoke_Callback (Action callback) 
 	{
-		if(cb_dialogueEnded != null)
+		if (callback != null)
 		{
-			cb_dialogueEnded ();
-		}
-	}
-
-
-	public static Action cb_characterFinishedPath; 
-
-	public static void Invoke_cb_characterFinishedPath()
-	{
-		if(cb_characterFinishedPath != null)
-		{
-			cb_characterFinishedPath ();
+			callback ();
 		}
 	}
 
@@ -435,10 +426,7 @@ public static class EventsHandler
 
 		}
 
-		if (cb_tileLayoutChanged != null) 
-		{
-			cb_tileLayoutChanged ();
-		}
+		Invoke_cb_tileLayoutChanged ();
 
 	}
 
@@ -454,10 +442,7 @@ public static class EventsHandler
 
 		}
 
-		if (cb_tileLayoutChanged != null) 
-		{
-			cb_tileLayoutChanged ();
-		}
+		Invoke_cb_tileLayoutChanged ();
 
 	}
 
@@ -472,10 +457,7 @@ public static class EventsHandler
 			cb_editorTileInteractioneModelChanged (tileInteraction);
 		}
 
-		if (cb_tileLayoutChanged != null) 
-		{
-			cb_tileLayoutChanged ();
-		}
+		Invoke_cb_tileLayoutChanged ();
 
 	}
 
@@ -489,32 +471,10 @@ public static class EventsHandler
 			cb_editorFurniturePlaced (furniture);
 		}
 
-		if (cb_tileLayoutChanged != null) 
-		{
-			cb_tileLayoutChanged ();
-		}
+		Invoke_cb_tileLayoutChanged ();
 
 	}
 
-
-	/*
-
-	public static Action<Furniture> cb_editorFurnitureChanged;
-
-	public static void Invoke_cb_editorFurnitureChanged(Furniture furniture)
-	{
-		if(cb_editorFurnitureChanged != null)
-		{
-			cb_editorFurnitureChanged (furniture);
-		}
-
-		if (cb_tileLayoutChanged != null) 
-		{
-			cb_tileLayoutChanged ();
-		}
-
-	}
-	*/
 
 
 

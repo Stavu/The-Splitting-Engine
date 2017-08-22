@@ -53,28 +53,29 @@ public class PI_Handler : MonoBehaviour {
 	}
 
 
-	// Update is called once per frame
-	void Update () 
-	{
-		
-	}
-
-
-
 	public void AddPIToMap(PhysicalInteractable physicalInteractable, GameObject obj, string name)
 	{
-		PI_gameObjectMap.Add (physicalInteractable, obj);
-		name_PI_map.Add (name, physicalInteractable);
-
-		if (physicalInteractable is Player) 
+		// FIXME: find out why it crashes here in the starting scene
+		try
 		{
-			Player player = (Player)physicalInteractable;
+			PI_gameObjectMap.Add (physicalInteractable, obj);
+			name_PI_map.Add (name, physicalInteractable);
 
-			if (PlayerManager.instance.playerGameObjectMap.ContainsKey (player) == false) 
+			if (physicalInteractable is Player) 
 			{
-				PlayerManager.instance.playerGameObjectMap.Add (player, obj);
+				Player player = (Player)physicalInteractable;
+
+				if (PlayerManager.instance.playerGameObjectMap.ContainsKey (player) == false) 
+				{
+					PlayerManager.instance.playerGameObjectMap.Add (player, obj);
+				}
 			}
 		}
+		catch (System.Exception ex)
+		{
+			
+		}
+
 
 	}
 
@@ -103,27 +104,8 @@ public class PI_Handler : MonoBehaviour {
 			}				
 		}
 
-		/*
-		// active player should get the position according to the entrance pos
-
-		if (myPhysicalInteractable is Player)
-		{
-			Player player = (Player)myPhysicalInteractable;
-
-			if (player.isActive == true) 
-			{
-				if (PlayerManager.entrancePoint != Vector2.zero) 
-				{
-					player.myPos = new Vector3 (PlayerManager.entrancePoint.x, PlayerManager.entrancePoint.y, 0);
-				}
-			}
-		}
-		*/
-
-
 		GameObject obj = null;
 		SpriteRenderer sr = null;
-
 
 		// Animated Object
 	
@@ -176,6 +158,19 @@ public class PI_Handler : MonoBehaviour {
 		}
 
 		obj.transform.SetParent (this.transform);
+		if (myPhysicalInteractable is Furniture)
+		{
+			Furniture furn = (Furniture)myPhysicalInteractable;
+			obj.transform.localScale = furn.imageFlipped ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
+		}
+
+		if (myPhysicalInteractable is Character)
+		{
+			Character character = (Character)myPhysicalInteractable;
+			obj.transform.localScale = character.imageFlipped ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
+		}
+
+
 
 		if (myPhysicalInteractable is Player) 
 		{
@@ -191,31 +186,20 @@ public class PI_Handler : MonoBehaviour {
 		// sorting order 
 
 		Utilities.SetPISortingOrder (myPhysicalInteractable, obj);
-
-		if (myPhysicalInteractable.walkable == true) 
-		{
-			sr.sortingOrder = (int) -(myPhysicalInteractable.y + myPhysicalInteractable.mySize.y) * 10;
-		}
-
-		sr.sortingLayerName = Constants.furniture_character_layer;
-	}
-
-
-	// Change Current Graphic State
-
-	public void ChangeCurrentGraphicState(PhysicalInteractable physicalInteractable, string state)
-	{
-		ActionBoxManager.instance.CloseFurnitureFrame ();
-
-		foreach (GraphicState graphicState in physicalInteractable.graphicStates) 
-		{
-			if (graphicState.graphicStateName == state) 
-			{
-				RoomManager.instance.myRoom.ChangePIInTiles (physicalInteractable, graphicState);
-				physicalInteractable.currentGraphicState = graphicState;
-				GameManager.userData.AddAnimationState (physicalInteractable.identificationName, state);			
-			}
-		}
+//
+//		if (myPhysicalInteractable.walkable == true) 
+//		{
+//			sr.sortingOrder = (int) -(myPhysicalInteractable.y + myPhysicalInteractable.mySize.y) * 10;
+//		}
+//
+//		if (myPhysicalInteractable.aboveFrame == true)
+//		{
+//			sr.sortingLayerName = Constants.aboveFrame_layer;
+//		}
+//		else
+//		{
+//			sr.sortingLayerName = Constants.furniture_character_layer;
+//		}
 	}
 
 
@@ -223,6 +207,10 @@ public class PI_Handler : MonoBehaviour {
 
 	public void SetPIAnimationState(string PI_name, string state, GameObject obj = null)
 	{
+
+	//	Debug.Log ("SetPIAnimationState " + PI_name + state);
+
+
 		if (name_PI_map.ContainsKey (PI_name)) 
 		{
 			PhysicalInteractable physicalInteractable = name_PI_map [PI_name];
@@ -246,8 +234,256 @@ public class PI_Handler : MonoBehaviour {
 	}
 
 
+	// Change Current Graphic State
+
+	public void ChangeCurrentGraphicState(PhysicalInteractable physicalInteractable, string state)
+	{
+		//Debug.Log ("change current graphic state " + physicalInteractable.identificationName + " " + state);
+
+		ActionBoxManager.instance.CloseFurnitureFrame ();
+
+		foreach (GraphicState graphicState in physicalInteractable.graphicStates) 
+		{
+			if (graphicState.graphicStateName == state) 
+			{
+				Room room = RoomManager.instance.myRoom;
+
+				// get the associated grids
+				List<Grid> grids = new List<Grid>();
+
+				if (physicalInteractable is Furniture) 
+				{
+					Furniture furn = (Furniture)physicalInteractable;
+
+					if (room.myFurnitureList.Contains(furn))
+					{
+						grids.Add (room.myGrid);
+					}
+
+					if (room.myMirrorRoom != null)
+					{
+						if (room.myMirrorRoom.myFurnitureList_Shadow.Contains(furn))
+						{
+							grids.Add (room.myMirrorRoom.shadowGrid);
+						}
+
+						if (room.myMirrorRoom.myFurnitureList_Persistant.Contains(furn))
+						{
+							grids.Clear (); // maybe this is unnecessary, but whatever
+							grids.Add (room.myGrid);
+							grids.Add (room.myMirrorRoom.shadowGrid);
+						}
+					}
+
+
+				}
 
 
 
+				
+				RoomManager.instance.myRoom.ChangePIInTiles (physicalInteractable, graphicState, grids);
+				physicalInteractable.currentGraphicState = graphicState;
+				GameManager.userData.AddAnimationState (physicalInteractable.identificationName, state);	
+				//Debug.Log ("save state");
+
+			}
+		}
+	}
+
+
+
+
+
+	public void UnHide_PI (PhysicalInteractable physicalInteractable) 
+	{
+
+		physicalInteractable.hidden = false;
+
+
+		if (physicalInteractable is Furniture)
+		{
+			Furniture furn = (Furniture) physicalInteractable;
+			EventsHandler.Invoke_cb_furnitureChanged (furn);
+		}
+
+		if (physicalInteractable is Character)
+		{
+			Character character = (Character) physicalInteractable;
+			EventsHandler.Invoke_cb_characterChanged (character);
+		}
+
+
+		// Remove from hidden list
+
+		if (physicalInteractable is Furniture) 
+		{
+			if (GameManager.userData.hiddenFurnitureList.Contains (physicalInteractable.identificationName) == true) 
+			{
+				GameManager.userData.hiddenFurnitureList.Remove (physicalInteractable.identificationName);
+			}
+		}
+
+		if (physicalInteractable is Character) 
+		{
+			if (GameManager.userData.hiddenCharacterList.Contains (physicalInteractable.identificationName) == true) 
+			{
+				GameManager.userData.hiddenCharacterList.Remove (physicalInteractable.identificationName);
+			}
+		}
+
+
+		RoomManager.instance.myRoom.CreateRoomInteractables ();
+
+	}
+
+
+
+	public void RoomStarter_Unhide_PI (PhysicalInteractable physicalInteractable) 
+	{
+		
+		physicalInteractable.hidden = false;
+
+		// Remove from hidden list
+
+		if (physicalInteractable is Furniture) 
+		{
+			if (GameManager.userData.hiddenFurnitureList.Contains (physicalInteractable.identificationName) == true) 
+			{
+				GameManager.userData.hiddenFurnitureList.Remove (physicalInteractable.identificationName);
+			}
+		}
+
+		if (physicalInteractable is Character) 
+		{
+			if (GameManager.userData.hiddenCharacterList.Contains (physicalInteractable.identificationName) == true) 
+			{
+				GameManager.userData.hiddenCharacterList.Remove (physicalInteractable.identificationName);
+			}
+		}
+	}
+
+
+
+
+
+	public void Hide_PI (string PI_name) 
+	{
+		PhysicalInteractable physicalInteractable = name_PI_map [PI_name];
+
+		if (physicalInteractable == null) 
+		{
+			Debug.LogError ("can't find PI by name");
+			return;
+		}
+
+		physicalInteractable.hidden = true;
+
+		if (PI_gameObjectMap.ContainsKey (physicalInteractable)) 
+		{			
+			Destroy (PI_gameObjectMap [physicalInteractable]);
+			PI_gameObjectMap.Remove (physicalInteractable);
+		}
+
+		foreach (Tile tile in RoomManager.instance.myRoom.MyGrid.gridArray) 
+		{
+			if (tile.myFurniture == physicalInteractable) 
+			{
+				tile.myFurniture = null;
+			}
+		}
+
+
+		if (physicalInteractable is Furniture) 
+		{
+			
+			if (GameManager.userData.hiddenFurnitureList.Contains (PI_name) == false) 
+			{
+				GameManager.userData.hiddenFurnitureList.Add (PI_name);
+			}
+		}
+
+		if (physicalInteractable is Character) 
+		{
+
+			if (GameManager.userData.hiddenCharacterList.Contains (PI_name) == false) 
+			{
+				GameManager.userData.hiddenCharacterList.Add (PI_name);
+			}
+		}
+
+
+	}
+
+
+
+	public void RoomStarter_Hide_Character (string PI_name) 
+	{
+
+		PhysicalInteractable physicalInteractable = RoomManager.instance.getCharacterByName (PI_name);
+
+		if (physicalInteractable == null) 
+		{
+			Debug.LogError ("can't find PI by name");
+			return;
+		}
+
+		physicalInteractable.hidden = true;
+
+		if (physicalInteractable is Character) 
+		{
+
+			if (GameManager.userData.hiddenCharacterList.Contains (PI_name) == false) 
+			{
+				GameManager.userData.hiddenCharacterList.Add (PI_name);
+			}
+		}
+
+
+	}
+
+
+
+	public void RoomStarter_Hide_Furniture (string PI_name) 
+	{
+
+		PhysicalInteractable physicalInteractable = RoomManager.instance.getFurnitureByName (PI_name);
+
+		if (physicalInteractable == null) 
+		{
+			Debug.LogError ("can't find PI by name");
+			return;
+		}
+
+		physicalInteractable.hidden = true;
+
+		if (physicalInteractable is Furniture) 
+		{
+
+			if (GameManager.userData.hiddenFurnitureList.Contains (PI_name) == false) 
+			{
+				GameManager.userData.hiddenFurnitureList.Add (PI_name);
+			}
+		}
+
+
+	}
+
+
+	/*
+	// Get PI by Name
+
+	public PhysicalInteractable getPIbyName(string PI_Name)
+	{
+		PhysicalInteractable pi = null;
+
+		if(name_PI_map.ContainsKey(PI_Name))
+		{
+			pi = name_PI_map [PI_Name];
+		}
+	
+		return name_PI_map [PI_Name];
+	}
+
+	*/
 
 }

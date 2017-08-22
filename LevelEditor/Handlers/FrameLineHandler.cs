@@ -7,7 +7,7 @@ public class FrameLineHandler : MonoBehaviour {
 
 
 	List<GameObject> lineContainer = new List<GameObject>();
-
+	Transform parent;
 
 
 
@@ -15,7 +15,8 @@ public class FrameLineHandler : MonoBehaviour {
 	void Start () 
 	{
 		
-		EventsHandler.cb_tileLayoutChanged += CreateLines;
+		EventsHandler.cb_tileLayoutChanged += CreateFrames;
+		parent = new GameObject ("Frames").transform;
 
 	}
 
@@ -24,55 +25,12 @@ public class FrameLineHandler : MonoBehaviour {
 	void OnDestroy()
 	{
 
-		EventsHandler.cb_tileLayoutChanged -= CreateLines;
+		EventsHandler.cb_tileLayoutChanged -= CreateFrames;
 
 	}
 
-	
-	// Update is called once per frame
 
-	void Update () 
-	{
-		
-	}
-
-
-
-
-	// Draw Line
-
-
-	public void CreateLine(PhysicalInteractable physicalInteractable)
-	{
-		
-		GameObject lineObj = new GameObject ("frameline_" + physicalInteractable.identificationName);
-		lineObj.transform.SetParent (this.transform);
-
-		LineRenderer lr = lineObj.AddComponent<LineRenderer> ();
-		lr.loop = true;
-		lr.positionCount = 4;
-		lr.widthMultiplier = 0.1f;
-
-		List<Vector3> positionList = Utilities.EditorGetPhysicalInteractableFrameBounds (physicalInteractable);
-
-		Vector3[] posArray = new Vector3[4];
-
-
-		for (int i = 1; i < positionList.Count; i++) 
-		{
-			posArray [i - 1] = positionList [i] + positionList [0] + new Vector3 (physicalInteractable.currentGraphicState.frameOffsetX, physicalInteractable.currentGraphicState.frameOffsetY,-5);
-		}
-
-		lr.SetPositions (posArray);
-
-		lineContainer.Add (lineObj);
-	}
-
-
-
-
-
-	public void CreateLines()
+	public void CreateFrames()
 	{
 
 		lineContainer.ForEach (obj => Destroy (obj));
@@ -82,7 +40,9 @@ public class FrameLineHandler : MonoBehaviour {
 		{
 			foreach (Furniture furn in EditorRoomManager.instance.furnitureGameObjectMap.Keys) 
 			{
-				CreateLine (furn);
+				GameObject obj = ActionBoxManager.CreateFrame (furn, true);
+				obj.transform.SetParent (parent);
+				lineContainer.Add(obj);
 			}
 		}
 
@@ -90,7 +50,9 @@ public class FrameLineHandler : MonoBehaviour {
 		{			
 			foreach (Character character in EditorRoomManager.instance.characterGameObjectMap.Keys) 
 			{
-				CreateLine (character);
+				GameObject obj = ActionBoxManager.CreateFrame (character, true);
+
+				lineContainer.Add(obj);
 			}
 		}
 	}

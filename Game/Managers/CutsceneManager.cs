@@ -33,22 +33,38 @@ public class CutsceneManager : MonoBehaviour {
 	{
 		stringCutsceneMap = new Dictionary<string, IEnumerator> ();
 
-		Cutscene cutScene = new DanielScene ("daniel_scene");
-		stringCutsceneMap.Add (cutScene.myName, cutScene.MyCutscene());
+		Cutscene openingCutScene = new OpeningScene ("opening_scene");
+		stringCutsceneMap.Add (openingCutScene.myName, openingCutScene.MyCutscene());
 
-		Cutscene cutScene_switch_player = new ChangePlayerScene ("switch_player_cutscene");
-		stringCutsceneMap.Add (cutScene_switch_player.myName, cutScene_switch_player.MyCutscene());
+		Cutscene waterCanCutScene = new WaterCanScene ("water_can_scene");
+		stringCutsceneMap.Add (waterCanCutScene.myName, waterCanCutScene.MyCutscene());
 
+		Cutscene coverManCutscene = new CoverManScene ("cover_man_scene");
+		stringCutsceneMap.Add (coverManCutscene.myName, coverManCutscene.MyCutscene());
+	
+		Cutscene toolboxCutscene = new ToolboxScene ("technician_toolbox_scene");
+		stringCutsceneMap.Add (toolboxCutscene.myName, toolboxCutscene.MyCutscene());
+
+		Cutscene busToAsylumCutscene = new BusToAsylumScene ("bus_to_asylum_scene");
+		stringCutsceneMap.Add (busToAsylumCutscene.myName, busToAsylumCutscene.MyCutscene());
+
+		Cutscene OpenGreenDoorScene = new OpenGreenDoorScene ("open_green_door_scene");
+		stringCutsceneMap.Add (OpenGreenDoorScene.myName, OpenGreenDoorScene.MyCutscene());
+
+		Cutscene OpenGreenDoorMirrorScene = new OpenGreenDoorMirrorScene ("open_green_door_mirror_scene");
+		stringCutsceneMap.Add (OpenGreenDoorMirrorScene.myName, OpenGreenDoorMirrorScene.MyCutscene());
 	}
 	
 	// Update is called once per frame
 
 	void Update () 
 	{
+		/*
 		if(Input.GetKeyDown(KeyCode.G))
 		{
 			PlayCutscene ("switch_player_cutscene");	
 		}
+		*/
 	}
 
 
@@ -66,6 +82,21 @@ public class CutsceneManager : MonoBehaviour {
 
 		StartCoroutine (stringCutsceneMap [cutsceneName]);	
 
+	}
+
+	public void EaseInObject (GameObject obj, Vector3 target, float maxSpeed, bool destroyOnArrival, bool invokeClearToContinue) 
+	{
+		StartCoroutine ( MovementUtilities.EaseIn(obj, target, maxSpeed, destroyOnArrival, invokeClearToContinue) );
+	}
+
+	public void EaseOutObject (GameObject obj, Vector3 target, float maxSpeed, bool destroyOnArrival, bool invokeClearToContinue) 
+	{
+		StartCoroutine ( MovementUtilities.EaseOut(obj, target, maxSpeed, destroyOnArrival, invokeClearToContinue) );
+	}
+
+	public void MoveInConstantSpeed (GameObject obj, Vector3 target, float maxSpeed, bool destroyOnArrival, bool invokeClearToContinue) 
+	{
+		StartCoroutine ( MovementUtilities.MoveConstantSpeed(obj, target, maxSpeed, destroyOnArrival, invokeClearToContinue) );
 	}
 
 

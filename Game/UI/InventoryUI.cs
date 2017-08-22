@@ -212,11 +212,20 @@ public class InventoryUI : MonoBehaviour {
 		// Creating frames
 
 		frameGreen = new GameObject ("frameGreen");
-		frameGreen.AddComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/item_frame_green");
+
+		SpriteRenderer frameGreenSR = frameGreen.AddComponent<SpriteRenderer> ();
+		frameGreenSR.sprite = Resources.Load<Sprite> ("Sprites/item_frame_green");
+		frameGreenSR.sortingLayerName = Constants.ui_layer;
+
 		frameGreen.SetActive(false);
 
+
 		frameOrange = new GameObject ("frameOrange");
-		frameOrange.AddComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Sprites/item_frame_orange");
+
+		SpriteRenderer frameOrangeSR = frameOrange.AddComponent<SpriteRenderer> ();
+		frameOrangeSR.sprite = Resources.Load<Sprite> ("Sprites/item_frame_orange");
+		frameOrangeSR.sortingLayerName = Constants.ui_layer;
+
 		frameOrange.SetActive(false);
 
 
@@ -267,6 +276,7 @@ public class InventoryUI : MonoBehaviour {
 			}
 
 			sr.sprite = sprite;
+			sr.sortingLayerName = Constants.ui_layer;
 			itemGameObjectMap.Add (item, itemObject);
 
 		}

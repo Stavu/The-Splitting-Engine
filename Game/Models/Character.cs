@@ -17,6 +17,8 @@ public class Character : PhysicalInteractable, ISpeaker, IWalker {
 
 	public Color myTextColor;
 
+	public bool imageFlipped = false;
+
 
 
 	public string speakerName 
@@ -118,6 +120,28 @@ public class Character : PhysicalInteractable, ISpeaker, IWalker {
 		graphicStates = new List<GraphicState> ();
 
 		myTextColor = Color.cyan;
+
+
+	}
+
+
+	// Constructor for flipped character
+
+	public Character(Room room, Character character)
+	{				
+		this.identificationName = character.identificationName;
+		this.fileName = character.fileName;
+		this.x = room.MyGrid.myWidth - 1 - character.x - ((int)character.mySize.x - 1);
+		this.y = character.y;
+
+		this.imageFlipped = !character.imageFlipped;
+
+		this.offsetX = -character.offsetX;
+		this.offsetY = character.offsetY;
+		this.mySize = character.mySize;
+		this.graphicStates = character.graphicStates;
+
+		this.walkable = character.walkable;
 	}
 
 
@@ -130,7 +154,18 @@ public class Character : PhysicalInteractable, ISpeaker, IWalker {
 
 		Tile newTile = RoomManager.instance.myRoom.MyGrid.GetTileAt((int)newPos.x, (int)newPos.y);
 			
-		newTile.myCharacter = this;
+		// Stav: new thing - if there is no tile (the character left the room) the character's object will be destroyed
+
+		if (newTile != null) 
+		{
+			newTile.myCharacter = this;
+
+		} else {
+
+			// destroy character
+
+
+		}
 	}
 }
 

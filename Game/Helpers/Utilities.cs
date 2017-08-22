@@ -63,6 +63,38 @@ public class Utilities {
 	}
 
 
+
+
+	// Sorting order //
+
+	public static void SetPISortingOrder(PhysicalInteractable myPI, GameObject obj)
+	{
+		// sorting order 
+
+		SpriteRenderer[] sr_list = obj.GetComponentsInChildren<SpriteRenderer> ();
+
+		for (int i = 0; i < sr_list.Length; i++)
+		{
+			sr_list[i].sortingOrder = i + (-myPI.y * 10) + (int)myPI.layerOffset; //FIXME
+
+			if (myPI.walkable == true) 
+			{
+				sr_list[i].sortingOrder = (int) -(myPI.y + myPI.mySize.y) * 10;
+			}
+
+			if (myPI.aboveFrame == true)
+			{
+				sr_list[i].sortingLayerName = Constants.aboveFrame_layer;
+			}
+			else
+			{
+				sr_list[i].sortingLayerName = Constants.furniture_character_layer;
+			}
+		}
+	}
+
+
+
 	// Editor function
 
 	public static GameObject CreateEditorFurnitureGameObject (Furniture myFurniture, Transform parent)
@@ -92,57 +124,123 @@ public class Utilities {
 
 			sr = childObj.AddComponent<SpriteRenderer>();
 			sr.sprite = Resources.Load<Sprite> ("Sprites/Furniture/" + myFurniture.fileName); 
-			sr.flipX = myFurniture.imageFlipped;
+			obj.transform.localScale = myFurniture.imageFlipped ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
 		}
 
 		obj.transform.position = new Vector3 (myFurniture.myPos.x + myFurniture.offsetX, myFurniture.myPos.y + 0.5f + myFurniture.offsetY, myFurniture.myPos.z);
 
 		// sorting order 
 
-		sr.sortingOrder = -myFurniture.y * 10;
-
-		if (myFurniture.walkable == true) 
-		{
-			sr.sortingOrder = (int) -(myFurniture.y + myFurniture.mySize.y) * 10;
-
-		}
-
-		sr.sortingLayerName = Constants.furniture_character_layer;
+		SetPISortingOrder (myFurniture, obj);
+//		sr.sortingOrder = -myFurniture.y * 10;
+//
+//		if (myFurniture.walkable == true) 
+//		{
+//			sr.sortingOrder = (int) -(myFurniture.y + myFurniture.mySize.y) * 10;
+//
+//		}
+//
+//		if (myFurniture.aboveFrame == true)
+//		{
+//			sr.sortingLayerName = Constants.aboveFrame_layer;
+//		}
+//		else
+//		{
+//			sr.sortingLayerName = Constants.furniture_character_layer;
+//		}
 
 		return obj;
 	}
 
 
-	public static void SetPISortingOrder(PhysicalInteractable myPI, GameObject obj)
-	{
-		// sorting order 
+	/*
 
-		SpriteRenderer[] sr_list = obj.GetComponentsInChildren<SpriteRenderer> ();
+	// Editor function
 
-		for (int i = 0; i < obj.transform.childCount; i++)
+	public static GameObject CreateEditorCharacterGameObject (Character myCharacter, Transform parent)
+	{		
+
+		myCharacter.myPos = new Vector3 (myCharacter.x + myCharacter.mySize.x/2, myCharacter.y, 0);
+
+		GameObject obj = null;
+		SpriteRenderer sr = null;
+
+		if (EditorRoomManager.stringPrefabMap.ContainsKey (myCharacter.fileName)) 
 		{
-			obj.transform.GetChild (i).GetComponent<SpriteRenderer> ().sortingOrder = i + (-myPI.y * 10);			
+			obj = GameObject.Instantiate (EditorRoomManager.stringPrefabMap[myCharacter.fileName]);
+			obj.transform.SetParent (parent);
+
+			sr = obj.GetComponentInChildren<SpriteRenderer>();
 		}
 
+
+		if (obj == null) 
+		{
+			obj = new GameObject (myCharacter.fileName);
+			obj.transform.SetParent (parent);
+
+			GameObject childObj = new GameObject ("Image");
+			childObj.transform.SetParent (obj.transform);
+
+			sr = childObj.AddComponent<SpriteRenderer>();
+			sr.sprite = Resources.Load<Sprite> ("Sprites/Furniture/" + myCharacter.fileName); 
+			obj.transform.localScale = myCharacter.imageFlipped ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
+		}
+
+		obj.transform.position = new Vector3 (myCharacter.myPos.x + myCharacter.offsetX, myCharacter.myPos.y + 0.5f + myCharacter.offsetY, myCharacter.myPos.z);
+
+		// sorting order 
+
+		SetPISortingOrder (myCharacter, obj);
+
+		//		sr.sortingOrder = -myFurniture.y * 10;
+		//
+		//		if (myFurniture.walkable == true) 
+		//		{
+		//			sr.sortingOrder = (int) -(myFurniture.y + myFurniture.mySize.y) * 10;
+		//
+		//		}
+		//
+		//		if (myFurniture.aboveFrame == true)
+		//		{
+		//			sr.sortingLayerName = Constants.aboveFrame_layer;
+		//		}
+		//		else
+		//		{
+		//			sr.sortingLayerName = Constants.furniture_character_layer;
+		//		}
+
+		return obj;
 	}
 
+	*/
 
-	public static GameObject CreateCharacterGameObject (Character myCharacter, Transform parent)
+
+
+
+
+	public static GameObject CreateEditorCharacterGameObject (Character myCharacter, Transform parent)
 	{
 		myCharacter.myPos = new Vector3 (myCharacter.x + myCharacter.mySize.x/2, myCharacter.y, 0);
 
 		GameObject obj = GameObject.Instantiate(Resources.Load<GameObject> ("Prefabs/Characters/" + myCharacter.fileName)); 			
 		obj.transform.SetParent (parent);
 
+		obj.transform.localScale = myCharacter.imageFlipped ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
+
 		obj.transform.position = new Vector3 (myCharacter.myPos.x + myCharacter.offsetX, myCharacter.myPos.y + 0.5f + myCharacter.offsetY, myCharacter.myPos.z);
 
 		// sorting order 
 
-		obj.GetComponentInChildren<SpriteRenderer>().sortingOrder  = -myCharacter.y * 10;
+		obj.GetComponentInChildren<SpriteRenderer>().sortingOrder  = -myCharacter.y * 10 + 6;
 		obj.GetComponentInChildren<SpriteRenderer>().sortingLayerName = Constants.furniture_character_layer;
 
 		return obj;
 	}
+
+
+
+
 
 
 	public static Vector2 GetCharacterPosOnTile(IWalker character, Vector2 myPos)
@@ -271,18 +369,42 @@ public class Utilities {
 	}
 
 
-	public static List<Vector3> GetPhysicalInteractableFrameBounds(PhysicalInteractable myPhysicalInt)
+	public static List<Vector3> GetPhysicalInteractableFrameBounds(PhysicalInteractable myPhysicalInt, bool inEditor)
 	{
 		
 		// declerations 
-
-		Vector2 frameBounds = myPhysicalInt.CurrentGraphicState().frameExtents;
+		GraphicState GS = myPhysicalInt.currentGraphicState;
+		Vector2 frameBounds = GS.frameExtents;
+		//Debug.Log (GS.graphicStateName);
 
 		List<Vector3> positions = new List<Vector3> ();
 
-		SpriteRenderer sr = PI_Handler.instance.PI_gameObjectMap [myPhysicalInt].GetComponentInChildren<SpriteRenderer>();
+		SpriteRenderer sr = null;
+
+		if (inEditor)
+		{
+			if (myPhysicalInt is Furniture)
+			{
+				Furniture myFurniture = (Furniture)myPhysicalInt;
+
+				sr = EditorRoomManager.instance.furnitureGameObjectMap [myFurniture].GetComponentInChildren<SpriteRenderer> ();
+
+			}
+
+			if (myPhysicalInt is Character)
+			{
+				Character myCharacter = (Character)myPhysicalInt;
+
+				sr = EditorRoomManager.instance.characterGameObjectMap [myCharacter].GetComponentInChildren<SpriteRenderer> ();
+			}
+		}
+		else
+		{
+			sr = PI_Handler.instance.PI_gameObjectMap [myPhysicalInt].GetComponentInChildren<SpriteRenderer> ();
+		}
 
 		Vector3 center = sr.bounds.center + new Vector3 (myPhysicalInt.currentGraphicState.frameOffsetX, myPhysicalInt.currentGraphicState.frameOffsetY, 0);
+		//Debug.Log ("center " + center);
 
 		// center 
 
@@ -308,69 +430,6 @@ public class Utilities {
 		positions.Add(new Vector3 (frameBounds.x, frameBounds.y,0));
 
 
-
-		return positions;
-	}
-
-
-	public static List<Vector3> EditorGetPhysicalInteractableFrameBounds(PhysicalInteractable myPhysicalInt)
-	{
-		// declerations 
-
-		Vector2 frameBounds = myPhysicalInt.currentGraphicState.frameExtents;
-
-		List<Vector3> positions = new List<Vector3> ();
-
-		if (myPhysicalInt is Furniture) 		
-		{
-			Furniture myFurniture = (Furniture)myPhysicalInt;
-
-			SpriteRenderer sr = EditorRoomManager.instance.furnitureGameObjectMap[myFurniture].GetComponentInChildren<SpriteRenderer>();
-
-			Vector3 center = sr.bounds.center;
-
-			// center 
-
-			positions.Add(center);
-
-			// positioning frame pieces
-
-			if (frameBounds == Vector2.zero) 
-			{
-				frameBounds = sr.bounds.extents;
-			}
-		}
-
-
-		if (myPhysicalInt is Character) 		
-		{
-			Character myCharacter = (Character)myPhysicalInt;
-
-			GameObject myObject = EditorRoomManager.instance.characterGameObjectMap [myCharacter];
-			Vector3 center = myObject.GetComponentInChildren<SpriteRenderer> ().bounds.center;
-
-			// center 
-			positions.Add(center);
-
-			// positioning frame pieces
-
-			if (frameBounds == Vector2.zero) 
-			{
-				frameBounds = myObject.GetComponentInChildren<SpriteRenderer> ().bounds.extents;
-			}
-		}
-
-		//down left
-		positions.Add(new Vector3 (-frameBounds.x, -frameBounds.y,0));
-
-		//down right
-		positions.Add(new Vector3 (frameBounds.x, -frameBounds.y,0));
-
-		//up right
-		positions.Add(new Vector3 (frameBounds.x, frameBounds.y,0));
-
-		//up left
-		positions.Add(new Vector3 (-frameBounds.x, frameBounds.y,0));
 
 		return positions;
 	}

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileManager : MonoBehaviour {
-
-
+public class TileManager : MonoBehaviour 
+{
 
 	// Singleton //
 
@@ -31,9 +30,6 @@ public class TileManager : MonoBehaviour {
 	// Use this for initialization
 	public void Initialize () 
 	{	
-		//EventsHandler.cb_furnitureChanged += ColorTiles;
-		//EventsHandler.cb_characterChanged += ColorTiles;
-		//EventsHandler.cb_tileInteractionChanged += ColorTiles;
 		EventsHandler.cb_playerMove += FindPlayerTile;
 		EventsHandler.cb_roomCreated += CreateTileObject;
 		EventsHandler.cb_tileLayoutChanged += ColorTiles;
@@ -45,36 +41,25 @@ public class TileManager : MonoBehaviour {
 
 	public void OnDestroy()
 	{
-		//EventsHandler.cb_furnitureChanged -= ColorTiles;
-		//EventsHandler.cb_characterChanged -= ColorTiles;
-		//EventsHandler.cb_tileInteractionChanged -= ColorTiles;
 		EventsHandler.cb_playerMove -= FindPlayerTile;
 		EventsHandler.cb_roomCreated -= CreateTileObject;
 		EventsHandler.cb_tileLayoutChanged -= ColorTiles;
 	}
 
 
-
-	// Update is called once per frame
-
-	void Update () 
-	{
-		
-	}
-
-
 	void CreateTileObject(Room myRoom)
 	{
-
+		// create tile objects
 		tiles = new GameObject ("Tiles");
-
 
 		foreach (Tile tile in myRoom.myGrid.gridArray) 
 		{
 			GameObject obj = Instantiate (TilePrefab, tiles.transform);
 
 			obj.transform.position = new Vector3 (tile.x,tile.y,0);
-			obj.GetComponent<SpriteRenderer> ().sortingLayerName = Constants.tiles_layer;
+			SpriteRenderer SR = obj.GetComponent<SpriteRenderer> ();
+			SR.sortingLayerName = Constants.tiles_layer;
+			SR.color = new Color (0.1f, 0.1f, 0.1f, 0.05f);
 
 			tileGameObjectMap.Add(tile, obj);
 
@@ -96,10 +81,9 @@ public class TileManager : MonoBehaviour {
 
 		// light the tile
 
-		TileManager.instance.GetTileObject(currentTile.x, currentTile.y).GetComponent<SpriteRenderer> ().color = new Color (0.1f,0.1f,0.1f,0.2f);
+		GetTileObject(currentTile.x, currentTile.y).GetComponent<SpriteRenderer> ().color = new Color (1, 1, 1, 0.01f);
 
 	}
-
 
 
 	public GameObject GetTileObject(int x, int y)
@@ -122,7 +106,7 @@ public class TileManager : MonoBehaviour {
 
 		foreach (GameObject obj in tileGameObjectMap.Values) 
 		{
-			obj.GetComponent<SpriteRenderer> ().color = new Color (1f, 1f, 1f, 0.1f);
+			obj.GetComponent<SpriteRenderer> ().color = new Color (1f, 1f, 1f, 0.05f);
 		}
 
 
@@ -141,7 +125,7 @@ public class TileManager : MonoBehaviour {
 					for (int y = 0; y < tileInt.mySize.y; y++) 
 					{
 						Tile tempTile = RoomManager.instance.myRoom.myGrid.GetTileAt (tileInt.x + x, tileInt.y + y);
-						tileGameObjectMap [tempTile].GetComponent<SpriteRenderer> ().color = Color.yellow;
+						tileGameObjectMap [tempTile].GetComponent<SpriteRenderer> ().color = new Color (0.9f, 0.2f, 0.2f, 0.8f);
 					}
 				}
 			}
@@ -153,12 +137,15 @@ public class TileManager : MonoBehaviour {
 
 			if (tile.myFurniture != null) 
 			{
-				tileGameObjectMap [mapTile].GetComponent<SpriteRenderer> ().color = Color.blue;
+				tileGameObjectMap [mapTile].GetComponent<SpriteRenderer> ().color = 
+					(
+						tile.myFurniture.hidden ? 
+						new Color (0.2f, 0.2f, 0.9f, 0.3f) :
+						new Color (0.2f, 0.2f, 0.9f, 0.8f)
+					);
 			}
 		}
 	}
-
-
 
 
 }

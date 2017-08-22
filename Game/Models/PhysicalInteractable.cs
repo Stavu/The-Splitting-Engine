@@ -13,13 +13,13 @@ public class PhysicalInteractable : Interactable {
 
 	public Vector3 myPos {get; set;}
 
-	//public Vector2 frameExtents;
-
-	//public float frameOffsetX;
-	//public float frameOffsetY;
-
 	public float offsetX = 0;
 	public float offsetY = 0;
+
+	public float layerOffset = 0;
+
+	public bool hidden;
+	public bool aboveFrame;
 
 	public List<Interaction> myInteractionList;
 

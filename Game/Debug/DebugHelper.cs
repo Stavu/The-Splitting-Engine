@@ -55,6 +55,13 @@ public class DebugHelper : MonoBehaviour {
 			AsyncLoad ();
 		}
 
+		if(Input.GetKeyDown(KeyCode.H))
+		{
+			Debug.Log ("hide");
+			PI_Handler.instance.Hide_PI("fork_pn_table");
+		}
+
+
 
 	}
 
@@ -101,10 +108,28 @@ public class DebugHelper : MonoBehaviour {
 	{
 
 		string roomName = dropDownMenu.options [roomNum].text;
-
 		GameManager.roomToLoad = GameManager.instance.stringRoomMap [roomName];
 
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		PlayerManager.myPlayer.currentRoom = roomName;
+
+		Vector2 newPos;
+
+		newPos.x = 2;
+		newPos.y = 2;
+
+
+		PlayerManager.myPlayer.myPos = newPos;
+
+
+		GameManager.userData.GetPlayerDataByPlayerName (PlayerManager.myPlayer.identificationName).currentRoom = PlayerManager.myPlayer.currentRoom;
+
+
+		NavigationManager.instance.NavigateToScene (SceneManager.GetActiveScene ().name, Color.black);
+
+
+
+
+		//SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
 	}
 

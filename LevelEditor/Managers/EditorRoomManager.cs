@@ -35,7 +35,7 @@ public class EditorRoomManager : MonoBehaviour {
 
 
 	public Room room; 
-	GameObject roomBackground;
+	public GameObject roomBackground;
 
 	public Dictionary<Furniture,GameObject> furnitureGameObjectMap;
 	public Dictionary<Character,GameObject> characterGameObjectMap;
@@ -894,6 +894,46 @@ public class EditorRoomManager : MonoBehaviour {
 
 
 
+	public void ChangeInteractableLayerOffset(int layerOffset, Interactable interactable)
+	{
+		Debug.Log ("ChangeInteractableLayerOffset");
+
+		if (interactable is Furniture) 
+		{
+			Furniture furn = (Furniture)interactable;
+			furn.layerOffset = layerOffset;
+
+			SpriteRenderer[] srArray = furnitureGameObjectMap [furn].GetComponentsInChildren<SpriteRenderer> ();
+
+			foreach (SpriteRenderer sr in srArray) 
+			{				
+				sr.sortingOrder = -(furn.y * 10) + layerOffset; // FIXME
+			}
+
+
+		} else if (interactable is Character) 
+		{
+			Character character = (Character)interactable;
+			character.layerOffset = layerOffset;
+
+			SpriteRenderer[] srArray = characterGameObjectMap [character].GetComponentsInChildren<SpriteRenderer> ();
+
+			foreach (SpriteRenderer sr in srArray) 
+			{
+				sr.sortingOrder = -(character.y * 10) + layerOffset; // FIXME 
+			}
+		
+		} 
+
+		EventsHandler.Invoke_cb_tileLayoutChanged ();
+
+
+	}
+
+
+
+
+
 
 	// ------- GRAPHIC STATE ------- //
 
@@ -914,7 +954,7 @@ public class EditorRoomManager : MonoBehaviour {
 				GameObject obj = GetPhysicalInteractableGameObject (interactable);
 				Animator animator = obj.GetComponent<Animator> ();
 				animator.PlayInFixedTime (state);
-
+				Debug.Log ("ChangeInteractableCurrentGraphicState --- " + state);
 				EventsHandler.Invoke_cb_tileLayoutChanged ();
 				return;
 			}
@@ -1156,7 +1196,15 @@ public class EditorRoomManager : MonoBehaviour {
 			}
 		}
 
-		UnityEditor.AssetDatabase.Refresh ();
+		try
+		{
+			UnityEditor.AssetDatabase.Refresh ();
+		}
+		catch (Exception ex)
+		{
+			
+		}
+
 
 		return roomString;
 	}

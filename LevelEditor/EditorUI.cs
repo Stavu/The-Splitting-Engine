@@ -73,6 +73,14 @@ public class EditorUI : MonoBehaviour
 		CreateBgSelect ();
 	}
 
+	public void Update ()
+	{
+		if (Input.GetKeyDown(KeyCode.L))
+		{
+			EventsHandler.Invoke_cb_tileLayoutChanged ();
+		}
+	}
+
 
 	public void CreateBgSelect()
 	{	
@@ -229,10 +237,47 @@ public class EditorUI : MonoBehaviour
 
 		shadowToggle.onValueChanged.AddListener (SetShadowState);
 
+
 		// flipped background
-		flippedToggle.isOn = myRoom.bgFlipped;
-		flippedToggle.interactable = false; // FIXME: if you want to make it interactable, add a function which will change it and reload the background
+
+		if ((myRoom.myMirrorRoom != null) && (myRoom.myMirrorRoom.inTheShadow)) 
+		{
+			flippedToggle.isOn = myRoom.myMirrorRoom.bgFlipped_Shadow;
+
+		} else {
+
+			flippedToggle.isOn = myRoom.bgFlipped;
+		}
+
+		flippedToggle.onValueChanged.AddListener(FlipBackground);
+	
+	
 	}
+
+
+	public void FlipBackground (bool isFlipped)
+	{
+		Room myRoom = EditorRoomManager.instance.room;
+
+		SpriteRenderer sr = null;
+
+		sr = EditorRoomManager.instance.roomBackground.GetComponent<SpriteRenderer> ();
+		sr.flipX = isFlipped;
+
+
+		if ((myRoom.myMirrorRoom != null) && (myRoom.myMirrorRoom.inTheShadow)) 
+		{
+			myRoom.myMirrorRoom.bgFlipped_Shadow = isFlipped;
+
+		} else {
+			
+			myRoom.bgFlipped = isFlipped;
+		}
+	}
+
+
+
+
 
 
 	// Dropdown - on value changed //
@@ -412,6 +457,8 @@ public class EditorUI : MonoBehaviour
 	public void SetShadowState(bool inShadow)
 	{
 		EditorRoomManager.instance.room.myMirrorRoom.inTheShadow = inShadow;
+		EditorRoomManager.instance.room.myMirrorRoom.inTheShadow_initial = inShadow;
+
 		EditorRoomManager.roomToLoad = JsonUtility.ToJson (EditorRoomManager.instance.room);
 
 		EditorRoomManager.loadRoomFromMemory = true;

@@ -37,8 +37,6 @@ public class PlayerManager : MonoBehaviour {
 
 	public void Initialize () 
 	{		
-		//EventsHandler.cb_roomCreated 	+= CreatePlayer;
-		//EventsHandler.cb_playerCreated 	+= CreatePlayerObject;
 		EventsHandler.cb_keyPressed 	+= MovePlayer;
 		EventsHandler.cb_noKeyPressed 	+= StopPlayer;
 		EventsHandler.cb_playerMove		+= SavePlayerPosition;
@@ -49,8 +47,6 @@ public class PlayerManager : MonoBehaviour {
 
 	public void OnDestroy()
 	{	
-		//EventsHandler.cb_roomCreated 	-= CreatePlayer;
-		//EventsHandler.cb_playerCreated 	-= CreatePlayerObject;
 		EventsHandler.cb_keyPressed 	-= MovePlayer;
 		EventsHandler.cb_noKeyPressed 	-= StopPlayer;
 		EventsHandler.cb_playerMove 	-= SavePlayerPosition;
@@ -61,6 +57,7 @@ public class PlayerManager : MonoBehaviour {
 
 	void Update () 
 	{
+		/*
 		if (Input.GetKeyDown (KeyCode.A)) 
 		{
 			if (myPlayer.identificationName == "Daniel") 
@@ -75,6 +72,7 @@ public class PlayerManager : MonoBehaviour {
 				SwitchPlayer ("Daniel");
 			}
 		}
+		*/
 	}
 
 
@@ -94,7 +92,7 @@ public class PlayerManager : MonoBehaviour {
 			foreach (TextAsset txt in myPlayers) 
 			{
 				Player player = JsonUtility.FromJson<Player> (txt.text);
-				playerList.Add (player);
+				playerList.Add (player);	
 
 			}
 
@@ -123,7 +121,7 @@ public class PlayerManager : MonoBehaviour {
 
 		// 4 tiles in one second
 
-		float playerSpeed = 4f * Time.deltaTime;
+		float playerSpeed = 5f * Time.deltaTime;
 		float offsetX = 0;
 		float offsetY = 0;
 
@@ -163,7 +161,7 @@ public class PlayerManager : MonoBehaviour {
 				break;
 		}
 
-
+	//	Debug.Log(RoomManager.instance.myRoom.myGrid == RoomManager.instance.myRoom.myMirrorRoom.shadowGrid);
 		Tile tile = RoomManager.instance.myRoom.MyGrid.GetTileAt(new Vector3 (newPos.x + offsetX, newPos.y + offsetY, newPos.z));
 
 		if (tile == null) 
@@ -178,10 +176,11 @@ public class PlayerManager : MonoBehaviour {
 
 			if (tile.myFurniture != null) 
 			{
-				if (tile.myFurniture.walkable == false) 
+				if (tile.myFurniture.walkable == false && tile.myFurniture.hidden == false) 
 				{		
-					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myFurniture, tile);
+					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myFurniture);
 					StopPlayer (InputManager.instance.lastDirection);
+					//Debug.Log ("furniture " + tile.myFurniture.identificationName);
 
 					return;
 				}
@@ -191,9 +190,9 @@ public class PlayerManager : MonoBehaviour {
 
 			if (tile.myCharacter != null) 
 			{
-				if (tile.myCharacter.walkable == false) 
+				if (tile.myCharacter.walkable == false && tile.myCharacter.hidden == false) 
 				{		
-					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myCharacter, tile);
+					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myCharacter);
 					StopPlayer (InputManager.instance.lastDirection);
 
 					return;
@@ -206,7 +205,7 @@ public class PlayerManager : MonoBehaviour {
 			if (tile.myInactivePlayer != null) 
 			{
 				if (tile.myInactivePlayer.walkable == false) {		
-					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myInactivePlayer, tile);
+					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myInactivePlayer);
 					StopPlayer (InputManager.instance.lastDirection);
 
 					return;
@@ -286,19 +285,12 @@ public class PlayerManager : MonoBehaviour {
 	public void UpdatePlayerSortingLayer(Player myPlayer)
 	{		
 		Tile currentTile = RoomManager.instance.myRoom.MyGrid.GetTileAt(myPlayer.myPos);
-		playerGameObjectMap[myPlayer].GetComponent<SpriteRenderer> ().sortingOrder = -currentTile.y * 10;
+		playerGameObjectMap[myPlayer].GetComponent<SpriteRenderer> ().sortingOrder = (int) ((-myPlayer.myPos.y * 10f) + 6f);
 	}
 			
 
 
 	// --- SWITCH PLAYER --- //
-
-
-	public void ChangeCharacterToPlayer()
-	{
-		
-	}
-
 
 	public void SwitchPlayer(string newPlayer)
 	{
@@ -386,6 +378,7 @@ public class PlayerManager : MonoBehaviour {
 	{
 		Room myRoom = RoomManager.instance.myRoom;
 
+		//Debug.Log ("currentPos" + currentPos);
 		player.x = Mathf.FloorToInt(currentPos.x);
 		player.y = Mathf.FloorToInt(currentPos.y);		
 
@@ -401,8 +394,6 @@ public class PlayerManager : MonoBehaviour {
 
 		EventsHandler.Invoke_cb_tileLayoutChanged ();
 	}
-
-
 
 
 	public void RemovePlayerFromTiles(Player player)
@@ -433,16 +424,17 @@ public class PlayerManager : MonoBehaviour {
 	}
 
 
-
-
-
-	public void PlayerEntersRoom(string playerName)
+	public void PlayerEntersRoom(string playerName, Vector2 position)
 	{
 		Player player = GetPlayerByName (playerName);
 
+		player.x = (int)position.x;
+		player.y = (int)position.y;
+		player.myPos = new Vector3 (position.x, position.y, player.myPos.z);
 		// change current room of player
 
 		player.currentRoom = RoomManager.instance.myRoom.myName;
+		RoomManager.instance.nameSpeakerMap.Add (playerName, player); // FIXME: why is this here?
 		GameManager.userData.GetPlayerDataByPlayerName (playerName).currentRoom = player.currentRoom;
 
 		// create game object 
@@ -457,7 +449,6 @@ public class PlayerManager : MonoBehaviour {
 			ParkPlayerInTiles (player, player.myPos);
 		}
 	}
-
 
 
 	public void PlayerExitsRoom(string playerName, string nextRoom)

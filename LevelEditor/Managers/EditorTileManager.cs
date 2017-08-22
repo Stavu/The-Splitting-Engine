@@ -120,19 +120,19 @@ public class EditorTileManager : MonoBehaviour {
 					for (int y = 0; y < tileInt.mySize.y; y++) 
 					{
 						Tile tempTile = EditorRoomManager.instance.room.MyGrid.GetTileAt (tileInt.x + x, tileInt.y + y);
-						tileGameObjectMap [tempTile].GetComponent<SpriteRenderer> ().color = Color.yellow;
+						tileGameObjectMap [tile].GetComponent<SpriteRenderer> ().color = new Color (0, 1f, 0, 0.2f);
 					}
 				}
 			}
 
 			if (tile.myCharacter != null) 
 			{
-				tileGameObjectMap [tile].GetComponent<SpriteRenderer> ().color = Color.magenta;
+				tileGameObjectMap [tile].GetComponent<SpriteRenderer> ().color = new Color (1f, 0, 0, 0.5f);
 			}
 
 			if (tile.myFurniture != null) 
 			{
-				tileGameObjectMap [tile].GetComponent<SpriteRenderer> ().color = Color.blue;
+				tileGameObjectMap [tile].GetComponent<SpriteRenderer> ().color = new Color (0, 0, 1f, 0.5f);
 			}
 		}
 	}

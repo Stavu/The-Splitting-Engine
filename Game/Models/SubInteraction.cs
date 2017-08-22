@@ -25,12 +25,14 @@ public class SubInteraction : IConditionable {
 	//public List<InventoryItem> inventoryItems;
 
 	public InventoryItem inventoryItem;
+	public string itemToRemove;
 
 	public string conversationName;
 	public string dialogueOptionTitle;
 	public string dialogueTreeName;
 
 	public string animationToPlay;
+	public string animationToPlayOn;
 	public string targetFurniture;
 
 	public string soundToPlay;
@@ -40,6 +42,14 @@ public class SubInteraction : IConditionable {
 
 	public string eventToAdd;
 	public string eventToRemove;
+
+	public string cutsceneToPlay;
+
+	public string PItoHide;
+	public string PItoShow;
+
+	public string specialSubInt;
+	public string roomToReset;
 
 	public string newPlayer;
 
@@ -114,7 +124,8 @@ public class SubInteraction : IConditionable {
 
 	public void SubInteract ()
 	{
-		
+		//Debug.Log ("subinteract");
+
 		switch (interactionType) 
 		{
 			
@@ -159,6 +170,14 @@ public class SubInteraction : IConditionable {
 				break;
 
 
+			case "PlayAnimationOn":
+
+				PI_Handler.instance.SetPIAnimationState (targetFurniture, animationToPlayOn);
+				EventsHandler.Invoke_cb_inputStateChanged ();
+
+				break;
+
+
 			case "PlaySound":
 
 				SoundManager.Invoke_cb_playSound (soundToPlay, numberOfPlays);
@@ -175,9 +194,11 @@ public class SubInteraction : IConditionable {
 				break;
 
 
-			case "playCutscene":
+			case "PlayCutscene":
 
-				//CutsceneManager.instance.c
+				Debug.Log ("subinteract" + "play cut scene");
+
+				CutsceneManager.instance.PlayCutscene(cutsceneToPlay);
 
 				break;				
 
@@ -191,14 +212,19 @@ public class SubInteraction : IConditionable {
 
 			case "intoShadows":
 
-				InteractionManager.instance.ChangeShadowState (true);
+				Debug.Log ("into shadows");
 
+				InteractionManager.instance.ChangeShadowState (true);
+			
 				break;
 
 
 			case "outOfShadows":
 
+				Debug.Log ("out of shadows");
+
 				InteractionManager.instance.ChangeShadowState (false);
+				InteractionManager.instance.ResetRoom (RoomManager.instance.myRoom.myName);
 
 				break;
 
@@ -206,6 +232,16 @@ public class SubInteraction : IConditionable {
 			case "pickUpItem":
 
 				InteractionManager.instance.PickUpItem (inventoryItem);
+				ActionBoxManager.instance.CloseFurnitureFrame ();			
+
+				EventsHandler.Invoke_cb_inputStateChanged ();
+
+				break;
+
+
+			case "removeItem":
+
+				InteractionManager.instance.RemoveItem (itemToRemove);
 				ActionBoxManager.instance.CloseFurnitureFrame ();			
 
 				EventsHandler.Invoke_cb_inputStateChanged ();
@@ -222,6 +258,8 @@ public class SubInteraction : IConditionable {
 
 			case "changeConversation":
 
+
+				Debug.Log ("change conversation");
 				DialogueManager.instance.SetConversation (conversationName);
 
 				break;
@@ -272,6 +310,28 @@ public class SubInteraction : IConditionable {
 			case "switchPlayer":
 
 				PlayerManager.instance.SwitchPlayer (newPlayer);
+				break;
+
+
+			case "hidePI":
+				
+
+				PI_Handler.instance.Hide_PI (PItoHide);
+				break;
+
+
+
+			case "showPI":
+
+				PhysicalInteractable tempPI = RoomManager.instance.getFurnitureByName (PItoShow);
+
+				PI_Handler.instance.UnHide_PI (tempPI);
+				break;
+
+			case "special":
+							
+				InteractionManager.instance.SpecialInteraction (specialSubInt);
+
 				break;
 		}
 	}

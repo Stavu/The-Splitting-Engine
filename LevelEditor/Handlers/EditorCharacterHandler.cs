@@ -96,7 +96,7 @@ public class EditorCharacterHandler : MonoBehaviour {
 
 	public void CreateCharacterObject(Character myCharacter)
 	{	
-		GameObject obj = Utilities.CreateCharacterGameObject (myCharacter, this.transform);
+		GameObject obj = Utilities.CreateEditorCharacterGameObject (myCharacter, this.transform);
 
 		if (EditorRoomManager.instance.characterGameObjectMap == null) 
 		{

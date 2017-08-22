@@ -18,6 +18,7 @@ public class SubinteractionInspector : MonoBehaviour {
 	Transform moveToRoom;
 	Transform recieveItem;
 	Transform playAnimation;
+	Transform playAnimationOn;
 	Transform playSound;
 
 	Button cancelButton;
@@ -41,6 +42,7 @@ public class SubinteractionInspector : MonoBehaviour {
 			"showDialogue",
 			"showDialogueTree",
 			"PlayAnimation",
+			"PlayAnimationOn",
 			"PlaySound",
 			"StopSound",
 			"moveToRoom",
@@ -49,7 +51,11 @@ public class SubinteractionInspector : MonoBehaviour {
 			"pickUpItem",
 			"useItem",
 			"addEvent",
-			"removeEvent"
+			"removeEvent",
+			"PlayCutscene",
+			"hidePI",
+			"showPI",
+			"special"
 		};
 	}
 
@@ -87,6 +93,7 @@ public class SubinteractionInspector : MonoBehaviour {
 		recieveItem = panel.Find ("RecieveItem");
 		moveToRoom = panel.Find ("MoveToRoom");
 		playAnimation = panel.Find ("PlayAnimation");
+		playAnimationOn = panel.Find ("PlayAnimationOn");
 		playSound = panel.Find ("PlaySound");
 
 		cancelButton = panel.Find ("CancelButton").GetComponent<Button> ();
@@ -177,10 +184,21 @@ public class SubinteractionInspector : MonoBehaviour {
 					{
 						playAnimation.Find ("AnimationDropdown").GetComponent<Dropdown> ().value = animationList.IndexOf (currentSubint.animationToPlay);
 					}
+										 
+					playAnimation.Find("FurnitureNameInput").GetComponent<InputField>().text = InspectorManager.instance.chosenFurniture.identificationName;
 
-					playAnimation.Find("FurnitureNameInput").GetComponent<InputField>().text = subInt.targetFurniture;
 
 					break;
+
+
+				case "PlayAnimationOn":
+
+					playAnimationOn.Find("AnimationNameInput").GetComponent<InputField>().text = subInt.animationToPlayOn;
+					playAnimationOn.Find("FurnitureNameInput").GetComponent<InputField>().text = subInt.targetFurniture;
+
+					break;
+
+
 
 
 				case "moveToRoom":
@@ -192,8 +210,7 @@ public class SubinteractionInspector : MonoBehaviour {
 					break;
 
 
-				case "intoShadows":		
-
+				case "intoShadows":	
 
 				case "outOfShadows":
 
@@ -223,6 +240,34 @@ public class SubinteractionInspector : MonoBehaviour {
 				case "removeEvent":
 
 					textInputSmall.text = subInt.eventToRemove;
+
+					break;
+
+
+				case "PlayCutscene":
+					
+					textInputSmall.text = subInt.cutsceneToPlay;
+
+					break;
+
+
+				case "hidePI":
+
+					textInputSmall.text = subInt.PItoHide;
+
+					break;
+
+
+				case "showPI":
+
+					textInputSmall.text = subInt.PItoShow;
+
+					break;
+
+
+				case "special":
+
+					textInputSmall.text = subInt.specialSubInt;
 
 					break;
 			}
@@ -261,7 +306,9 @@ public class SubinteractionInspector : MonoBehaviour {
 		moveToRoom.gameObject.SetActive (false);
 		recieveItem.gameObject.SetActive (false);
 		playAnimation.gameObject.SetActive (false);
+		playAnimationOn.gameObject.SetActive (false);
 		playSound.gameObject.SetActive (false);
+		importantToggle.gameObject.SetActive (false);
 
 		string typeString = subIntTypeList [type];
 
@@ -272,7 +319,7 @@ public class SubinteractionInspector : MonoBehaviour {
 			case "showMonologue":
 
 				textInputBig.gameObject.SetActive (true);
-
+				importantToggle.gameObject.SetActive (true);
 				break;
 
 
@@ -314,6 +361,15 @@ public class SubinteractionInspector : MonoBehaviour {
 				break;			
 
 
+
+			case "PlayAnimationOn":
+
+				playAnimationOn.gameObject.SetActive (true);
+
+				break;
+
+
+
 			case "moveToRoom":
 
 				moveToRoom.gameObject.SetActive (true);
@@ -347,6 +403,31 @@ public class SubinteractionInspector : MonoBehaviour {
 
 
 			case "removeEvent":
+
+				textInputSmall.gameObject.SetActive (true);
+
+				break;
+
+
+			case "PlayCutscene":
+
+				textInputSmall.gameObject.SetActive (true);
+
+				break;
+
+			case "hidePI":
+
+				textInputSmall.gameObject.SetActive (true);
+
+				break;
+
+			case "showPI":
+
+				textInputSmall.gameObject.SetActive (true);
+
+				break;
+
+			case "special":
 
 				textInputSmall.gameObject.SetActive (true);
 
@@ -440,8 +521,16 @@ public class SubinteractionInspector : MonoBehaviour {
 
 				int i = playAnimation.Find ("AnimationDropdown").GetComponent<Dropdown> ().value;
 				currentSubint.animationToPlay = playAnimation.Find ("AnimationDropdown").GetComponent<Dropdown> ().options [i].text;
-				currentSubint.targetFurniture = playAnimation.Find ("FurnitureNameInput").GetComponent<InputField> ().text;
-					
+				currentSubint.targetFurniture = InspectorManager.instance.chosenFurniture.identificationName;
+
+				break;
+
+
+			case "PlayAnimationOn":
+
+				currentSubint.animationToPlayOn = playAnimationOn.Find ("AnimationNameInput").GetComponent<InputField> ().text;
+				currentSubint.targetFurniture = playAnimationOn.Find ("FurnitureNameInput").GetComponent<InputField> ().text;
+
 				break;
 
 
@@ -496,6 +585,37 @@ public class SubinteractionInspector : MonoBehaviour {
 				currentSubint.eventToRemove = textInputSmall.text;
 
 				break;
+
+
+			case "PlayCutscene":
+
+				currentSubint.cutsceneToPlay = textInputSmall.text;
+
+				break;
+
+
+			case "hidePI":
+
+				currentSubint.PItoHide = textInputSmall.text;
+
+				break;
+
+			case "showPI":
+
+				currentSubint.PItoShow = textInputSmall.text;
+
+				break;
+
+
+			case "special":
+
+				currentSubint.specialSubInt = textInputSmall.text;
+
+				break;
+
+
+
+
 		}
 
 		EventsHandler.Invoke_cb_subinteractionChanged ();

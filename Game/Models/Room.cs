@@ -35,7 +35,7 @@ public class Room {
 					return myMirrorRoom.shadowGrid;
 				}
 
-				return myGrid;
+//				return myGrid;
 			}
 
 			return myGrid;
@@ -48,9 +48,11 @@ public class Room {
 				if (myMirrorRoom.inTheShadow == true) 
 				{
 					myMirrorRoom.shadowGrid = value;
+					return;
 				}
 
-				myGrid = value;
+//				myGrid = value;
+//				return;
 			}
 
 			myGrid = value;
@@ -59,7 +61,7 @@ public class Room {
 
 
 	public string bgName;
-	public bool bgFlipped = false;
+	public bool bgFlipped;
 
 	public List <Furniture> myFurnitureList;
 	public List <Character> myCharacterList;
@@ -121,6 +123,8 @@ public class Room {
 		this.myWidth = clone.myWidth;
 		this.myHeight = clone.myHeight;
 
+		this.bgFlipped = clone.bgFlipped;
+
 		this.bgName = clone.bgName;
 
 		this.myFurnitureList = clone.myFurnitureList;
@@ -151,6 +155,7 @@ public class Room {
 
 		foreach (Furniture furn in myFurnitureList) 
 		{	
+
 			List<Tile> FurnitureTiles;
 
 			if (furn.CurrentGraphicState().coordsList.Count > 0)
@@ -169,6 +174,7 @@ public class Room {
 
 		foreach (Character character in myCharacterList) 
 		{
+
 			List<Tile> CharacterTiles;
 
 			if (character.CurrentGraphicState().coordsList.Count > 0)
@@ -197,37 +203,35 @@ public class Room {
 
 		if (RoomState == RoomState.Mirror) 
 		{
-			if (myMirrorRoom.inTheShadow == true) 
+			// -- SHADOW ROOM -- //
+
+			// Furniture
+
+			foreach (Furniture furn in myMirrorRoom.myFurnitureList_Shadow)
 			{
-				// -- SHADOW ROOM -- //
+				List<Tile> FurnitureTiles;
 
-				// Furniture
+				if (furn.CurrentGraphicState ().coordsList.Count > 0)
+				{		
+					FurnitureTiles = GetMyTiles (myMirrorRoom.shadowGrid, furn.currentGraphicState.coordsList);
 
-				foreach (Furniture furn in myMirrorRoom.myFurnitureList_Shadow) 
-				{
-					List<Tile> FurnitureTiles;
-
-					if (furn.CurrentGraphicState().coordsList.Count > 0)
-					{		
-						FurnitureTiles = GetMyTiles (myMirrorRoom.shadowGrid, furn.currentGraphicState.coordsList);
-
-					} else {
-
-						FurnitureTiles = GetMyTiles(myMirrorRoom.shadowGrid,furn.mySize, furn.x, furn.y);
-					}
-						
-					FurnitureTiles.ForEach (tile => tile.PlaceFurnitureInTile (furn));
 				}
+				else
+				{
+
+					FurnitureTiles = GetMyTiles (myMirrorRoom.shadowGrid, furn.mySize, furn.x, furn.y);
+				}
+						
+				FurnitureTiles.ForEach (tile => tile.PlaceFurnitureInTile (furn));
+			}
 
 				// Tile interactions
 
-				foreach (TileInteraction tileInteraction in myMirrorRoom.myTileInteractionList_Shadow)
-				{
-					List<Tile> TileInteractionTiles = GetMyTiles(myMirrorRoom.shadowGrid, tileInteraction.mySize, tileInteraction.x, tileInteraction.y);
-					TileInteractionTiles.ForEach (tile => tile.PlaceTileInteraction (tileInteraction));
-				}
-			} 
-
+			foreach (TileInteraction tileInteraction in myMirrorRoom.myTileInteractionList_Shadow)
+			{
+				List<Tile> TileInteractionTiles = GetMyTiles (myMirrorRoom.shadowGrid, tileInteraction.mySize, tileInteraction.x, tileInteraction.y);
+				TileInteractionTiles.ForEach (tile => tile.PlaceTileInteraction (tileInteraction));
+			}
 
 			// -- PERSISTENT -- //
 
@@ -350,50 +354,69 @@ public class Room {
 
 	// When changing a graphic state - change physical interactable tiles
 
-	public void ChangePIInTiles(PhysicalInteractable physicalInteractable, GraphicState newState)
+	public void ChangePIInTiles(PhysicalInteractable physicalInteractable, GraphicState newState, List<Grid> grids = null)
 	{
-		List<Tile> oldTiles;
-
-		if (physicalInteractable.CurrentGraphicState ().coordsList.Count > 0) 
+		if (grids == null)
 		{
-			oldTiles = GetMyTiles (MyGrid, physicalInteractable.CurrentGraphicState ().coordsList);	
-
-		} else {
-
-			oldTiles = GetMyTiles (MyGrid, physicalInteractable.mySize, physicalInteractable.x, physicalInteractable.y);
+			grids = new List<Grid> (){ MyGrid };
 		}
 
-		List<Tile> newTiles;
+		foreach (Grid grid in grids)
+		{		
+			List<Tile> oldTiles;
 
-		if (newState.coordsList.Count > 0) {
-			newTiles = GetMyTiles (MyGrid, newState.coordsList);
+			if (physicalInteractable.CurrentGraphicState ().coordsList.Count > 0)
+			{
+				oldTiles = GetMyTiles (grid, physicalInteractable.CurrentGraphicState ().coordsList);	
 
-		} else {
+			}
+			else
+			{
 
-			newTiles = GetMyTiles (MyGrid, physicalInteractable.mySize, physicalInteractable.x, physicalInteractable.y);
+				oldTiles = GetMyTiles (grid, physicalInteractable.mySize, physicalInteractable.x, physicalInteractable.y);
+			}
+
+			List<Tile> newTiles;
+
+			if (newState.coordsList.Count > 0)
+			{
+				newTiles = GetMyTiles (grid, newState.coordsList);
+
+			}
+			else
+			{
+
+				newTiles = GetMyTiles (grid, physicalInteractable.mySize, physicalInteractable.x, physicalInteractable.y);
+			}
+
+			if (physicalInteractable is Furniture)
+			{
+				foreach (Tile oldTile in oldTiles)
+				{
+					oldTile.myFurniture = null;
+				}
+
+				foreach (Tile newTile in newTiles)
+				{
+					newTile.myFurniture = (Furniture)physicalInteractable;
+				}
+			}
+
+			if (physicalInteractable is Character)
+			{
+				foreach (Tile oldTile in oldTiles)
+				{
+					oldTile.myCharacter = null;
+				}
+
+				foreach (Tile newTile in newTiles)
+				{
+					newTile.myCharacter = (Character)physicalInteractable;
+				}
+			}
 		}
 
-		if (physicalInteractable is Furniture) {
-			foreach (Tile oldTile in oldTiles) {
-				oldTile.myFurniture = null;
-			}
-
-			foreach (Tile newTile in newTiles) {
-				newTile.myFurniture = (Furniture)physicalInteractable;
-			}
-		}
-
-		if (physicalInteractable is Character) {
-			foreach (Tile oldTile in oldTiles) {
-				oldTile.myCharacter = null;
-			}
-
-			foreach (Tile newTile in newTiles) {
-				newTile.myCharacter = (Character)physicalInteractable;
-			}
-		}
-
-		EventsHandler.Invoke_cb_tileLayoutChanged ();
+		//EventsHandler.Invoke_cb_tileLayoutChanged ();
 	}
 
 

@@ -70,7 +70,7 @@ public class ActionBoxManager : MonoBehaviour {
 	public void Initialize () 
 	{
 
-		EventsHandler.cb_playerHitPhysicalInteractable += SetPhysicalInteractableFrame;
+		EventsHandler.cb_playerHitPhysicalInteractable += SelectPhysicalInteractable;
 		EventsHandler.cb_playerLeavePhysicalInteractable += CloseFurnitureFrame;	
 
 		EventsHandler.cb_keyPressedDown += BrowseInteractions;
@@ -83,7 +83,7 @@ public class ActionBoxManager : MonoBehaviour {
 	public void OnDestroy()
 	{
 		
-		EventsHandler.cb_playerHitPhysicalInteractable -= SetPhysicalInteractableFrame;
+		EventsHandler.cb_playerHitPhysicalInteractable -= SelectPhysicalInteractable;
 		EventsHandler.cb_playerLeavePhysicalInteractable -= CloseFurnitureFrame;
 
 		EventsHandler.cb_keyPressedDown -= BrowseInteractions;
@@ -91,17 +91,7 @@ public class ActionBoxManager : MonoBehaviour {
 	}
 
 
-	
-	// Update is called once per frame
-
-	void Update () 
-	{
-		
-	}
-
-
-
-	public void SetPhysicalInteractableFrame(PhysicalInteractable myPhysicalInt, Tile tile)
+	public void SelectPhysicalInteractable(PhysicalInteractable myPhysicalInt)
 	{
 
 		if (myPhysicalInt.myInteractionList.Count == 0) 
@@ -117,20 +107,29 @@ public class ActionBoxManager : MonoBehaviour {
 
 		currentPhysicalInteractable = myPhysicalInt;
 
-		currentPhysicalInteractableFrame = Instantiate (FurnitureFramePrefab);
-
-
-		List<Vector3> positionsList = Utilities.GetPhysicalInteractableFrameBounds (myPhysicalInt);
-
-		currentPhysicalInteractableFrame.GetComponent<RectTransform> ().anchoredPosition = positionsList [0];
-
-		currentPhysicalInteractableFrame.transform.Find ("FramePiece_DL").GetComponent<RectTransform> ().anchoredPosition = positionsList [1];
-		currentPhysicalInteractableFrame.transform.Find ("FramePiece_DR").GetComponent<RectTransform> ().anchoredPosition = positionsList [2];
-		currentPhysicalInteractableFrame.transform.Find ("FramePiece_UL").GetComponent<RectTransform> ().anchoredPosition = positionsList [3];
-		currentPhysicalInteractableFrame.transform.Find ("FramePiece_UR").GetComponent<RectTransform> ().anchoredPosition = positionsList [4];
-
+		currentPhysicalInteractableFrame = CreateFrame (myPhysicalInt);
 	}
 
+
+	public static GameObject CreateFrame(PhysicalInteractable myPhysicalInt, bool inEditor = false)
+	{
+
+		GameObject frame = Instantiate (Resources.Load<GameObject>("Prefabs/FurnitureFrameObject"));
+
+		List<Vector3> positionsList;
+
+
+		positionsList = Utilities.GetPhysicalInteractableFrameBounds (myPhysicalInt, inEditor);
+
+		frame.GetComponent<RectTransform> ().anchoredPosition = positionsList [0];
+
+		frame.transform.Find ("FramePiece_DL").GetComponent<RectTransform> ().anchoredPosition = positionsList [1];
+		frame.transform.Find ("FramePiece_DR").GetComponent<RectTransform> ().anchoredPosition = positionsList [2];
+		frame.transform.Find ("FramePiece_UL").GetComponent<RectTransform> ().anchoredPosition = positionsList [3];
+		frame.transform.Find ("FramePiece_UR").GetComponent<RectTransform> ().anchoredPosition = positionsList [4];
+
+		return frame;
+	}
 
 
 	public void CloseFurnitureFrame ()

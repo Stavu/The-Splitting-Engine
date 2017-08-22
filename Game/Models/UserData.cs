@@ -8,10 +8,17 @@ using System;
 [Serializable]
 public class UserData {
 	
-	List<string> gameEventsList;
+	public List<string> gameEventsList;
 	public List<string> roomsVisitedList;
+	public List<string> roomsInShadowList;
+	public List<string> benchAbandoned6BookList;
+	public List<string> benchAbandoned6MirrorBookList;
+
 	public List<PI_AnimationState> animationStateList;
 	public List<PlayerData> playerDataList;
+
+	public List<string> hiddenFurnitureList;
+	public List<string> hiddenCharacterList;
 
 	public string currentActivePlayer;
 
@@ -20,8 +27,15 @@ public class UserData {
 	{		
 		gameEventsList = new List<string> ();
 		roomsVisitedList = new List<string> ();
+		roomsInShadowList = new List<string> ();
+		benchAbandoned6BookList = new List<string> ();
+		benchAbandoned6MirrorBookList = new List<string> ();
+
 		animationStateList = new List<PI_AnimationState> ();
 		playerDataList = new List<PlayerData> ();
+
+		hiddenFurnitureList = new List<string> ();
+		hiddenCharacterList = new List<string> ();
 	}
 
 	// Get current Player Data 
@@ -34,6 +48,7 @@ public class UserData {
 		{
 			if (playerData.playerName == myPlayer) 
 			{
+				
 				return playerData;
 			}
 		}
@@ -113,10 +128,47 @@ public class UserData {
 	}
 
 
+
+	// --- SHADOWS --- //
+
+
+	// Add to rooms in shadow list
+
+	public void AddToRoomsInShadow(string roomName)
+	{
+		
+		if (roomsInShadowList.Contains (roomName) == false) 
+		{
+			Debug.Log ("room in shadow");
+			roomsInShadowList.Add (roomName);
+			GameManager.instance.SaveData ();
+		}
+	}
+
+
+	// Remove from rooms in shadow list
+
+	public void RemoveFromRoomsInShadow(string roomName)
+	{
+		if (roomsInShadowList.Contains (roomName)) 
+		{
+			Debug.Log ("room not in shadow");
+			roomsInShadowList.Remove (roomName);
+			GameManager.instance.SaveData ();
+
+		}	
+	}
+
+
+	// --- EVENTS --- //
+
+
 	// Add Event
 
 	public void AddEventToList(string eventName)
 	{
+		//Debug.Log ("add event to list");
+
 		if (gameEventsList.Contains (eventName) == false) 
 		{
 			gameEventsList.Add (eventName);
@@ -137,15 +189,81 @@ public class UserData {
 	}
 
 
+
+
+	// --- BOOKS --- //
+
+
+	// Add book
+
+	public void AddBookToBench(string bookName)
+	{
+
+		Debug.Log ("book " + bookName);
+
+		benchAbandoned6BookList.Add (bookName);
+		GameManager.instance.SaveData ();
+
+		Debug.Log ("books " + benchAbandoned6BookList);
+
+	}
+
+
+	// Remove book
+
+	public void RemoveBookFromBench(string eventName)
+	{
+		if (benchAbandoned6BookList.Count > 0)
+		{
+			benchAbandoned6BookList.RemoveAt (benchAbandoned6BookList.Count - 1);
+			GameManager.instance.SaveData ();
+		}
+	}
+
+
+
+	// Add book
+
+	public void AddBookToBenchMirror(string bookName)
+	{
+
+		Debug.Log ("book " + bookName);
+
+		benchAbandoned6MirrorBookList.Add (bookName);
+		GameManager.instance.SaveData ();
+
+		Debug.Log ("books " + benchAbandoned6MirrorBookList);
+
+	}
+
+
+	// Remove book
+
+	public void RemoveBookFromBenchMirror(string eventName)
+	{
+		if (benchAbandoned6MirrorBookList.Count > 0)
+		{
+			benchAbandoned6MirrorBookList.RemoveAt (benchAbandoned6MirrorBookList.Count - 1);
+			GameManager.instance.SaveData ();
+		}
+	}
+
+
+
+
+
 	// Add animation state
 
 	public void AddAnimationState(string physicalInateractable,string animationState)
-	{		
+	{	
+		//Debug.Log ("AddAnimationState " + physicalInateractable + " " + animationState);
+
 		foreach (PI_AnimationState state in animationStateList) 
 		{
 			if (physicalInateractable == state.myName) 
 			{
 				state.animationState = animationState;
+				//Debug.Log ("animation state " + state.myName);
 				return;
 			}
 		}

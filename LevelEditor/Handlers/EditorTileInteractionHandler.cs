@@ -44,7 +44,7 @@ public class EditorTileInteractionHandler : MonoBehaviour {
 
 			} else {
 
-				if (EditorRoomManager.instance.room.myMirrorRoom.inTheShadow == true) 
+				if (EditorRoomManager.instance.room.myMirrorRoom.inTheShadow_initial == true) 
 				{			
 					// Shadow
 					EditorRoomManager.instance.room.myMirrorRoom.myTileInteractionList_Shadow.Remove (oldTileInt);
@@ -87,7 +87,7 @@ public class EditorTileInteractionHandler : MonoBehaviour {
 
 		} else {
 
-			if (EditorRoomManager.instance.room.myMirrorRoom.inTheShadow == true) 
+			if (EditorRoomManager.instance.room.myMirrorRoom.inTheShadow_initial == true) 
 			{			
 				// Shadow
 

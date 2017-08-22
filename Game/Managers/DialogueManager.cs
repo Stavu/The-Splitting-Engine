@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 
 public class DialogueManager : MonoBehaviour {
-
-
+	
 
 	// Singleton //
 
@@ -38,7 +37,6 @@ public class DialogueManager : MonoBehaviour {
 
 	public DialogueOption currentDialogueOption
 	{
-
 		get {return _currentDialogueOption;} 
 		set {
 
@@ -57,7 +55,6 @@ public class DialogueManager : MonoBehaviour {
 				myOptionObjectDictionary [_currentDialogueOption].transform.GetChild (0).gameObject.SetActive (true);
 				myOptionObjectDictionary [_currentDialogueOption].GetComponent<Text> ().color = new Color (0.1f, 0.8f, 0.8f, 1f);
 			}
-
 		} 
 	}
 
@@ -105,14 +102,18 @@ public class DialogueManager : MonoBehaviour {
 
 	public void SetConversation(string conversationName)
 	{
+		Debug.Log ("set conversation: " + currentDialogueTree.GetConversationByName (conversationName).myName);
 		currentDialogueTree.currentConversation = currentDialogueTree.GetConversationByName (conversationName);
+		CreateDialogueTreeUI ();
 	}
 
 
 	// Create Dialogue Tree
 
 	public void CreateDialogueTreeUI()
-	{		
+	{	
+		Debug.Log ("CreateDialogueTreeUI");
+
 		DestroyDialogueTree ();
 
 		if (myOptionObjectDictionary != null) 
@@ -124,13 +125,11 @@ public class DialogueManager : MonoBehaviour {
 		}
 
 		myOptionObjectDictionary = new Dictionary<DialogueOption, GameObject> ();
-
 	
 		dialogueTreeObject = Instantiate (dialogueTreeBoxPrefab);
 
 		for (int i = 0; i < currentDialogueTree.currentConversation.optionList.Count; i++) 
 		{
-
 			DialogueOption option = currentDialogueTree.currentConversation.optionList [i];
 			GameObject optionObj = Instantiate (dialogueOptionPrefab);
 			optionObj.transform.SetParent (dialogueTreeObject.transform.Find ("Box"));	
@@ -138,21 +137,18 @@ public class DialogueManager : MonoBehaviour {
 
 			optionObj.GetComponent<Text>().text = option.myTitle;
 
-			myOptionObjectDictionary.Add (option, optionObj);
-				
+			myOptionObjectDictionary.Add (option, optionObj);				
 		}
 
 		if (currentDialogueOption == null) 
 		{
+			Debug.Log ("conversation null");
 			currentDialogueOption = currentDialogueTree.currentConversation.optionList[0];
 		}
 
 		GameManager.dialogueTreeBoxActive = true;
 		EventsHandler.Invoke_cb_inputStateChanged ();
 	}
-
-
-
 
 
 	public void BrowseDialogueOptions(Direction myDirection)
@@ -171,7 +167,6 @@ public class DialogueManager : MonoBehaviour {
 
 		switch (myDirection) 
 		{
-
 			case Direction.down:
 
 				if (i < currentDialogueTree.currentConversation.optionList.Count - 1) 
@@ -186,7 +181,6 @@ public class DialogueManager : MonoBehaviour {
 
 				break;
 
-
 			case Direction.up:
 
 				if (i > 0) 
@@ -200,10 +194,9 @@ public class DialogueManager : MonoBehaviour {
 				}
 
 				break;
-
 		}
-
 	}
+
 
 	// Activate option //
 

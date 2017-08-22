@@ -36,7 +36,6 @@ public class Inventory {
 
 	public void AddItem(InventoryItem item)
 	{
-
 		// if there's already an item with the same name, return
 
 		foreach (InventoryItem inventoryItem in items) 
@@ -73,6 +72,22 @@ public class Inventory {
 	}
 
 
+	// Removing Item
+
+	public void RemoveItem(string itemName)
+	{
+		for (int i = items.Count - 1; i >= 0; i--) 
+		{			
+			if (items[i].fileName == itemName) 
+			{				
+				items.RemoveAt (i);
+			}
+		}
+
+		EventsHandler.Invoke_cb_inventoryChanged (this);
+
+		GameManager.instance.SaveData ();		
+	}
 
 
 }

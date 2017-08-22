@@ -89,7 +89,7 @@ public class DialogueTextObject : MonoBehaviour {
 
 		} else {
 
-			EventsHandler.Invoke_cb_dialogueEnded ();
+			EventsHandler.Invoke_Callback (EventsHandler.cb_dialogueEnded);
 			//GameManager.instance.inputState = InputState.Character;	
 		}
 
