@@ -167,8 +167,14 @@ public class EditorRoomManager : MonoBehaviour {
 			if ((chosenPhysicalInteractable.currentGraphicState.coordsList[i].x == coords.x) && (chosenPhysicalInteractable.currentGraphicState.coordsList[i].y == coords.y)) 
 			{
 				chosenPhysicalInteractable.currentGraphicState.coordsList.RemoveAt (i);
-				tile.myFurniture  = null;
+
+				if (tile.myFurnitureList.Contains ((Furniture)chosenPhysicalInteractable) == true) 
+				{					
+					tile.myFurnitureList.Remove ((Furniture)chosenPhysicalInteractable);
+				}
+
 				tile.myCharacter  = null;
+
 				EventsHandler.Invoke_cb_tileLayoutChanged ();
 
 				return;
@@ -185,7 +191,10 @@ public class EditorRoomManager : MonoBehaviour {
 			{
 				if (chosenPhysicalInteractable is Furniture) 
 				{
-					oldTile.myFurniture = null;
+					if (oldTile.myFurnitureList.Contains ((Furniture)chosenPhysicalInteractable) == true) 
+					{					
+						oldTile.myFurnitureList.Remove ((Furniture)chosenPhysicalInteractable);
+					}
 				}
 
 				if (chosenPhysicalInteractable is Character) 
@@ -199,7 +208,10 @@ public class EditorRoomManager : MonoBehaviour {
 
 		if (chosenPhysicalInteractable is Furniture) 
 		{
-			tile.myFurniture = (Furniture)chosenPhysicalInteractable;
+			if (tile.myFurnitureList.Contains ((Furniture)chosenPhysicalInteractable) == false) 
+			{
+				tile.myFurnitureList.Add((Furniture)chosenPhysicalInteractable);
+			}
 		}
 
 		if (chosenPhysicalInteractable is Character) 
@@ -320,8 +332,10 @@ public class EditorRoomManager : MonoBehaviour {
 		{
 			if (interactable is Furniture) 
 			{
-				if (tile.myFurniture != null) 
+				if (tile.myFurnitureList.Count > 0)
 				{
+
+
 					if (tile.myFurniture != interactable) 
 					{
 						return false;

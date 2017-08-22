@@ -575,8 +575,9 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 				{
 					foreach (Tile oldTile in myRoom.myMirrorRoom.shadowGrid.gridArray) 
 					{
-						if (oldTile.myFurniture == furn) {
-							oldTile.myFurniture = null;
+						if (oldTile.myFurnitureList.Contains(furn)) 
+						{
+							oldTile.myFurnitureList.Remove (furn);
 						}
 					}
 				}
@@ -584,9 +585,9 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 
 			foreach (Tile oldTile in myRoom.myGrid.gridArray) 
 			{
-				if (oldTile.myFurniture == furn) 
+				if (oldTile.myFurnitureList.Contains(furn)) 
 				{
-					oldTile.myFurniture = null;
+					oldTile.myFurnitureList.Remove (furn);
 				}
 			}
 

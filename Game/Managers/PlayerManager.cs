@@ -174,11 +174,30 @@ public class PlayerManager : MonoBehaviour {
 		{
 			// FURNITURE - if there a furniture at this tile
 
-			if (tile.myFurniture != null) 
+			if (tile.myFurnitureList.Count > 0) 
 			{
-				if (tile.myFurniture.walkable == false && tile.myFurniture.hidden == false) 
+				Furniture furn = null;
+
+				foreach (Furniture f in tile.myFurnitureList) 
+				{
+					if((f.walkable == true) || (f.hidden == true))
+					{
+						continue;
+					}
+
+					if (furn == null) 
+					{
+						furn = tile.myFurnitureList [0];
+					
+					} else if (f.myPriority > furn.myPriority) 					
+					{
+						furn = f;
+					}					
+				}
+
+				if (furn != null)
 				{		
-					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myFurniture);
+					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (furn);
 					StopPlayer (InputManager.instance.lastDirection);
 					//Debug.Log ("furniture " + tile.myFurniture.identificationName);
 

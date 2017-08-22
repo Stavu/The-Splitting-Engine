@@ -586,11 +586,9 @@ public class UseItemHelper {
 						{	
 							ItemOnObjectMonologue ("It doesn't fit. I think this key is for the mirror room.");
 
-
 						} else {
 
 							Debug.LogError ("this shouldn't happen - we shoudln't have the key.");
-
 						}
 
 						break;

@@ -47,44 +47,10 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 		Room myRoom = EditorRoomManager.instance.room;
 
-		if (tile.myFurniture != null)
-		{
-			Furniture oldFurn = tile.myFurniture;
-		
-			if (myRoom.RoomState == RoomState.Real) 
-			{			
-				// Real
-				myRoom.myFurnitureList.Remove (oldFurn);
-
-			} else {
-
-				if (myRoom.myMirrorRoom.inTheShadow == true) 
-				{			
-					// Shadow
-					myRoom.myMirrorRoom.myFurnitureList_Shadow.Remove (oldFurn);
-
-				} else {
-
-					// Mirror
-					myRoom.myFurnitureList.Remove (oldFurn);
-				}
-			}
-
-			Destroy(EditorRoomManager.instance.furnitureGameObjectMap [oldFurn]);
-			EditorRoomManager.instance.furnitureGameObjectMap.Remove (oldFurn);
-
-			foreach (Tile oldTile in myRoom.MyGrid.gridArray) 
-			{
-				if (oldTile.myFurniture == oldFurn) 
-				{
-					oldTile.myFurniture = null;
-				}
-			}
-		}
-
 		// create furniture
 
 		Furniture furn = new Furniture (furnitureName, tile.x, tile.y);
+		furn.myPriority = tile.myFurnitureList.Count;
 
 		// set default size
 
@@ -185,7 +151,10 @@ public class EditorFurnitureHandler : MonoBehaviour
 
 		foreach (Tile myTile in tempTileList) 
 		{			
-			myTile.myFurniture = furn;
+			if (myTile.myFurnitureList.Contains (furn) == false) 
+			{
+				myTile.myFurnitureList.Add (furn);
+			}
 		}
 
 		EventsHandler.Invoke_cb_tileLayoutChanged ();

@@ -135,11 +135,11 @@ public class TileManager : MonoBehaviour
 				tileGameObjectMap [mapTile].GetComponent<SpriteRenderer> ().color = Color.magenta;
 			}
 
-			if (tile.myFurniture != null) 
+			if (tile.myFurnitureList.Count > 0) 
 			{
 				tileGameObjectMap [mapTile].GetComponent<SpriteRenderer> ().color = 
 					(
-						tile.myFurniture.hidden ? 
+						tile.myFurnitureList[0].hidden ? //FIXME
 						new Color (0.2f, 0.2f, 0.9f, 0.3f) :
 						new Color (0.2f, 0.2f, 0.9f, 0.8f)
 					);

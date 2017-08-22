@@ -9,7 +9,7 @@ public class Furniture : PhysicalInteractable
 {
 
 	public bool imageFlipped = false;
-
+	public int myPriority = 0;
 
 	public Furniture(string myName, int x, int y)
 	{
@@ -22,7 +22,9 @@ public class Furniture : PhysicalInteractable
 		this.y = y;	
 
 		myInteractionList = new List<Interaction> ();
-		graphicStates = new List<GraphicState> ();			
+		graphicStates = new List<GraphicState> ();	
+
+	
 	}
 
 

@@ -292,7 +292,7 @@ public class Room {
 		{
 			if (interactable is Furniture) 
 			{
-				tile.myFurniture = (Furniture)interactable;
+				tile.myFurnitureList.Add((Furniture)interactable);
 			}
 
 			if (interactable is Character) 
@@ -393,12 +393,26 @@ public class Room {
 			{
 				foreach (Tile oldTile in oldTiles)
 				{
-					oldTile.myFurniture = null;
+					if (oldTile.myFurnitureList.Contains ((Furniture)(physicalInteractable)) == true) 
+					{
+						oldTile.myFurnitureList.Remove ((Furniture)physicalInteractable);
+					
+					} else {
+
+						Debug.LogError ("not supposed to be here - furniture doesn't exist in tile futnirue list");
+					}
 				}
 
 				foreach (Tile newTile in newTiles)
 				{
-					newTile.myFurniture = (Furniture)physicalInteractable;
+					if (newTile.myFurnitureList.Contains ((Furniture)(physicalInteractable)) == false) 
+					{
+						newTile.myFurnitureList.Add ((Furniture)physicalInteractable);
+
+					} else {
+
+						Debug.LogError ("not supposed to be here - furniture already exists in tile futnirue list");
+					}
 				}
 			}
 

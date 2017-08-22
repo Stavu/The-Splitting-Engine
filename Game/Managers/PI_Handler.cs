@@ -386,16 +386,17 @@ public class PI_Handler : MonoBehaviour {
 
 		foreach (Tile tile in RoomManager.instance.myRoom.MyGrid.gridArray) 
 		{
-			if (tile.myFurniture == physicalInteractable) 
-			{
-				tile.myFurniture = null;
+			if (tile.myFurnitureList != null) 
+			{				
+				if (tile.myFurnitureList.Contains ((Furniture)physicalInteractable)) 
+				{
+					tile.myFurnitureList.Remove ((Furniture)physicalInteractable);
+				}
 			}
 		}
 
-
 		if (physicalInteractable is Furniture) 
-		{
-			
+		{			
 			if (GameManager.userData.hiddenFurnitureList.Contains (PI_name) == false) 
 			{
 				GameManager.userData.hiddenFurnitureList.Add (PI_name);
@@ -404,7 +405,6 @@ public class PI_Handler : MonoBehaviour {
 
 		if (physicalInteractable is Character) 
 		{
-
 			if (GameManager.userData.hiddenCharacterList.Contains (PI_name) == false) 
 			{
 				GameManager.userData.hiddenCharacterList.Add (PI_name);

@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-
-
 public class Tile {
-
 
 
 	public int x {get; protected set;}
 	public int y {get; protected set;}
 
-	public Furniture myFurniture; 
+	public List<Furniture> myFurnitureList; // TODO - furniture list instead of furniture 
 	public Character myCharacter;
 	public Player myInactivePlayer;
 	public TileInteraction myTileInteraction;
@@ -20,11 +17,12 @@ public class Tile {
 	public bool walkable;
 
 
-
 	public Tile(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
+
+		myFurnitureList = new List<Furniture> ();
 	}
 
 
@@ -37,20 +35,18 @@ public class Tile {
 			return;
 		}
 
-		if(myFurniture != null)
+		if (myFurnitureList.Contains (furniture) == true) 
 		{
-			if (myFurniture != furniture) 
-			{
-				Debug.LogError("Tile: PlaceRoomObject myRoomObject exists" + myFurniture.identificationName + " " + furniture.identificationName);
+			Debug.LogError("Tile: PlaceRoomObject myRoomObject exists:" + furniture.identificationName);
 
-				return;
-			}
-
+			return;
 		}
 
-		// if everything's okay, set myFurniture
 
-		myFurniture = furniture;
+		// if everything's okay, add furniture to list
+
+		myFurnitureList.Add (furniture);
+
 	}
 
 
@@ -132,18 +128,20 @@ public class Tile {
 
 	public bool IsWalkable()
 	{
-
 		if (myCharacter != null) 
 		{		
 			return false;
 		}
 
-		if (myFurniture != null) 
-		{		
-			if (myFurniture.walkable == false) 
+		if (myFurnitureList != null) 
+		{	
+			foreach (Furniture furn in myFurnitureList) 
 			{
-				return false;
-			}		
+				if (furn.walkable == false) 
+				{
+					return false;
+				}	
+			}				
 		}
 
 		if (myTileInteraction != null) 
@@ -156,5 +154,4 @@ public class Tile {
 
 		return true;
 	}
-
 }

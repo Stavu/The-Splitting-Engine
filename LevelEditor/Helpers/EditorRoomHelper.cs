@@ -20,8 +20,6 @@ public static class EditorRoomHelper {
 
 		newRoom.myGrid = new Grid (newRoom.myWidth, newRoom.myHeight);
 
-
-
 		// Interactables
 
 		foreach (Furniture furn in room.myFurnitureList) 
@@ -31,8 +29,7 @@ public static class EditorRoomHelper {
 			newRoom.myFurnitureList.Add (flippedFurn);
 
 			Tile tile = newRoom.MyGrid.GetTileAt (flippedFurn.x, flippedFurn.y);
-			tile.myFurniture = flippedFurn;
-
+			tile.myFurnitureList.Add(flippedFurn);
 		}
 
 		foreach (TileInteraction tileInt in room.myTileInteractionList) 
@@ -62,10 +59,10 @@ public static class EditorRoomHelper {
 				newRoom.myMirrorRoom.myFurnitureList_Persistant.Add (flippedFurn);
 
 				Tile tile = newRoom.MyGrid.GetTileAt (flippedFurn.x, flippedFurn.y);
-				tile.myFurniture = flippedFurn;
+				tile.myFurnitureList.Add(flippedFurn);
 
 				Tile shadowTile = newRoom.myMirrorRoom.shadowGrid.GetTileAt (flippedFurn.x, flippedFurn.y);
-				shadowTile.myFurniture = flippedFurn;
+				shadowTile.myFurnitureList.Add(flippedFurn);
 			}
 
 			foreach (TileInteraction tileInt in room.myMirrorRoom.myTileInteractionList_Persistant) 
@@ -90,7 +87,7 @@ public static class EditorRoomHelper {
 				newRoom.myMirrorRoom.myFurnitureList_Shadow.Add (flippedFurn);
 
 				Tile shadowTile = newRoom.myMirrorRoom.shadowGrid.GetTileAt (flippedFurn.x, flippedFurn.y);
-				shadowTile.myFurniture = flippedFurn;
+				shadowTile.myFurnitureList.Add(flippedFurn);
 			}
 
 			foreach (TileInteraction tileInt in room.myMirrorRoom.myTileInteractionList_Shadow) 

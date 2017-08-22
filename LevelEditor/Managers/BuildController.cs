@@ -130,8 +130,22 @@ public class BuildController : MonoBehaviour {
 
 
 		// inspect tile
+							
+		Furniture furn = null;
 
-		InspectorManager.instance.chosenFurniture = tile.myFurniture;
+		foreach (Furniture f in tile.myFurnitureList) 
+		{
+			if (furn == null) 
+			{
+				furn = f;
+
+			} else if (f.myPriority > furn.myPriority) 
+			{
+				furn = f;
+			}					
+		}
+
+		InspectorManager.instance.chosenFurniture = furn;
 
 		if (InspectorManager.instance.chosenFurniture != null) 
 		{			
