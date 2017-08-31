@@ -108,6 +108,10 @@ public class UseItemHelper {
 
 						if ((GameManager.userData.CheckIfEventExists ("mirror_abandoned_4_mirror_covered") == true) && (GameManager.userData.CheckIfEventExists ("cloth_cut") == false))
 						{
+							// text
+
+							ItemOnObjectMonologue ("I cut a piece of the cloth with my pocket knife.");
+
 							// event
 
 							GameManager.userData.AddEventToList ("cloth_cut");
@@ -233,6 +237,7 @@ public class UseItemHelper {
 
 			/* -------- BLANKET -------- */
 
+
 			case "blanket":
 
 				switch (physicalInt.identificationName) 
@@ -257,14 +262,11 @@ public class UseItemHelper {
 								textList.Add ("I just feel there's something I have to do first.");
 
 								ItemOnObjectMonologue (textList);
-
-
 							}
 						
 						} else {
 
 								ItemOnObjectMonologue ("He looks warm enough.");
-
 						}
 						
 						break;
@@ -340,7 +342,13 @@ public class UseItemHelper {
 
 
 					case "pipe_storeroom":
-						
+					
+						List<string> textList = new List<string> ();
+						textList.Add ("There! The pipe is clogged.");
+						textList.Add ("It should have an effect on the toilets here.");
+
+						ItemOnObjectMonologue (textList);
+
 						PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "Open_with_goo");
 						EventsHandler.Invoke_cb_inputStateChanged ();
 
@@ -381,7 +389,7 @@ public class UseItemHelper {
 
 					case "pipe_storeroom":
 
-						ItemOnObjectMonologue ("I opened the pipe.");
+						ItemOnObjectMonologue ("I opened the pipe with the wrench.");
 
 						PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "Open");
 						EventsHandler.Invoke_cb_inputStateChanged ();
@@ -451,6 +459,25 @@ public class UseItemHelper {
 
 						GameManager.userData.AddEventToList ("mirror_abandoned_3_mirror_covered");
 						GameManager.userData.GetCurrentPlayerData ().inventory.RemoveItem ("tablecloth");
+
+						// table
+
+						if ((GameManager.userData.CheckIfEventExists ("tablecloth_taken")) && (GameManager.userData.CheckIfEventExists ("maze_room_3_mirror_first_reset") == false))
+						{
+							PI_Handler.instance.SetPIAnimationState ("table_abandoned_vase_shadow", "Broken");
+							EventsHandler.Invoke_cb_inputStateChanged ();
+						
+						} else {
+
+							PI_Handler.instance.SetPIAnimationState ("table_abandoned_vase_shadow", "Without_map");
+							EventsHandler.Invoke_cb_inputStateChanged ();
+						}
+
+						// dresser
+
+						PI_Handler.instance.SetPIAnimationState ("dresser_abandoned_3_shadow", "With_key");
+						EventsHandler.Invoke_cb_inputStateChanged ();
+
 
 						InteractionManager.instance.ChangeShadowState (true);
 

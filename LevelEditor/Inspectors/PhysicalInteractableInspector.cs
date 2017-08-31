@@ -514,12 +514,8 @@ public class PhysicalInteractableInspector : MonoBehaviour {
 				EditorRoomManager.instance.ChangeInteractableLayerOffset (newLayerOffset, InspectorManager.instance.chosenCharacter);
 			}	
 
-			offsetYInput.text = offset;
+			offsetLayerInput.text = offset;
 		}
-
-
-
-
 
 	}
 

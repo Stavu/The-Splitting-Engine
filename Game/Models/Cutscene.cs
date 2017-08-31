@@ -32,16 +32,20 @@ public class OpeningScene : Cutscene
 
 	public override IEnumerator MyCutscene()
 	{
-
 		///////////
 		yield return new WaitForSeconds (2);
 		///////////
 
-
-
 		PlayerManager.instance.PlayerEntersRoom ("Daniel", new Vector2(18, 10));
 
-		PlayerManager.instance.PlayerEntersRoom ("llehctiM", new Vector2(18, 12));
+		Character llehctiM = RoomManager.instance.getCharacterByName ("llehctiM");
+		PI_Handler.instance.UnHide_PI (llehctiM);
+
+		//PlayerManager.instance.PlayerEntersRoom ("llehctiM", new Vector2(18, 12));
+
+		///////////
+
+		GameManager.userData.AddEventToList ("opening_scene_done");
 
 
 		/*
@@ -333,7 +337,6 @@ public class OpeningScene : Cutscene
 		EventsHandler.Invoke_cb_inputStateChanged ();
 
 	}
-
 }
 
 
@@ -402,14 +405,8 @@ public class WaterCanScene : Cutscene
 
 		CutsceneManager.inCutscene = false;
 		EventsHandler.Invoke_cb_inputStateChanged ();
-
-
-
-
 	}
-
 }
-
 
 
 // ---------------------------------------------------------------------------------------------- //
@@ -426,11 +423,7 @@ public class CoverManScene : Cutscene
 	}
 
 	public override IEnumerator MyCutscene()
-	{
-
-
-		///////////
-
+	{		
 
 		// -- COVER MAN -- //
 
@@ -491,7 +484,7 @@ public class CoverManScene : Cutscene
 
 		///////////
 
-		// --- TECHNICIAN ENTER --- //
+		// --- TECHNICIAN ENTERS --- //
 
 
 		InteractionManager.instance.DisplayInfoText ("30 Minutes Later");
@@ -516,8 +509,8 @@ public class CoverManScene : Cutscene
 
 		List<Vector2> technicianPosList = new List<Vector2> 
 		{
-			new Vector2 (16, 12),
-			new Vector2 (3, 12)
+			new Vector2 (16, 13),
+			new Vector2 (3, 13)
 		};
 
 		Character_Handler.instance.MoveByPath ((Character)PI_Handler.instance.name_PI_map["technician_reflection"], technicianPosList);
@@ -540,6 +533,7 @@ public class CoverManScene : Cutscene
 
 		// EVENTS //
 
+		GameManager.userData.AddEventToList ("man_water_covered");
 		GameManager.userData.AddEventToList ("air_vent_turned_off");
 		GameManager.userData.AddEventToList ("technician_arrived");
 
@@ -604,7 +598,7 @@ public class ToolboxScene : Cutscene
 
 		// technician walks down
 
-		//PI_Handler.instance.SetPIAnimationState ("technician_reflection", "Walk_down");
+		PI_Handler.instance.SetPIAnimationState ("technician_reflection", "Walk_down");
 
 
 		List<Vector2> technicianPosList = new List<Vector2> 
@@ -889,14 +883,154 @@ public class OpenGreenDoorMirrorScene : Cutscene
 
 
 
+
+public class MeetgeMScene : Cutscene
+{
+	public MeetgeMScene (string myName) : base (myName)
+	{
+		EventsHandler.cb_dialogueEnded += (() => isClearToContinue = true);
+		EventsHandler.cb_characterFinishedPath += (() => isClearToContinue = true);
+		EventsHandler.cb_isClearToContinue += (() => isClearToContinue = true);
+	}
+
+	public override IEnumerator MyCutscene()
+	{
+
+
+		// -- Dialogue -- //
+
+
+
+		InteractionManager.instance.DisplayDialogueOption ("meet_geM_dialogue1");
+
+		isClearToContinue = false;
+
+		while (isClearToContinue == false) 
+		{
+			yield return new WaitForFixedUpdate ();
+		}
+
+		// ------------------- 
+		yield return new WaitForSeconds (1);
+		// ------------------- 
+
+
+		////////// ------------------- ///////////
+
+
+
+		// --- geM leaves --- //
+
+		List<Vector2> geMPosList = new List<Vector2> 
+		{
+			new Vector2 (10, 4),
+			new Vector2 (10, 14)
+		};
+
+		Character_Handler.instance.MoveByPath (PlayerManager.instance.GetPlayerByName("geM"), geMPosList);
+
+
+		isClearToContinue = false;
+
+		while (isClearToContinue == false) 
+		{
+			yield return new WaitForFixedUpdate ();
+		}
+
+		// ------------------- 
+		yield return new WaitForSeconds (1);
+		// ------------------- 
+
+
+		////////// ------------------- ///////////
+
+
+		// dialogue with llehctiM
+
+
+		InteractionManager.instance.DisplayDialogueOption ("meet_geM_dialogue2");
+
+
+		isClearToContinue = false;
+
+		while (isClearToContinue == false) 
+		{
+			yield return new WaitForFixedUpdate ();
+		}
+
+		// ------------------- 
+		yield return new WaitForSeconds (1);
+		// ------------------- 
+
+
+		////////// ------------------- ///////////
+
+
+		// -- llechtiM leaves -- //
+
+
+		List<Vector2> llehctiMPosList = new List<Vector2> 
+		{
+			new Vector2 (10, 4),
+			new Vector2 (10, 14)
+		};
+
+		Character_Handler.instance.MoveByPath (PlayerManager.instance.GetPlayerByName("llehctiM"), llehctiMPosList);
+
+
+		isClearToContinue = false;
+
+		while (isClearToContinue == false) 
+		{
+			yield return new WaitForFixedUpdate ();
+		}
+
+		// ------------------- 
+		yield return new WaitForSeconds (1);
+		// ------------------- 
+
+
+		////////// ------------------- ///////////
+
+
+		// -- llehctiM disappears -- // 
+
+
+
+		// ------------------- 
+		yield return new WaitForSeconds (1);
+		// ------------------- 
+
+		////////// ------------------- ///////////
+
+
+
+		// add event
+
+		GameManager.userData.AddEventToList ("met_geM");
+
+
+		// END OF CUTSCENE //
+
+		CutsceneManager.inCutscene = false;
+		EventsHandler.Invoke_cb_inputStateChanged ();
+
+	}
+}
+
+
+
+// ---------------------------------------------------------------------------------------------- //
+
+
+
+
 public class DanielScene : Cutscene
 {
 	public DanielScene (string myName) : base (myName)
 	{
-
 		EventsHandler.cb_dialogueEnded += (() => isClearToContinue = true);
 		EventsHandler.cb_characterFinishedPath += (() => isClearToContinue = true);
-
 	}
 
 	public override IEnumerator MyCutscene()

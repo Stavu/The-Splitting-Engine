@@ -423,7 +423,7 @@ public class PI_Handler : MonoBehaviour {
 
 		if (physicalInteractable == null) 
 		{
-			Debug.LogError ("can't find PI by name");
+			Debug.LogError ("can't find PI by name" + PI_name);
 			return;
 		}
 

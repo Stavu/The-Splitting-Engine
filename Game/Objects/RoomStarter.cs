@@ -86,13 +86,41 @@ public class RoomStarter : MonoBehaviour {
 
 			
 
-			case "bus_stop_mirror":			
-						
-								
+			case "bus_stop_mirror":							
+					
+
+				if (GameManager.userData.CheckIfEventExists ("opening_scene_done")) 
+				{
+					if (GameManager.userData.roomsVisitedList.Contains ("pub_inside_mirror")) 
+					{
+						//Character llehctiM = RoomManager.instance.getCharacterByName ("llehctiM");
+						PI_Handler.instance.RoomStarter_Hide_Character ("llehctiM");
+
+					} else {
+
+						Character llehctiM = RoomManager.instance.getCharacterByName ("llehctiM");
+						PI_Handler.instance.RoomStarter_Unhide_PI (llehctiM);
+					}
+
+				} else {
+
+					PI_Handler.instance.RoomStarter_Hide_Character ("llehctiM");
+
+				}
+			
 				break;			
 
 
 			case "pub_inside_mirror":
+
+
+				if (GameManager.userData.roomsVisitedList.Contains ("pub_inside_mirror")) 
+				{
+					Character llehctiM = RoomManager.instance.getCharacterByName ("llehctiM");
+					PI_Handler.instance.RoomStarter_Unhide_PI (llehctiM);
+
+					PI_Handler.instance.ChangeCurrentGraphicState (llehctiM, "Sitting_with_beer");
+				}
 
 				if (GameManager.userData.roomsVisitedList.Contains ("pub_storeroom_mirror")) 
 				{
@@ -102,6 +130,14 @@ public class RoomStarter : MonoBehaviour {
 
 					Furniture water_can_mirror = RoomManager.instance.getFurnitureByName ("water_can_mirror");
 					PI_Handler.instance.RoomStarter_Unhide_PI (water_can_mirror);
+				}
+
+				if (GameManager.userData.CheckIfEventExists ("pipe_clogged")) 
+				{
+					Furniture door_toilets_mirror = RoomManager.instance.getFurnitureByName ("door_toilet_mirror");
+					PI_Handler.instance.ChangeCurrentGraphicState (door_toilets_mirror, "Out_of_order");
+
+					GameManager.userData.RemoveEventFromList ("door_toilet_mirror_opened");
 				}
 
 				break;
@@ -167,6 +203,12 @@ public class RoomStarter : MonoBehaviour {
 				}
 
 
+				if (GameManager.userData.CheckIfEventExists ("pipe_closed_for_good")) 
+				{
+					// pipe
+
+					PI_Handler.instance.ChangeCurrentGraphicState (pipe_storeroom, "Closed");
+				}
 
 
 			break;
@@ -210,17 +252,16 @@ public class RoomStarter : MonoBehaviour {
 				}
 
 				break;
-
-
+							
 
 			case "pub_toilet_mirror":
-
-
+				
 				Character man_toilets_mirror = RoomManager.instance.getCharacterByName ("man_toilets_mirror_reflection");
 				Character woman_toilets_reflection = RoomManager.instance.getCharacterByName ("woman_toilets_reflection");
 				Character old_man_toilets_reflection = RoomManager.instance.getCharacterByName ("old_man_toilets_reflection");
 
-				if (GameManager.userData.CheckIfEventExists ("pipe_clogged")) {
+				if (GameManager.userData.CheckIfEventExists ("pipe_clogged")) 
+				{
 					// hide technician
 
 					PI_Handler.instance.RoomStarter_Hide_Character ("man_toilets_mirror_reflection");
@@ -234,9 +275,15 @@ public class RoomStarter : MonoBehaviour {
 
 
 
-			case "abandoned_lobby_mirror":			
+			case "pub_toilet":
+
+				if (GameManager.userData.roomsVisitedList.Contains ("pub_toilet") == false) 
+				{
+					GameManager.instance.inputState = InputState.Dialogue;
+				}
 
 				break;
+
 
 
 			case "abandoned_wing_entrance_shadow":
@@ -263,7 +310,6 @@ public class RoomStarter : MonoBehaviour {
 				break;
 
 
-
 			case "maze_room_1":
 
 				if (GameManager.userData.CheckIfEventExists ("closet_abandoned_1_opened")) 
@@ -271,6 +317,13 @@ public class RoomStarter : MonoBehaviour {
 					Furniture mirror_closet_abandoned_1 = RoomManager.instance.getFurnitureByName ("mirror_closet_abandoned_1");
 					PI_Handler.instance.RoomStarter_Unhide_PI (mirror_closet_abandoned_1);
 				}
+
+				if (GameManager.userData.CheckIfEventExists ("map_taken")) 
+				{
+					PI_Handler.instance.RoomStarter_Hide_Furniture ("map_on_bed");
+				}
+
+
 				break;
 
 
@@ -616,6 +669,17 @@ public class RoomStarter : MonoBehaviour {
 
 
 
+			case "abandoned_lobby_mirror":			
+
+
+
+
+				break;
+
+
+
+
+
 		}
 	}
 
@@ -643,20 +707,33 @@ public class RoomStarter : MonoBehaviour {
 				break;
 
 
+
+			case "field_shadow2":
+				
+				if (firstTimeinRoom) 
+				{					
+					RoomStarterMonologue ("There's nothing in this direction.");
+				}
+
+				break;
+
+
+
+			case "field_shadow3":
+				
+				if (firstTimeinRoom) 
+				{					
+					RoomStarterMonologue ("There's nothing in this direction.");
+				}
+
+				break;
+
+
 			case "abandoned_lobby":
 
 			
 				break;
 
-
-			case "abandoned_lobby_mirror":
-
-
-
-				break;
-
-
-			
 
 			case "pub_storeroom_mirror":
 
@@ -667,9 +744,35 @@ public class RoomStarter : MonoBehaviour {
 
 			case "pub_toilet_mirror":
 
-				if (GameManager.userData.CheckIfEventExists ("pipe_clogged")) 
+				if (firstTimeinRoom)
+				{						
+					List<string> textList = new List<string> ();
+					textList.Add ("Look At all of these people...");
+					textList.Add ("I can't possibly pass through the mirror. They'll see me!");
+
+					RoomStarterMonologue (textList);
+				}
+
+				if ((GameManager.userData.CheckIfEventExists ("pipe_clogged")) && (GameManager.userData.CheckIfEventExists ("saw_empty_toilets") == false)) 
 				{					
 					RoomStarterMonologue ("It worked!");
+
+					GameManager.userData.AddEventToList ("saw_empty_toilets");
+				}
+
+
+				break;
+
+
+			case "pub_toilet":
+
+				if (firstTimeinRoom)
+				{						
+					List<string> textList = new List<string> ();
+					textList.Add ("Oh my god... That smells awful...");
+					textList.Add ("It seems like clogging the pipe caused a flood.");
+
+					RoomStarterMonologue (textList);
 				}
 
 				break;
@@ -690,16 +793,26 @@ public class RoomStarter : MonoBehaviour {
 				if (firstTimeinRoom) 
 				{	
 					List<string> textList = new List<string> ();
-					textList.Add ("Ok, I'm in.");
+					textList.Add ("Good, I'm inside.");
 					textList.Add ("It looks like a patient room.");
 					textList.Add ("But this place has been deserted for a long time now.");
 
-					ItemOnObjectMonologue (textList);
+					RoomStarterMonologue (textList);
 				}
 
 				break;
 		
-		
+
+
+			case "abandoned_lobby_mirror":			
+				
+				if (GameManager.userData.CheckIfEventExists("met_geM") == false)
+				{
+					CutsceneManager.instance.PlayCutscene ("meet_geM_scene");
+				}
+
+
+				break;
 		
 		}
 	}
@@ -723,7 +836,7 @@ public class RoomStarter : MonoBehaviour {
 
 	// with list instead of one text
 
-	public static void ItemOnObjectMonologue(List<string> myTextList)
+	public static void RoomStarterMonologue(List<string> myTextList)
 	{
 		List<DialogueSentence> list = new List<DialogueSentence> ();
 
