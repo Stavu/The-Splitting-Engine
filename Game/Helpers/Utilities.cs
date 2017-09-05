@@ -288,11 +288,17 @@ public class Utilities {
 		bool evaluation = true;
 
 		foreach (Condition cond in conditionList) 
-		{			
+		{	
 			evaluation = cond.EvaluateCondition ();
+
+			if (evaluation == false) 
+			{
+				Debug.Log ("false");
+				return false;
+			}
 		}
 
-		return evaluation;
+		return true; // FIXME - not sure if it's perfect, but it works
 	}
 
 

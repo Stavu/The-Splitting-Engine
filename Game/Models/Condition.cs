@@ -112,6 +112,7 @@ public class Condition {
 
 	public bool EvaluateCondition()
 	{
+		//Debug.Log ("evaluate condition " + myType);
 
 		switch (myType)
 		{
@@ -124,7 +125,9 @@ public class Condition {
 
 
 			case ConditionType.EventOccured:
-				
+
+				Debug.Log (GameManager.userData.CheckIfEventExists (eventOccured));
+
 				return GameManager.userData.CheckIfEventExists (eventOccured);
 
 			
@@ -160,8 +163,9 @@ public class Condition {
 
 			case ConditionType.EventDidntOccur:
 
-				return !GameManager.userData.CheckIfEventExists (eventDidntOccur);
+				Debug.Log (!GameManager.userData.CheckIfEventExists (eventDidntOccur));
 
+				return !GameManager.userData.CheckIfEventExists (eventDidntOccur);
 
 			case ConditionType.CharacterNotInRoom:
 
@@ -179,6 +183,8 @@ public class Condition {
 				return !RoomManager.instance.myRoom.myMirrorRoom.inTheShadow;
 					
 		}
+
+		Debug.Log ("return condition false");
 
 		return false;
 

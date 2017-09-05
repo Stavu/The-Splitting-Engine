@@ -55,6 +55,7 @@ public class UseItemHelper {
 				{
 
 					case "air_vent_mirror":
+					case "air_vent":
 
 						ItemOnObjectMonologue ("I don't wanna shred it. My boss is counting on me.");
 
@@ -92,6 +93,12 @@ public class UseItemHelper {
 
 						break;
 
+					case "air_vent":
+
+						ItemOnObjectMonologue ("I don't wanna destroy a perfectly good pocket knife.");
+
+						break;
+
 					
 					case "pipe_storeroom":						
 					case "pipe_storeroom_mirror":
@@ -108,10 +115,6 @@ public class UseItemHelper {
 
 						if ((GameManager.userData.CheckIfEventExists ("mirror_abandoned_4_mirror_covered") == true) && (GameManager.userData.CheckIfEventExists ("cloth_cut") == false))
 						{
-							// text
-
-							ItemOnObjectMonologue ("I cut a piece of the cloth with my pocket knife.");
-
 							// event
 
 							GameManager.userData.AddEventToList ("cloth_cut");
@@ -162,6 +165,13 @@ public class UseItemHelper {
 						break;
 
 
+					case "air_vent":
+
+						ItemOnObjectMonologue ("This picture might be a clue. I don't wanna shred it.");
+
+						break;
+
+
 					case "door_abandoned_main_shadow":
 
 						DialogueSentence sentence2 = new DialogueSentence (PlayerManager.myPlayer.identificationName, "pic on door.", false);
@@ -191,6 +201,15 @@ public class UseItemHelper {
 
 				switch (physicalInt.identificationName) 
 				{
+
+					case "air_vent":
+					case "air_vent_mirror":
+
+						ItemOnObjectMonologue ("On the off chance I might need it... I prefer not to.");
+
+						break;
+
+
 					case "door_kitchen_shadow":
 
 						ItemOnObjectMonologue ("The key Fits!");
@@ -242,7 +261,20 @@ public class UseItemHelper {
 
 				switch (physicalInt.identificationName) 
 				{
-					
+					case "air_vent":
+
+						ItemOnObjectMonologue ("It'll just tear the blanket to pieces.");
+
+						break;
+
+
+					case "air_vent_mirror":
+						
+						ItemOnObjectMonologue ("It'll just tear the blanket to pieces.");
+
+						break;
+
+
 					case "man_water_reflection":
 
 						if(GameManager.userData.CheckIfEventExists("water_can_spilled"))
@@ -299,6 +331,12 @@ public class UseItemHelper {
 						GameManager.userData.AddEventToList ("fork_in_vent");
 						GameManager.userData.GetCurrentPlayerData().inventory.RemoveItem ("fork");
 
+						// fork in vent
+
+						PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "With_fork");
+						EventsHandler.Invoke_cb_inputStateChanged ();
+
+
 						break;
 
 					case "air_vent_mirror":
@@ -336,18 +374,30 @@ public class UseItemHelper {
 
 					case "pipe_storeroom_mirror":
 
-						ItemOnObjectMonologue ("I should open the real pipe.");
+						List<string> textList = new List<string> ();
+						textList.Add ("I would need to open it first if I wanted to clog it.");
+						textList.Add ("In the real world, that is.");
+
+						ItemOnObjectMonologue (textList);
+
+						break;
+
+
+					case "air_vent":						
+					case "air_vent_mirror":
+
+						ItemOnObjectMonologue ("The blades are too sharp, They'll cut right through it.");
 
 						break;
 
 
 					case "pipe_storeroom":
 					
-						List<string> textList = new List<string> ();
-						textList.Add ("There! The pipe is clogged.");
-						textList.Add ("It should have an effect on the toilets here.");
+						List<string> textList2 = new List<string> ();
+						textList2.Add ("There! The pipe is clogged.");
+						textList2.Add ("It should have an effect on the toilets here.");
 
-						ItemOnObjectMonologue (textList);
+						ItemOnObjectMonologue (textList2);
 
 						PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "Open_with_goo");
 						EventsHandler.Invoke_cb_inputStateChanged ();
@@ -459,25 +509,6 @@ public class UseItemHelper {
 
 						GameManager.userData.AddEventToList ("mirror_abandoned_3_mirror_covered");
 						GameManager.userData.GetCurrentPlayerData ().inventory.RemoveItem ("tablecloth");
-
-						// table
-
-						if ((GameManager.userData.CheckIfEventExists ("tablecloth_taken")) && (GameManager.userData.CheckIfEventExists ("maze_room_3_mirror_first_reset") == false))
-						{
-							PI_Handler.instance.SetPIAnimationState ("table_abandoned_vase_shadow", "Broken");
-							EventsHandler.Invoke_cb_inputStateChanged ();
-						
-						} else {
-
-							PI_Handler.instance.SetPIAnimationState ("table_abandoned_vase_shadow", "Without_map");
-							EventsHandler.Invoke_cb_inputStateChanged ();
-						}
-
-						// dresser
-
-						PI_Handler.instance.SetPIAnimationState ("dresser_abandoned_3_shadow", "With_key");
-						EventsHandler.Invoke_cb_inputStateChanged ();
-
 
 						InteractionManager.instance.ChangeShadowState (true);
 
@@ -720,7 +751,6 @@ public class UseItemHelper {
 						
 						if (GameManager.userData.CheckIfEventExists ("mirror_cleaned_once") == false) 
 						{	
-
 							// monologue 
 
 							List<string> textList = new List<string> ();
@@ -752,12 +782,14 @@ public class UseItemHelper {
 							
 							if (GameManager.userData.CheckIfEventExists ("mirror_cleaned_twice") == false) 
 							{									
-								ItemOnObjectMonologue ("all clean");
+								ItemOnObjectMonologue ("All clean!");
 
 								PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "Idle");
 								EventsHandler.Invoke_cb_inputStateChanged ();
 
 								GameManager.userData.AddEventToList ("mirror_cleaned_twice");
+
+								InteractionManager.instance.ChangeShadowState (false);
 
 								// remove item
 

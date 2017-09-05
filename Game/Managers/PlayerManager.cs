@@ -121,7 +121,7 @@ public class PlayerManager : MonoBehaviour {
 
 		// 4 tiles in one second
 
-		float playerSpeed = 5f * Time.deltaTime;
+		float playerSpeed = 7f * Time.deltaTime;
 		float offsetX = 0;
 		float offsetY = 0;
 

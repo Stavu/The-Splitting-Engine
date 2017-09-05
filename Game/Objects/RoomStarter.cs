@@ -113,7 +113,6 @@ public class RoomStarter : MonoBehaviour {
 
 			case "pub_inside_mirror":
 
-
 				if (GameManager.userData.roomsVisitedList.Contains ("pub_inside_mirror")) 
 				{
 					Character llehctiM = RoomManager.instance.getCharacterByName ("llehctiM");
@@ -136,6 +135,15 @@ public class RoomStarter : MonoBehaviour {
 				{
 					Furniture door_toilets_mirror = RoomManager.instance.getFurnitureByName ("door_toilet_mirror");
 					PI_Handler.instance.ChangeCurrentGraphicState (door_toilets_mirror, "Out_of_order");
+				
+					Character old_man_toilets_reflection_sitting = RoomManager.instance.getCharacterByName ("old_man_toilets_reflection");
+					PI_Handler.instance.RoomStarter_Unhide_PI (old_man_toilets_reflection_sitting);
+
+					Character girl_toilets_sitting_reflection = RoomManager.instance.getCharacterByName ("girl_toilets_sitting_reflection");
+					PI_Handler.instance.RoomStarter_Unhide_PI (girl_toilets_sitting_reflection);
+
+					Character man_toilets_mirror_reflection = RoomManager.instance.getCharacterByName ("man_toilets_mirror_reflection");
+					PI_Handler.instance.RoomStarter_Unhide_PI (man_toilets_mirror_reflection);
 
 					GameManager.userData.RemoveEventFromList ("door_toilet_mirror_opened");
 				}
@@ -148,7 +156,6 @@ public class RoomStarter : MonoBehaviour {
 
 				Debug.Log ("storeroom");
 
-
 				// physical interactables
 
 				Furniture air_vent = RoomManager.instance.getFurnitureByName ("air_vent");
@@ -160,12 +167,22 @@ public class RoomStarter : MonoBehaviour {
 
 				if (GameManager.userData.CheckIfEventExists ("water_can_spilled")) 
 				{
-					Debug.Log ("water_spilled");
+					//Debug.Log ("water_spilled");
 					PI_Handler.instance.ChangeCurrentGraphicState (air_vent, "Turned_off");
 				}
 
+
+				if (GameManager.userData.CheckIfEventExists ("fork_in_vent")) 
+				{				
+					//Debug.Log ("fork in vent");	
+					PI_Handler.instance.ChangeCurrentGraphicState (air_vent, "With_fork");
+				}
+
+
 				if (GameManager.userData.CheckIfEventExists ("technician_arrived")) 
-				{					
+				{	
+					//Debug.Log ("technician_arrived");	
+
 					// un hide technician
 
 					PI_Handler.instance.RoomStarter_Unhide_PI (technician);
@@ -176,7 +193,9 @@ public class RoomStarter : MonoBehaviour {
 
 
 				if (GameManager.userData.CheckIfEventExists ("technician_left")) 
-				{
+				{					
+					//Debug.Log ("technician_left");	
+
 					// hide technician
 
 					PI_Handler.instance.RoomStarter_Hide_Character ("technician");
@@ -260,13 +279,27 @@ public class RoomStarter : MonoBehaviour {
 				Character woman_toilets_reflection = RoomManager.instance.getCharacterByName ("woman_toilets_reflection");
 				Character old_man_toilets_reflection = RoomManager.instance.getCharacterByName ("old_man_toilets_reflection");
 
-				if (GameManager.userData.CheckIfEventExists ("pipe_clogged")) 
-				{
+				Furniture door_toilet_booth_mirror1 = RoomManager.instance.getFurnitureByName ("door_toilet_booth_mirror1");
+				Furniture door_toilet_booth_mirror2 = RoomManager.instance.getFurnitureByName ("door_toilet_booth_mirror2");
+				Furniture door_toilet_booth_mirror3 = RoomManager.instance.getFurnitureByName ("door_toilet_booth_mirror3");
+
+				if (GameManager.userData.CheckIfEventExists ("pipe_clogged")) {
 					// hide technician
 
 					PI_Handler.instance.RoomStarter_Hide_Character ("man_toilets_mirror_reflection");
 					PI_Handler.instance.RoomStarter_Hide_Character ("woman_toilets_reflection");
-					PI_Handler.instance.RoomStarter_Hide_Character ("old_man_toilets_reflection");
+					PI_Handler.instance.RoomStarter_Hide_Character ("old_man_toilets_reflection");				
+
+					PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth_mirror1, "Open");
+					PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth_mirror2, "Open");
+					PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth_mirror3, "Open");
+				
+				} else {
+
+					PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth_mirror1, "Closed");
+					PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth_mirror2, "Closed");
+					PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth_mirror3, "Open");
+
 				}
 
 				GameManager.instance.inputState = InputState.Dialogue;
@@ -281,6 +314,14 @@ public class RoomStarter : MonoBehaviour {
 				{
 					GameManager.instance.inputState = InputState.Dialogue;
 				}
+				 
+				Furniture door_toilet_booth1 = RoomManager.instance.getFurnitureByName ("door_toilet_booth1");
+				Furniture door_toilet_booth2 = RoomManager.instance.getFurnitureByName ("door_toilet_booth2");
+				Furniture door_toilet_booth3 = RoomManager.instance.getFurnitureByName ("door_toilet_booth3");
+
+				PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth1, "Open");
+				PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth2, "Open");
+				PI_Handler.instance.ChangeCurrentGraphicState (door_toilet_booth3, "Open");
 
 				break;
 
@@ -545,6 +586,39 @@ public class RoomStarter : MonoBehaviour {
 				}
 
 			break;
+
+
+			case "maze_room_5_mirror":
+
+
+				Furniture mirror_abandoned_5_mirror = RoomManager.instance.getFurnitureByName ("mirror_abandoned_5_mirror");
+
+				if (GameManager.userData.CheckIfEventExists ("mirror_cleaned_twice")) 
+				{
+					// mirror clean
+
+					PI_Handler.instance.ChangeCurrentGraphicState (mirror_abandoned_5_mirror, "Clean");
+				
+				} else {					
+
+					if (GameManager.userData.CheckIfEventExists ("mirror_cleaned_once")) 
+					{
+						// mirror half clean
+
+						PI_Handler.instance.ChangeCurrentGraphicState (mirror_abandoned_5_mirror, "With_half_mold");
+					
+					} else {
+
+						// mirror not clean at all
+
+						PI_Handler.instance.ChangeCurrentGraphicState (mirror_abandoned_5_mirror, "With_mold");
+					}
+
+				}
+
+			break;
+
+
 
 
 

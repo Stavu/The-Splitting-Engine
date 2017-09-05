@@ -960,7 +960,7 @@ public class EditorRoomManager : MonoBehaviour {
 			}
 		}
 
-		Debug.LogError ("I shouldn't be here.");
+		Debug.LogError ("I shouldn't be here. " + state + " " + interactable.identificationName);
 	}
 
 
