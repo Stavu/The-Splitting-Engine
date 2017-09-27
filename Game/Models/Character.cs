@@ -145,6 +145,8 @@ public class Character : PhysicalInteractable, ISpeaker, IWalker {
 	}
 
 
+
+
 	public void ChangePos(Vector2 newPos)
 	{
 		this.x = (int)newPos.x;

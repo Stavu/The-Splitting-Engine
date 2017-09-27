@@ -175,15 +175,17 @@ public class Room {
 		foreach (Character character in myCharacterList) 
 		{
 
+			//Debug.Log (myGrid);
+
 			List<Tile> CharacterTiles;
 
 			if (character.CurrentGraphicState().coordsList.Count > 0)
 			{		
-				CharacterTiles = GetMyTiles (myGrid, character.currentGraphicState.coordsList);
+				CharacterTiles = GetMyTiles (MyGrid, character.currentGraphicState.coordsList);
 
 			} else {
 
-				CharacterTiles = GetMyTiles(myGrid,character.mySize, character.x, character.y);
+				CharacterTiles = GetMyTiles(MyGrid,character.mySize, character.x, character.y);
 			}
 
 			CharacterTiles.ForEach (tile => tile.PlaceCharacterInTile (character));

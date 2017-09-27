@@ -56,6 +56,9 @@ public class Tile {
 
 	public void PlaceCharacterInTile(Character character)
 	{
+
+		//Debug.Log ("place character");
+
 		if (character == null) 
 		{
 			Debug.LogError("Tile: PlaceRoomObject myObject is null");

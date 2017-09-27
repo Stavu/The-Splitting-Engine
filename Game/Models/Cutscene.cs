@@ -16,9 +16,7 @@ public class Cutscene  {
 	{
 		this.myName = myName;
 	}
-
 }
-
 
 
 public class OpeningScene : Cutscene
@@ -330,6 +328,24 @@ public class OpeningScene : Cutscene
 			
 
 		*/
+
+
+		// Add Items 
+
+		InventoryItem missing_picture = new InventoryItem ("missing_picture", "Family Picture");
+		InventoryItem flashlight = new InventoryItem ("flashlight", "Flashlight");
+		InventoryItem order_details = new InventoryItem ("order_details", "Order Details");
+		InventoryItem daniel_phone = new InventoryItem ("daniels_phone", "Daniel's Phone");
+		InventoryItem pocket_knife = new InventoryItem ("pocket_knife", "Pocket Knife");
+		InventoryItem compass = new InventoryItem ("compass", "Compass");
+
+		GameManager.userData.GetCurrentPlayerData().inventory.AddItem (missing_picture);
+		GameManager.userData.GetCurrentPlayerData().inventory.AddItem (flashlight);
+		GameManager.userData.GetCurrentPlayerData().inventory.AddItem (order_details);
+		GameManager.userData.GetCurrentPlayerData().inventory.AddItem (daniel_phone);
+		GameManager.userData.GetCurrentPlayerData().inventory.AddItem (pocket_knife);
+		GameManager.userData.GetCurrentPlayerData().inventory.AddItem (compass);
+
 
 		// END OF CUTSCENE //
 
@@ -728,7 +744,20 @@ public class BusToAsylumScene : Cutscene
 
 		// -- MOVE ROOM: TO ASYLUM GATE -- //
 
-		InteractionManager.instance.MoveToRoom ("asylum_gate", new Vector2 (10, 10));
+		InteractionManager.instance.MoveToRoom ("asylum_gate", new Vector2 (18, 6));
+
+
+		// remove item - key
+
+		GameManager.userData.GetCurrentPlayerData().inventory.RemoveItem ("key");
+
+
+
+		// ------------------- 
+		yield return new WaitForSeconds (2);
+		// ------------------- 
+
+
 
 
 		// -- BUS ENTERS -- //
@@ -742,6 +771,7 @@ public class BusToAsylumScene : Cutscene
 
 		// -- DIALOGUE -- //
 
+		InteractionManager.instance.DisplayDialogueOption ("daniel_arrives_at_asylum");
 
 	
 		// END OF CUTSCENE //
@@ -799,8 +829,6 @@ public class OpenGreenDoorScene : Cutscene
 		// missing - sound
 
 
-
-
 		// add event
 
 		GameManager.userData.AddEventToList ("green_door_opened");
@@ -836,7 +864,7 @@ public class OpenGreenDoorMirrorScene : Cutscene
 
 		///////////
 
-		InteractionManager.instance.DisplayDialogueOption ("open_green_door_mirror");
+		InteractionManager.instance.DisplayDialogueOption ("open_green_door");
 
 		//////////
 
@@ -895,11 +923,7 @@ public class MeetgeMScene : Cutscene
 
 	public override IEnumerator MyCutscene()
 	{
-
-
 		// -- Dialogue -- //
-
-
 
 		InteractionManager.instance.DisplayDialogueOption ("meet_geM_dialogue1");
 
@@ -923,11 +947,11 @@ public class MeetgeMScene : Cutscene
 
 		List<Vector2> geMPosList = new List<Vector2> 
 		{
-			new Vector2 (10, 4),
-			new Vector2 (10, 14)
+			new Vector2 (13, 13),
+			new Vector2 (13, 20)
 		};
 
-		Character_Handler.instance.MoveByPath (PlayerManager.instance.GetPlayerByName("geM"), geMPosList);
+		Character_Handler.instance.MoveByPath ((Character)PI_Handler.instance.name_PI_map["geM"], geMPosList);
 
 
 		isClearToContinue = false;
@@ -936,6 +960,13 @@ public class MeetgeMScene : Cutscene
 		{
 			yield return new WaitForFixedUpdate ();
 		}
+
+
+		// geM disappears
+
+		PI_Handler.instance.Hide_PI ("geM");
+
+
 
 		// ------------------- 
 		yield return new WaitForSeconds (1);
@@ -970,12 +1001,14 @@ public class MeetgeMScene : Cutscene
 
 
 		List<Vector2> llehctiMPosList = new List<Vector2> 
-		{
-			new Vector2 (10, 4),
-			new Vector2 (10, 14)
+		{			
+			new Vector2 (7, 13),
+			new Vector2 (22, 13),
+			new Vector2 (22, 14)
+
 		};
 
-		Character_Handler.instance.MoveByPath (PlayerManager.instance.GetPlayerByName("llehctiM"), llehctiMPosList);
+		Character_Handler.instance.MoveByPath ((Character)PI_Handler.instance.name_PI_map["llehctiM"], llehctiMPosList);
 
 
 		isClearToContinue = false;
@@ -985,24 +1018,41 @@ public class MeetgeMScene : Cutscene
 			yield return new WaitForFixedUpdate ();
 		}
 
-		// ------------------- 
-		yield return new WaitForSeconds (1);
-		// ------------------- 
 
+		// llehctiM's animation state
 
-		////////// ------------------- ///////////
-
-
-		// -- llehctiM disappears -- // 
-
+		PI_Handler.instance.SetPIAnimationState ("llechtiM", "Idle_right");
 
 
 		// ------------------- 
 		yield return new WaitForSeconds (1);
 		// ------------------- 
 
-		////////// ------------------- ///////////
 
+		// door's animation state
+
+		PI_Handler.instance.SetPIAnimationState ("door_abandoned_lobby_mirror_right", "Open");
+
+		// missing - sound - door opening
+
+
+		// ------------------- 
+		yield return new WaitForSeconds (1);
+		// ------------------- 
+
+		// llehctiM disappears
+
+		PI_Handler.instance.Hide_PI ("llehctiM");
+
+
+		// door's animation state
+
+		PI_Handler.instance.SetPIAnimationState ("door_abandoned_lobby_mirror_right", "Closed");
+
+		// missing - sound - door closing
+
+
+		////////// ------------------- ///////////
 
 
 		// add event

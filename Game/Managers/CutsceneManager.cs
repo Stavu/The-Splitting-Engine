@@ -54,7 +54,7 @@ public class CutsceneManager : MonoBehaviour {
 		Cutscene OpenGreenDoorMirrorScene = new OpenGreenDoorMirrorScene ("open_green_door_mirror_scene");
 		stringCutsceneMap.Add (OpenGreenDoorMirrorScene.myName, OpenGreenDoorMirrorScene.MyCutscene());
 
-		Cutscene MeetgeMScene = new OpenGreenDoorMirrorScene ("meet_geM_scene");
+		Cutscene MeetgeMScene = new MeetgeMScene ("meet_geM_scene");
 		stringCutsceneMap.Add (MeetgeMScene.myName, MeetgeMScene.MyCutscene());
 	}
 	

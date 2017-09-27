@@ -293,7 +293,7 @@ public class Utilities {
 
 			if (evaluation == false) 
 			{
-				Debug.Log ("false");
+				//Debug.Log ("false");
 				return false;
 			}
 		}

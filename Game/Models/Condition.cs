@@ -112,7 +112,7 @@ public class Condition {
 
 	public bool EvaluateCondition()
 	{
-		//Debug.Log ("evaluate condition " + myType);
+		Debug.Log ("evaluate condition " + myType + eventOccured + eventDidntOccur);
 
 		switch (myType)
 		{
@@ -126,7 +126,7 @@ public class Condition {
 
 			case ConditionType.EventOccured:
 
-				Debug.Log (GameManager.userData.CheckIfEventExists (eventOccured));
+				//Debug.Log (GameManager.userData.CheckIfEventExists (eventOccured));
 
 				return GameManager.userData.CheckIfEventExists (eventOccured);
 
@@ -140,7 +140,7 @@ public class Condition {
 
 				if (RoomManager.instance.myRoom.myMirrorRoom == null) 
 				{
-					Debug.LogError ("mirror room doesn't exist");
+				//	Debug.LogError ("mirror room doesn't exist");
 					return false;
 				}
 
@@ -163,7 +163,7 @@ public class Condition {
 
 			case ConditionType.EventDidntOccur:
 
-				Debug.Log (!GameManager.userData.CheckIfEventExists (eventDidntOccur));
+				//Debug.Log (!GameManager.userData.CheckIfEventExists (eventDidntOccur));
 
 				return !GameManager.userData.CheckIfEventExists (eventDidntOccur);
 
@@ -176,7 +176,7 @@ public class Condition {
 
 				if (RoomManager.instance.myRoom.myMirrorRoom == null) 
 				{
-					Debug.LogError ("mirror room doesn't exist");
+					//Debug.LogError ("mirror room doesn't exist");
 					return false;
 				}
 
@@ -184,7 +184,7 @@ public class Condition {
 					
 		}
 
-		Debug.Log ("return condition false");
+		//Debug.Log ("return condition false");
 
 		return false;
 

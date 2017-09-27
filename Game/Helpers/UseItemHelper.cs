@@ -115,6 +115,11 @@ public class UseItemHelper {
 
 						if ((GameManager.userData.CheckIfEventExists ("mirror_abandoned_4_mirror_covered") == true) && (GameManager.userData.CheckIfEventExists ("cloth_cut") == false))
 						{
+
+							// monologue
+
+							ItemOnObjectMonologue ("I cut a piece of the cloth.");
+
 							// event
 
 							GameManager.userData.AddEventToList ("cloth_cut");
@@ -137,6 +142,15 @@ public class UseItemHelper {
 								ItemOnObjectMonologue ("I think the knife would just go through the mirror...");
 							}
 						}
+
+						break;
+
+
+						 
+					case "fuse_box":						
+					case "fuse_box_mirror":
+
+						ItemOnObjectMonologue ("The knife is too big for the keyhole.");
 
 						break;
 
@@ -201,7 +215,7 @@ public class UseItemHelper {
 
 				switch (physicalInt.identificationName) 
 				{
-
+					
 					case "air_vent":
 					case "air_vent_mirror":
 
@@ -320,7 +334,15 @@ public class UseItemHelper {
 			case "fork":
 
 				switch (physicalInt.identificationName) 
-				{					
+				{			
+
+					case "door_kitchen_shadow":
+
+						ItemOnObjectMonologue ("Rusty forks don't usually open doors.");
+
+						break;
+
+
 					case "air_vent":
 
 						ItemOnObjectMonologue ("I placed the fork inside the vent.");
@@ -336,14 +358,15 @@ public class UseItemHelper {
 						PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "With_fork");
 						EventsHandler.Invoke_cb_inputStateChanged ();
 
-
 						break;
+
 
 					case "air_vent_mirror":
 
 						ItemOnObjectMonologue ("I should place it in the real vent for it to have any effect.");
 
 						break;
+
 
 					case "pipe_storeroom":						
 					case "pipe_storeroom_mirror":
@@ -445,6 +468,8 @@ public class UseItemHelper {
 						EventsHandler.Invoke_cb_inputStateChanged ();
 
 						GameManager.userData.AddEventToList ("pipe_opened");
+						GameManager.userData.GetCurrentPlayerData().inventory.RemoveItem ("pipe_wrench");
+
 
 						break;
 
@@ -505,6 +530,17 @@ public class UseItemHelper {
 					case "mirror_abandoned_3_mirror":
 						
 						PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "Covered");
+						PI_Handler.instance.SetPIAnimationState ("dresser_abandoned_3_shadow", "With_key");
+
+						if((GameManager.userData.CheckIfEventExists("tablecloth_taken")) && ((GameManager.userData.CheckIfEventExists("tablecloth_back")) == false))
+						{
+							PI_Handler.instance.SetPIAnimationState ("table_abandoned_vase_shadow", "Broken");
+
+						} else {
+							
+							PI_Handler.instance.SetPIAnimationState ("table_abandoned_vase_shadow", "Without_map");
+						}
+
 						EventsHandler.Invoke_cb_inputStateChanged ();
 
 						GameManager.userData.AddEventToList ("mirror_abandoned_3_mirror_covered");
@@ -518,6 +554,48 @@ public class UseItemHelper {
 					case "mirror_abandoned_4_mirror":
 
 						PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "Covered");
+
+						if ((GameManager.userData.CheckIfEventExists ("cleaning_fluid_back_again")) == true) {							
+
+							// cleaning fluid back again
+
+							PI_Handler.instance.SetPIAnimationState ("shelves_abandoned_4_shadow", "With_cleaning_fluid_shadow");
+
+						} else {
+
+							if ((GameManager.userData.CheckIfEventExists ("cleaning_fluid_taken_again")) == true) 
+							{
+								// cleaning fluid taken twice
+
+								PI_Handler.instance.SetPIAnimationState ("shelves_abandoned_4_shadow", "Empty");
+
+							} else {
+
+								if ((GameManager.userData.CheckIfEventExists ("cleaning_fluid_back")) == true) {
+
+									// cleaning fluid back once
+
+									PI_Handler.instance.SetPIAnimationState ("shelves_abandoned_4_shadow", "With_cleaning_fluid_shadow");
+
+								} else {
+
+									if ((GameManager.userData.CheckIfEventExists ("cleaning_fluid_taken")) == true) {
+
+										// cleaning fluid taken once
+
+										PI_Handler.instance.SetPIAnimationState ("shelves_abandoned_4_shadow", "Empty");
+
+									} else {
+
+										// cleaning fluid not taken
+
+										PI_Handler.instance.SetPIAnimationState ("shelves_abandoned_4_shadow", "With_cleaning_fluid_shadow");
+									}
+								}
+							}
+						}
+
+
 						EventsHandler.Invoke_cb_inputStateChanged ();
 
 						GameManager.userData.AddEventToList ("mirror_abandoned_4_mirror_covered");
@@ -548,7 +626,6 @@ public class UseItemHelper {
 				{
 
 					case "door_abandoned_2_mirror":
-
 
 						if (GameManager.userData.CheckIfEventExists ("door_abandoned_2_mirror_unlocked") == false) 
 						{						
@@ -711,6 +788,38 @@ public class UseItemHelper {
 
 
 
+			
+
+
+			/* -------- CLEANING FLUID -------- */
+
+
+			case "cleaning_fluid":
+
+				switch (physicalInt.identificationName) 
+				{
+
+					case "mirror_abandoned_5_mirror":
+						
+						List<string> textList = new List<string> ();
+						textList.Add ("I can't just pour the liquid on the mirror.");
+						textList.Add ("I need some kind of cloth to clean with.");
+
+						ItemOnObjectMonologue (textList);
+
+						break;
+
+
+					default:
+
+						RandomItemOnRandomObjectText ();
+
+						break;
+				}
+
+				break;
+
+
 
 
 			/* -------- PIECE OF CLOTH -------- */
@@ -782,7 +891,7 @@ public class UseItemHelper {
 							
 							if (GameManager.userData.CheckIfEventExists ("mirror_cleaned_twice") == false) 
 							{									
-								ItemOnObjectMonologue ("All clean!");
+								ItemOnObjectMonologue ("Great! The mirror is all clean!");
 
 								PI_Handler.instance.SetPIAnimationState (physicalInt.identificationName, "Idle");
 								EventsHandler.Invoke_cb_inputStateChanged ();
@@ -876,6 +985,9 @@ public class UseItemHelper {
 
 									// no event - had no books, now has 1 book
 
+									// remove event
+									GameManager.userData.RemoveEventFromList ("bench_abandoned_6_0_books");
+
 									// add event
 									GameManager.userData.AddEventToList ("bench_abandoned_6_1_book");
 
@@ -952,9 +1064,11 @@ public class UseItemHelper {
 
 								} else {
 
-									// no event
-
 									// had no books, now has 1 book
+
+									// remove event
+									GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_0_books");
+
 
 									// add event
 									GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_1_book");

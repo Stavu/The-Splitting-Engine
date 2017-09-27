@@ -196,6 +196,12 @@ public class RoomStarter : MonoBehaviour {
 				{					
 					//Debug.Log ("technician_left");	
 
+
+					// air vent
+
+					PI_Handler.instance.ChangeCurrentGraphicState (air_vent, "Turned_on");
+
+
 					// hide technician
 
 					PI_Handler.instance.RoomStarter_Hide_Character ("technician");
@@ -261,6 +267,12 @@ public class RoomStarter : MonoBehaviour {
 
 				if (GameManager.userData.CheckIfEventExists ("technician_left")) 
 				{
+
+					// air vent
+
+					PI_Handler.instance.ChangeCurrentGraphicState (air_vent_mirror, "Turned_on");
+
+
 					// hide technician
 
 					PI_Handler.instance.RoomStarter_Hide_Character ("technician_reflection");
@@ -414,6 +426,18 @@ public class RoomStarter : MonoBehaviour {
 
 
 			case "maze_room_3_mirror":
+
+
+				if (GameManager.userData.CheckIfEventExists ("tablecloth_taken")) 
+				{
+					Debug.Log ("tablecloth_taken");
+				}
+
+				if (GameManager.userData.CheckIfEventExists ("tablecloth_back")) 
+				{
+					Debug.Log ("tablecloth_back");
+				}
+
 
 				Furniture mirror_abandoned_3_mirror = RoomManager.instance.getFurnitureByName ("mirror_abandoned_3_mirror");
 
@@ -619,10 +643,20 @@ public class RoomStarter : MonoBehaviour {
 			break;
 
 
-
-
-
 			case "maze_room_6":
+
+
+				// green door 
+
+				Furniture door_abandoned_6_green = RoomManager.instance.getFurnitureByName ("door_abandoned_6_green");
+
+				if (GameManager.userData.CheckIfEventExists ("green_door_opened")) 
+				{
+					PI_Handler.instance.ChangeCurrentGraphicState (door_abandoned_6_green, "Open");
+				}
+
+
+				// bench
 
 				if (GameManager.userData.roomsVisitedList.Contains (room.myName) == false) 
 				{
@@ -664,15 +698,17 @@ public class RoomStarter : MonoBehaviour {
 
 				// closet
 
-				//Furniture closet_abandoned_6 = RoomManager.instance.getFurnitureByName ("closet_abandoned_6");
+				Furniture closet_abandoned_6 = RoomManager.instance.getFurnitureByName ("closet_abandoned_6");
 				Furniture mirror_closet_abandoned_6 = RoomManager.instance.getFurnitureByName ("mirror_closet_abandoned_6");
 
 				if (GameManager.userData.CheckIfEventExists ("closet_abandoned_6_opened")) 
 				{
+					PI_Handler.instance.ChangeCurrentGraphicState (closet_abandoned_6, "Open_button");
 					PI_Handler.instance.RoomStarter_Unhide_PI (mirror_closet_abandoned_6);
 			
 				} else {
-
+					
+					PI_Handler.instance.ChangeCurrentGraphicState (closet_abandoned_6, "Closed_button");
 					PI_Handler.instance.RoomStarter_Hide_Furniture ("mirror_closet_abandoned_6");
 				}
 
@@ -682,8 +718,26 @@ public class RoomStarter : MonoBehaviour {
 
 			case "maze_room_6_mirror":
 
-				if (GameManager.userData.roomsVisitedList.Contains (room.myName) == false) 
+				/*
+				if (GameManager.userData.CheckIfEventExists ("abandoned_bench_6_0_books")) 
 				{
+					Debug.Log ("0 books");
+
+				} else {
+					
+					Debug.Log ("books");
+				}
+				*/
+
+				Furniture door_abandoned_6_green_mirror = RoomManager.instance.getFurnitureByName ("door_abandoned_6_green_mirror");
+
+				if (GameManager.userData.CheckIfEventExists ("green_door_mirror_opened")) 
+				{
+					PI_Handler.instance.ChangeCurrentGraphicState (door_abandoned_6_green_mirror, "Open");
+				}
+
+
+				if (GameManager.userData.roomsVisitedList.Contains (room.myName) == false) {
 					GameManager.userData.AddEventToList ("bench_abandoned_6_mirror_0_books");
 				}
 
@@ -704,22 +758,20 @@ public class RoomStarter : MonoBehaviour {
 
 						} else {
 
-							if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_mirror_0_books")) 
-							{
+							if (GameManager.userData.CheckIfEventExists ("bench_abandoned_6_mirror_0_books")) {
 								PI_Handler.instance.ChangeCurrentGraphicState (bench_abandoned_6_mirror, "Idle");
 
 							} else {
 
-								Debug.LogError("how many books?");
+								Debug.LogError ("how many books?");
 							}
 						}
 					}
 				}
 
 
-				// closet
+				// closet						
 
-				Furniture closet_abandoned_6_mirror = RoomManager.instance.getFurnitureByName ("closet_abandoned_6_mirror");
 				Furniture mirror_closet_abandoned_6_mirror = RoomManager.instance.getFurnitureByName ("mirror_closet_abandoned_6_mirror");
 
 				if (GameManager.userData.roomsVisitedList.Contains (room.myName) == false) 
@@ -729,35 +781,159 @@ public class RoomStarter : MonoBehaviour {
 
 				if (GameManager.userData.CheckIfEventExists ("closet_abandoned_6_mirror_opened")) 
 				{
-					PI_Handler.instance.ChangeCurrentGraphicState (closet_abandoned_6_mirror, "Open_button");
+					if (room.myMirrorRoom.inTheShadow == false) 
+					{		
+						Furniture closet_abandoned_6_mirror = RoomManager.instance.getFurnitureByName ("closet_abandoned_6_mirror");
+						PI_Handler.instance.ChangeCurrentGraphicState (closet_abandoned_6_mirror, "Open_button");
+
+					} else {
+						
+						Furniture closet_abandoned_6_shadow = RoomManager.instance.getFurnitureByName ("closet_abandoned_6_shadow");
+						PI_Handler.instance.ChangeCurrentGraphicState (closet_abandoned_6_shadow, "Open_button");
+					}
+
 					PI_Handler.instance.RoomStarter_Unhide_PI (mirror_closet_abandoned_6_mirror);
 
 				} else {
 					
-					PI_Handler.instance.ChangeCurrentGraphicState (closet_abandoned_6_mirror, "Closed_button");
+					//PI_Handler.instance.ChangeCurrentGraphicState (closet_abandoned_6_mirror, "Closed_button");
 					PI_Handler.instance.RoomStarter_Hide_Furniture ("mirror_closet_abandoned_6_mirror");
 				}
 
 			break;
 
 
+			case "maze_room_7_mirror":
+
+				Furniture dresser_abandoned_7_shadow = RoomManager.instance.getFurnitureByName ("dresser_abandoned_7_shadow");
+
+				if (GameManager.userData.CheckIfEventExists ("key_gold_mirror_taken")) 
+				{
+					PI_Handler.instance.ChangeCurrentGraphicState (dresser_abandoned_7_shadow, "Without_key");
+				
+				} else {
+
+					PI_Handler.instance.ChangeCurrentGraphicState (dresser_abandoned_7_shadow, "With_key_gold");
+				}
+
+				break;
 
 
-			case "abandoned_lobby_mirror":			
+			case "abandoned_lobby_mirror":				
+
+				Character llehctiM_lobby = RoomManager.instance.getCharacterByName ("llehctiM");
+				Character geM_lobby = RoomManager.instance.getCharacterByName ("geM");
+
+				if (GameManager.userData.CheckIfEventExists ("met_geM") == false) 
+				{	
+					PI_Handler.instance.RoomStarter_Unhide_PI (llehctiM_lobby);
+					PI_Handler.instance.RoomStarter_Unhide_PI (geM_lobby);
+
+					PI_Handler.instance.ChangeCurrentGraphicState (llehctiM_lobby, "Idle_right");
+					PI_Handler.instance.ChangeCurrentGraphicState (geM_lobby, "Idle_right");
+			
+				} else {
+
+					PI_Handler.instance.RoomStarter_Hide_Character ("llehctiM");
+					PI_Handler.instance.RoomStarter_Hide_Character ("geM");
+				}
+
+				break;
 
 
+			case "guest_room_1_mirror":				
+				
+				Furniture shelves_guest_1_mirror = RoomManager.instance.getFurnitureByName ("shelves_guest_1_mirror");
+				PI_Handler.instance.ChangeCurrentGraphicState (shelves_guest_1_mirror, "Empty");
 
+				if (GameManager.userData.roomsVisitedList.Contains (room.myName) == false) 
+				{
+					GameManager.instance.inputState = InputState.Dialogue;
+				}
+
+			break;
+
+
+			case "guest_room_2_mirror":				
+
+				if (GameManager.userData.CheckIfEventExists ("met_geM")) 
+				{
+					Character geM_room = RoomManager.instance.getCharacterByName ("geM");
+
+					if (GameManager.userData.CheckIfEventExists ("geM_disappeared") == false) 
+					{
+						Debug.Log ("geM");
+
+						PI_Handler.instance.RoomStarter_Unhide_PI (geM_room);
+						PI_Handler.instance.ChangeCurrentGraphicState (geM_room, "Sitting");
+					
+					} else {
+
+						Debug.Log ("geM disappeared");
+
+						PI_Handler.instance.RoomStarter_Hide_Character ("geM");
+					}
+
+
+					if (GameManager.userData.CheckIfEventExists ("geM_first_dialogue") == false) 
+					{
+						GameManager.instance.inputState = InputState.Dialogue;
+					}
+
+				}
+
+				break;
+
+
+			case "guest_room_4_mirror":				
+
+				// Stella 
+
+				Character Stella_room = RoomManager.instance.getCharacterByName ("Stella");
+				PI_Handler.instance.ChangeCurrentGraphicState (Stella_room, "Sitting");
+
+				// Recorder
+
+				Furniture shelves_abandoned_Stella = RoomManager.instance.getFurnitureByName ("shelves_abandoned_Stella");
+
+				if (GameManager.userData.CheckIfEventExists ("recorder_taken") == false) 
+				{
+					PI_Handler.instance.ChangeCurrentGraphicState (shelves_abandoned_Stella, "With_recorder");
+				
+				} else {
+
+					PI_Handler.instance.ChangeCurrentGraphicState (shelves_abandoned_Stella, "Without_recorder");
+				}
+
+				// Input
+
+				if (GameManager.userData.CheckIfEventExists ("Stella_first_dialogue") == false) 
+				{
+					GameManager.instance.inputState = InputState.Dialogue;
+				}
 
 				break;
 
 
 
+			case "guest_room_5_mirror":				
+
+				Furniture shelves_guest_5_mirror = RoomManager.instance.getFurnitureByName ("shelves_guest_5_mirror");
+				PI_Handler.instance.ChangeCurrentGraphicState (shelves_guest_5_mirror, "Empty");
+
+				break;
 
 
 		}
 	}
 
 
+
+
+
+
+
+	//////////////////////////////////////////////////////////////////////////
 
 	// -------- START ROOM -------- // 
 
@@ -879,15 +1055,53 @@ public class RoomStarter : MonoBehaviour {
 
 
 			case "abandoned_lobby_mirror":			
-				
+
+				Debug.Log ("abandoned lobby mirror");
+
 				if (GameManager.userData.CheckIfEventExists("met_geM") == false)
 				{
+					Debug.Log ("cutscene");
 					CutsceneManager.instance.PlayCutscene ("meet_geM_scene");
 				}
 
 
 				break;
-		
+
+
+			case "guest_room_1_mirror":
+
+				if (firstTimeinRoom) 
+				{	
+					List<string> textList = new List<string> ();
+					textList.Add ("The room is empty.");
+					textList.Add ("Seems like nobody is staying here at the moment.");
+					textList.Add ("Maybe this Dorian guy will stay here when he arrives?");
+
+					RoomStarterMonologue (textList);
+				}
+
+				break;		
+			
+
+			case "guest_room_2_mirror":
+
+				if (GameManager.userData.CheckIfEventExists ("geM_first_dialogue") == false) 
+				{
+					InteractionManager.instance.DisplayDialogueOption ("geM_dialogue1");
+				}
+
+				break;	
+
+
+
+			case "guest_room_4_mirror":				
+
+				if (GameManager.userData.CheckIfEventExists ("Stella_first_dialogue") == false) 
+				{
+					InteractionManager.instance.DisplayDialogueOption ("Stella_dialogue1");
+				}
+
+				break;
 		}
 	}
 

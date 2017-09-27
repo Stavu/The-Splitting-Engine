@@ -245,7 +245,7 @@ public class ActionBoxManager : MonoBehaviour {
 					
 			bool passedConditions = Utilities.EvaluateConditions (currentPhysicalInteractable.myInteractionList [i].conditionList);
 
-			Debug.Log ("passedConditions " + passedConditions);
+			//Debug.Log ("passedConditions " + passedConditions);
 
 			if (passedConditions == false) 
 			{

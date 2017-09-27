@@ -189,9 +189,9 @@ public class PlayerManager : MonoBehaviour {
 			// CHARACTER - if there a character at this tile
 
 			if (tile.myCharacter != null) 
-			{
+			{				
 				if (tile.myCharacter.walkable == false && tile.myCharacter.hidden == false) 
-				{		
+				{						
 					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myCharacter);
 					StopPlayer (InputManager.instance.lastDirection);
 
@@ -204,7 +204,8 @@ public class PlayerManager : MonoBehaviour {
 
 			if (tile.myInactivePlayer != null) 
 			{
-				if (tile.myInactivePlayer.walkable == false) {		
+				if (tile.myInactivePlayer.walkable == false) 
+				{		
 					EventsHandler.Invoke_cb_playerHitPhysicalInteractable (tile.myInactivePlayer);
 					StopPlayer (InputManager.instance.lastDirection);
 

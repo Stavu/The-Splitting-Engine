@@ -63,7 +63,6 @@ public class RoomManager : MonoBehaviour {
 			myRoom.myMirrorRoom.myFurnitureList_Persistant.ForEach (furn => CreateFurniture (furn));
 			myRoom.myMirrorRoom.myTileInteractionList_Persistant.ForEach (tileInt => EventsHandler.Invoke_cb_tileInteractionChanged (tileInt));
 
-
 			SwitchObjectByShadowState (true);
 		}
 
@@ -263,7 +262,7 @@ public class RoomManager : MonoBehaviour {
 		}
 
 		if (character.hidden == false)
-		{
+		{			
 			EventsHandler.Invoke_cb_characterChanged (character);
 		}
 	}

@@ -75,8 +75,6 @@ public class PI_Handler : MonoBehaviour {
 		{
 			
 		}
-
-
 	}
 
 
@@ -170,8 +168,6 @@ public class PI_Handler : MonoBehaviour {
 			obj.transform.localScale = character.imageFlipped ? new Vector3(-1, 1, 1) : new Vector3(1, 1, 1);
 		}
 
-
-
 		if (myPhysicalInteractable is Player) 
 		{
 			obj.transform.position = myPhysicalInteractable.myPos;
@@ -179,7 +175,6 @@ public class PI_Handler : MonoBehaviour {
 		} else {
 			
 			obj.transform.position = new Vector3 (myPhysicalInteractable.myPos.x + myPhysicalInteractable.offsetX, myPhysicalInteractable.myPos.y + 0.5f + myPhysicalInteractable.offsetY, myPhysicalInteractable.myPos.z);
-
 		}
 
 
@@ -274,12 +269,7 @@ public class PI_Handler : MonoBehaviour {
 							grids.Add (room.myMirrorRoom.shadowGrid);
 						}
 					}
-
-
 				}
-
-
-
 				
 				RoomManager.instance.myRoom.ChangePIInTiles (physicalInteractable, graphicState, grids);
 				physicalInteractable.currentGraphicState = graphicState;
